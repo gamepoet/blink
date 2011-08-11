@@ -1,0 +1,15 @@
+# Vim-generated files
+.*.swp
+
+# OSX
+.DS_Store
+
+# XCode 4
+xcuserdata/
+
+# VStudio
+*.ncb
+*.suo
+*.vcproj.*.user
+Debug/
+Release/
