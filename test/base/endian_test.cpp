@@ -34,7 +34,7 @@ SUITE(base) {
     uint16_t val = 0x3456;
     bl_endian_swap(&val);
     CHECK_EQUAL((uint16_t)0x5634, val);
-    
+
     uint16_t vals[] = { 0x1234, 0x6789 };
     bl_endian_swap(vals, 2);
     CHECK_EQUAL((uint16_t)0x3412, vals[0]);
@@ -44,11 +44,11 @@ SUITE(base) {
   //----------------------------------------------------------------------------
   TEST(endian_swap_u32) {
     CHECK_EQUAL(0x04030201U, bl_endian_swap(0x01020304U));
-    
+
     uint32_t val = 0x87654321U;
     bl_endian_swap(&val);
     CHECK_EQUAL(0x21436587U, val);
-    
+
     uint32_t vals[] = { 0x12345678U, 0xabcd4321U };
     bl_endian_swap(vals, 2);
     CHECK_EQUAL(0x78563412U, vals[0]);
@@ -58,11 +58,11 @@ SUITE(base) {
   //----------------------------------------------------------------------------
   TEST(endian_swap_u64) {
     CHECK_EQUAL(0x0807060504030201ULL, bl_endian_swap(0x0102030405060708ULL));
-    
+
     uint64_t val = 0x0123456789abcdefULL;
     bl_endian_swap(&val);
     CHECK_EQUAL(0xefcdab8967452301, val);
-    
+
     uint64_t vals[] = { 0x0102030405060708ULL, 0x8091a2b3c4d5e6f7 };
     bl_endian_swap(vals, 2);
     CHECK_EQUAL(0x0807060504030201ULL, vals[0]);
@@ -82,13 +82,13 @@ SUITE(base) {
 
     CHECK_EQUAL(expected.i, val.i);
     CHECK_EQUAL(1.0f, bl_endian_swap(bl_endian_swap(1.0f)));
-    
+
     val.f = 1.0f;
     bl_endian_swap(&val.f);
     CHECK_EQUAL(expected.i, val.i);
     bl_endian_swap(&val.f);
     CHECK_EQUAL(1.0f, val.f);
-    
+
     float vals[] = { 1.0f, 1.0f };
     F2I conv;
     bl_endian_swap(vals, 2);
