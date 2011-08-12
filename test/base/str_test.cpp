@@ -111,4 +111,34 @@ SUITE(base) {
     CHECK_EQUAL('\0', dest[5]);
     CHECK_EQUAL("himom", dest);
   }
+
+  //----------------------------------------------------------------------------
+  // tests both bl_sprintf and bl_vsprintf because the former uses the latter.
+  TEST(sprintf) {
+    char dest[6];
+    int ret;
+
+    // empty string
+    ret = bl_sprintf(dest, sizeof(dest), "");
+    CHECK_EQUAL(0, ret);
+    CHECK_EQUAL(0, dest[0]);
+
+    // within bounds
+    ret = bl_sprintf(dest, sizeof(dest), "%d", 12);
+    CHECK_EQUAL(2, ret);
+    CHECK_EQUAL(0, dest[2]);
+    CHECK_EQUAL("12", dest);
+
+    // filled buffer
+    ret = bl_sprintf(dest, sizeof(dest), "%d", 12345);
+    CHECK_EQUAL(5, ret);
+    CHECK_EQUAL(0, dest[5]);
+    CHECK_EQUAL("12345", dest);
+
+    // buffer overflow
+    ret = bl_sprintf(dest, sizeof(dest), "%d", 123456);
+    CHECK_EQUAL(6, ret);
+    CHECK_EQUAL(0, dest[5]);
+    CHECK_EQUAL("12345", dest);
+  }
 }

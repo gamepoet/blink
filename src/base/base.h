@@ -80,7 +80,8 @@ enum BL_PLATFORM_T {
 // types
 //
 
-# include <stddef.h>
+#include <stddef.h>
+#include <stdarg.h>
 
 // standard compilers defines integer types in stdint.h
 #ifndef _MSC_VER
@@ -97,6 +98,9 @@ int bl_strcmp(const char* __restrict a, const char* __restrict b, size_t size);
 int bl_stricmp(const char* __restrict a, const char* __restrict b, size_t size);
 size_t bl_strcpy(char* __restrict dest, const char* __restrict src, size_t size);
 size_t bl_strcat(char* __restrict dest, const char* __restrict src, size_t size);
+
+int bl_sprintf(char* __restrict str, size_t size, const char* __restrict format, ...);
+int bl_vsprintf(char* __restrict str, size_t size, const char* __restrict format, va_list args);
 
 
 //

@@ -25,6 +25,7 @@
 
 #include "base.h"
 #include <string.h>
+#include <stdio.h>
 
 //------------------------------------------------------------------------------
 size_t bl_strlen(const char* __restrict src, size_t size) {
@@ -49,4 +50,18 @@ size_t bl_strcpy(char* __restrict dest, const char* __restrict src, size_t size)
 //------------------------------------------------------------------------------
 size_t bl_strcat(char* __restrict dest, const char* __restrict src, size_t size) {
   return strlcat(dest, src, size);
+}
+
+//------------------------------------------------------------------------------
+int bl_sprintf(char* __restrict dest, size_t size, const char* __restrict format, ...) {
+  va_list args;
+  va_start(args, format);
+  int ret = bl_vsprintf(dest, size, format, args);
+  va_end(args);
+  return ret;
+}
+
+//------------------------------------------------------------------------------
+int bl_vsprintf(char* __restrict dest, size_t size, const char* __restrict format, va_list args) {
+  return vsnprintf(dest, size, format, args);
 }
