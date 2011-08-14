@@ -81,8 +81,9 @@ static void signal_handler(int sig) {
 //------------------------------------------------------------------------------
 static BLAssertResponse default_assert_handler(const char* cond, const char* msg, const char* file, unsigned int line) {
   BL_DEBUG_MSG(
-      "ASSERT: %s. %s%s%s(%d)",
-      cond,
+      "ASSERT: %s%s%s%s%s(%d)",
+      cond ? cond : "",
+      cond ? ". " : "",
       msg ? msg : "",
       msg ? ". " : "",
       file,
