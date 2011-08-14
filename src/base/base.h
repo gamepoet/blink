@@ -217,7 +217,7 @@ void bl_debug_msg(const char* format, ...);
 #endif
 
 // static assert
-#define BL_STATIC_ASSERT(b)   enum { BL_JOIN(bl_static_assert_, __LINE__) = sizeof(bl::STATIC_ASSERTION_FAILURE<(bool)(b)>) }
+#define BL_STATIC_ASSERT(b)   enum { BL_JOIN(bl_static_assert_, __LINE__) = sizeof(BL_STATIC_ASSERTION_FAILURE<(bool)(b)>) }
 template< bool b >
 struct BL_STATIC_ASSERTION_FAILURE;
 template<>
@@ -317,6 +317,75 @@ void bl_log_set_level(BLLogLevel level);
 # define bl_log_error_v(...)                                ((void)0)
 # define bl_log_fatal_v(...)                                ((void)0)
 #endif
+
+
+//
+// threading
+//
+
+typedef void (*BLThreadEntryFunc)(void* param);
+
+struct BLThread {
+#ifdef BL_PLATFORM_OSX
+  char pad[24];
+#else
+# error unsupported platform
+#endif
+};
+struct BLMutex {
+#ifdef BL_PLATFORM_OSX
+  char pad[64];
+#else
+# error unsupported platform
+#endif
+};
+struct BLCond {
+#ifdef BL_PLATFORM_OSX
+  char pad[48];
+#else
+# error unsupported platform
+#endif
+};
+struct BLSemaphore {
+#ifdef BL_PLATFORM_OSX
+  char pad[4];
+#else
+# error unsupported platform
+#endif
+};
+struct BLThreadSpecificPtr {
+#ifdef BL_PLATFORM_OSX
+  char pad[8];
+#else
+# error unsupported platform
+#endif
+};
+
+void bl_thread_create(BLThread* __restrict thread, BLThreadEntryFunc func, void* param);
+void bl_thread_join(BLThread* __restrict thread);
+void bl_thread_set_name(const char* __restrict name);
+
+void bl_mutex_create(BLMutex* __restrict mutex);
+void bl_mutex_destroy(BLMutex* __restrict mutex);
+void bl_mutex_lock(BLMutex* __restrict mutex);
+void bl_mutex_unlock(BLMutex* __restrict mutex);
+
+void bl_cond_create(BLCond* __restrict cond);
+void bl_cond_destroy(BLCond* __restrict cond);
+void bl_cond_notify_one(BLCond* __restrict cond);
+void bl_cond_notify_all(BLCond* __restrict cond);
+void bl_cond_wait(BLCond* __restrict cond, BLMutex* __restrict mutex);
+void bl_cond_wait_timeout(BLCond* __restrict cond, BLMutex* __restrict mutex, uint64_t timeout_ms);
+
+void bl_semaphore_create(BLSemaphore* __restrict semaphore, int initial_value);
+void bl_semaphore_destroy(BLSemaphore* __restrict semaphore);
+void bl_semaphore_post(BLSemaphore* __restrict semaphore);
+void bl_semaphore_wait(BLSemaphore* __restrict semaphore);
+
+void bl_thread_specific_ptr_create(BLThreadSpecificPtr* __restrict tsp);
+void bl_thread_specific_ptr_destroy(BLThreadSpecificPtr* __restrict tsp);
+void bl_thread_specific_ptr_set(BLThreadSpecificPtr* __restrict tsp, void* value);
+void* bl_thread_specific_ptr_get(BLThreadSpecificPtr* __restrict tsp);
 
 
 //

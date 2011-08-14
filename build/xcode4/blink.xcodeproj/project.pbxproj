@@ -19,6 +19,8 @@
 		5B9A680F13F7597D00E40577 /* base_int.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B9A680D13F7597D00E40577 /* base_int.h */; };
 		5B9A681013F7597D00E40577 /* init.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A680E13F7597D00E40577 /* init.cpp */; };
 		5B9A681313F75B2300E40577 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A681213F75B2300E40577 /* log.cpp */; };
+		5B9A681B13F83FDE00E40577 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A681A13F83FDE00E40577 /* thread.cpp */; };
+		5B9A681D13F844ED00E40577 /* thread_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A681C13F844ED00E40577 /* thread_test.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,8 @@
 		5B9A680D13F7597D00E40577 /* base_int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base_int.h; sourceTree = "<group>"; };
 		5B9A680E13F7597D00E40577 /* init.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = init.cpp; sourceTree = "<group>"; };
 		5B9A681213F75B2300E40577 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
+		5B9A681A13F83FDE00E40577 /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread.cpp; sourceTree = "<group>"; };
+		5B9A681C13F844ED00E40577 /* thread_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread_test.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,7 @@
 		5B6B5BD813F38FEA007DF59B /* base */ = {
 			isa = PBXGroup;
 			children = (
+				5B9A681813F83FDE00E40577 /* osx */,
 				5B6B5BD913F38FEA007DF59B /* base.h */,
 				5B9A680D13F7597D00E40577 /* base_int.h */,
 				5B9A680313F6488B00E40577 /* debug.cpp */,
@@ -125,11 +130,20 @@
 		5B6B5BF113F3919C007DF59B /* base */ = {
 			isa = PBXGroup;
 			children = (
+				5B9A681C13F844ED00E40577 /* thread_test.cpp */,
 				5B9A680613F7028D00E40577 /* debug_test.cpp */,
 				5B8971D213F39FF70087D363 /* endian_test.cpp */,
 				5B6B5BF213F3919C007DF59B /* str_test.cpp */,
 			);
 			path = base;
+			sourceTree = "<group>";
+		};
+		5B9A681813F83FDE00E40577 /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				5B9A681A13F83FDE00E40577 /* thread.cpp */,
+			);
+			path = osx;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,6 +228,7 @@
 				5B9A680413F6488B00E40577 /* debug.cpp in Sources */,
 				5B9A681013F7597D00E40577 /* init.cpp in Sources */,
 				5B9A681313F75B2300E40577 /* log.cpp in Sources */,
+				5B9A681B13F83FDE00E40577 /* thread.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,6 +240,7 @@
 				5B9A680813F7046B00E40577 /* debug_test.cpp in Sources */,
 				5B8971D413F3A0220087D363 /* endian_test.cpp in Sources */,
 				5B6B5BF613F391B9007DF59B /* str_test.cpp in Sources */,
+				5B9A681D13F844ED00E40577 /* thread_test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
