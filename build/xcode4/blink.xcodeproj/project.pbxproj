@@ -14,6 +14,8 @@
 		5B8971D113F3934A0087D363 /* libUnitTest++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8971D013F3934A0087D363 /* libUnitTest++.a */; };
 		5B8971D413F3A0220087D363 /* endian_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8971D213F39FF70087D363 /* endian_test.cpp */; };
 		5B8971D513F3A0260087D363 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B5BF313F3919C007DF59B /* main.cpp */; };
+		5B9A680413F6488B00E40577 /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A680313F6488B00E40577 /* debug.cpp */; };
+		5B9A680813F7046B00E40577 /* debug_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A680613F7028D00E40577 /* debug_test.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		5B6B5BF313F3919C007DF59B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5B8971D013F3934A0087D363 /* libUnitTest++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libUnitTest++.a"; path = "../../../../../../opt/local/lib/libUnitTest++.a"; sourceTree = "<group>"; };
 		5B8971D213F39FF70087D363 /* endian_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = endian_test.cpp; sourceTree = "<group>"; };
+		5B9A680313F6488B00E40577 /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
+		5B9A680613F7028D00E40577 /* debug_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug_test.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				5B6B5BD913F38FEA007DF59B /* base.h */,
+				5B9A680313F6488B00E40577 /* debug.cpp */,
 				5B6B5BDA13F38FEA007DF59B /* str.cpp */,
 			);
 			name = base;
@@ -111,6 +116,7 @@
 		5B6B5BF113F3919C007DF59B /* base */ = {
 			isa = PBXGroup;
 			children = (
+				5B9A680613F7028D00E40577 /* debug_test.cpp */,
 				5B8971D213F39FF70087D363 /* endian_test.cpp */,
 				5B6B5BF213F3919C007DF59B /* str_test.cpp */,
 			);
@@ -195,6 +201,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B6B5BDC13F38FEA007DF59B /* str.cpp in Sources */,
+				5B9A680413F6488B00E40577 /* debug.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5B8971D513F3A0260087D363 /* main.cpp in Sources */,
+				5B9A680813F7046B00E40577 /* debug_test.cpp in Sources */,
 				5B8971D413F3A0220087D363 /* endian_test.cpp in Sources */,
 				5B6B5BF613F391B9007DF59B /* str_test.cpp in Sources */,
 			);
