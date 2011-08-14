@@ -24,6 +24,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "base.h"
+#include "base_int.h"
 #include <stdio.h>
 #include <sys/sysctl.h>
 
@@ -98,7 +99,7 @@ static BLAssertResponse default_assert_handler(const char* cond, const char* msg
 //
 
 //------------------------------------------------------------------------------
-void bl_crash_handler_init() {
+void crash_handler_initialize() {
   // hook various signals related to error conditions
   signal(SIGABRT, &signal_handler);
   signal(SIGBUS,  &signal_handler);
@@ -107,13 +108,25 @@ void bl_crash_handler_init() {
   signal(SIGPIPE, &signal_handler);
   signal(SIGSEGV, &signal_handler);
   signal(SIGSYS,  &signal_handler);
-  
+
   // TODO: Figure out how to hook into more application crashes on OS X
   // - Unhandled exceptions
   //  - Need to first detect that exceptions are compiled in
   // - Pure virtual function calls
   // - stack overflow
   // - std::terminate()
+}
+
+//------------------------------------------------------------------------------
+void crash_handler_finalize() {
+  // remove signals hooks
+  signal(SIGABRT, SIG_DFL);
+  signal(SIGBUS,  SIG_DFL);
+  signal(SIGFPE,  SIG_DFL);
+  signal(SIGILL,  SIG_DFL);
+  signal(SIGPIPE, SIG_DFL);
+  signal(SIGSEGV, SIG_DFL);
+  signal(SIGSYS,  SIG_DFL);
 }
 
 //------------------------------------------------------------------------------

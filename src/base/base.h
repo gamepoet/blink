@@ -92,6 +92,18 @@ enum BL_PLATFORM_T {
 
 
 //
+// library management
+//
+
+struct BLBaseInitAttr {
+  const char* log_filename;
+};
+
+void bl_base_lib_initialize(BLBaseInitAttr* attr);
+void bl_base_lib_finalize();
+
+
+//
 // string manipulation
 //
 
@@ -169,11 +181,6 @@ enum BLAssertResponse {
 
 typedef BLAssertResponse (*BLAssertHandler)(const char* cond, const char* msg, const char* file, unsigned int line);
 
-// Hook up crash handlers for as many error conditions as possible. You should
-// call this as early as possibl in your application if you want to detect
-// application crashes.
-void bl_crash_handler_init();
-
 // Sets the current assert handler. Set to NULL to reset to the default handler.
 void bl_set_assert_handler(BLAssertHandler handler);
 
@@ -204,9 +211,9 @@ void bl_debug_msg(const char* format, ...);
 
 // print debug message in debugger console
 #ifdef NDEBUG
-# define BL_DEBUG_MSG(fmt, ...)   ((void)0)
+# define BL_DEBUG_MSG(...)        ((void)0)
 #else
-# define BL_DEBUG_MSG(fmt, ...)   bl_debug_msg(fmt, __VA_ARGS__)
+# define BL_DEBUG_MSG(...)        bl_debug_msg(__VA_ARGS__)
 #endif
 
 // static assert
@@ -247,6 +254,68 @@ struct BL_STATIC_ASSERTION_FAILURE<true> {};
     }                                                                                             \
   }                                                                                               \
   while (0)
+#endif
+
+
+//
+// log
+//
+
+// By default, compile out the log in release
+#ifndef BL_LOG_ENABLE
+# ifdef NDEBUG
+#   ifndef BL_LOG_DISABLE
+#     define BL_LOG_DISABLE
+#   endif
+# endif
+#endif
+
+enum BLLogLevel {
+  BL_LOG_LEVEL_FATAL,
+  BL_LOG_LEVEL_ERROR,
+  BL_LOG_LEVEL_WARN,
+  BL_LOG_LEVEL_INFO,
+  BL_LOG_LEVEL_DEBUG
+};
+
+// Flush the log file to disk
+void bl_log_flush();
+
+// Sets the log level.
+void bl_log_set_level(BLLogLevel level);
+
+// Log functions
+#ifndef BL_LOG_DISABLE
+# ifdef NDEBUG
+#   define bl_log_debug(...)                                ((void)0)
+# else
+    void bl_log_debug(const char* __restrict format, ...);
+# endif
+    void bl_log_info(const char* __restrict format, ...);
+    void bl_log_warn(const char* __restrict format, ...);
+    void bl_log_error(const char* __restrict format, ...);
+    void bl_log_fatal(const char* __restrict format, ...);
+# ifdef NDEBUG
+#   define bl_log_debug_v(...)                              ((void)0)
+# else
+    void bl_log_debug_v(const char* __restrict format, va_list args);
+# endif
+    void bl_log_info_v(const char* __restrict format, va_list args);
+    void bl_log_warn_v(const char* __restrict format, va_list args);
+    void bl_log_error_v(const char* __restrict format, va_list args);
+    void bl_log_fatal_v(const char* __restrict format, va_list args);
+#else
+# define bl_log_debug(...)                                  ((void)0)
+# define bl_log_info(...)                                   ((void)0)
+# define bl_log_warn(...)                                   ((void)0)
+# define bl_log_error(...)                                  ((void)0)
+# define bl_log_fatal(...)                                  ((void)0)
+
+# define bl_log_debug_v(...)                                ((void)0)
+# define bl_log_info_v(...)                                 ((void)0)
+# define bl_log_warn_v(...)                                 ((void)0)
+# define bl_log_error_v(...)                                ((void)0)
+# define bl_log_fatal_v(...)                                ((void)0)
 #endif
 
 
