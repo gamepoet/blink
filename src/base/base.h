@@ -169,6 +169,11 @@ enum BLAssertResponse {
 
 typedef BLAssertResponse (*BLAssertHandler)(const char* cond, const char* msg, const char* file, unsigned int line);
 
+// Hook up crash handlers for as many error conditions as possible. You should
+// call this as early as possibl in your application if you want to detect
+// application crashes.
+void bl_crash_handler_init();
+
 // Sets the current assert handler. Set to NULL to reset to the default handler.
 void bl_set_assert_handler(BLAssertHandler handler);
 

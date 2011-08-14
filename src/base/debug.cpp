@@ -25,6 +25,7 @@
 
 #include "base.h"
 #include <stdio.h>
+#include <sys/sysctl.h>
 
 //
 // local vars
@@ -36,6 +37,46 @@ static BLAssertHandler s_assert_handler;
 //
 // local functions
 //
+
+//------------------------------------------------------------------------------
+static void signal_handler(int sig) {
+  // re-hook the handler in case it gets called again (i.e. multiple threads)
+  signal(sig, &signal_handler);
+
+  switch (sig) {
+    case SIGABRT:
+      BL_FATAL("caught SIGABRT: program aborted");
+      break;
+
+    case SIGBUS:
+      BL_FATAL("caught SIGBUS: bus error");
+      break;
+
+    case SIGFPE:
+      BL_FATAL("caught SIGFPE: floating-point exception");
+      break;
+
+    case SIGILL:
+      BL_FATAL("caught SIGILL: illegal instruction");
+      break;
+
+    case SIGPIPE:
+      BL_FATAL("caught SIGPIPE: write on a pipe with no reader");
+      break;
+
+    case SIGSEGV:
+      BL_FATAL("caught SIGSEGV: segmentation violation");
+      break;
+
+    case SIGSYS:
+      BL_FATAL("caught SIGSYS: non-existent system call invoked");
+      break;
+
+    default:
+      BL_FATAL("caught unknown signal: generic failure");
+      break;
+  }
+}
 
 //------------------------------------------------------------------------------
 static BLAssertResponse default_assert_handler(const char* cond, const char* msg, const char* file, unsigned int line) {
@@ -54,6 +95,25 @@ static BLAssertResponse default_assert_handler(const char* cond, const char* msg
 //
 // exported functions
 //
+
+//------------------------------------------------------------------------------
+void bl_crash_handler_init() {
+  // hook various signals related to error conditions
+  signal(SIGABRT, &signal_handler);
+  signal(SIGBUS,  &signal_handler);
+  signal(SIGFPE,  &signal_handler);
+  signal(SIGILL,  &signal_handler);
+  signal(SIGPIPE, &signal_handler);
+  signal(SIGSEGV, &signal_handler);
+  signal(SIGSYS,  &signal_handler);
+  
+  // TODO: Figure out how to hook into more application crashes on OS X
+  // - Unhandled exceptions
+  //  - Need to first detect that exceptions are compiled in
+  // - Pure virtual function calls
+  // - stack overflow
+  // - std::terminate()
+}
 
 //------------------------------------------------------------------------------
 void bl_set_assert_handler(BLAssertHandler handler) {
