@@ -389,7 +389,50 @@ void* bl_thread_specific_ptr_get(BLThreadSpecificPtr* __restrict tsp);
 
 
 //
-// implementations
+// atomic ops
+//
+
+// Stricly orders memory access such that all loads and stores before the
+// barrier will complete before any load or store after the barrier.
+void bl_atomic_barrier();
+
+// Compares old_value to *val and sets *val to new_value if the comparison is
+// equal. Returns true if *val was set to the new value.
+bool bl_atomic_cas(volatile int32_t* val, int32_t old_value, int32_t new_value);
+bool bl_atomic_cas(volatile int64_t* val, int64_t old_value, int64_t new_value);
+bool bl_atomic_cas(void* volatile* val, void* old_value, void* new_value);
+
+// Increments *val. Returns the result of the operation.
+int32_t bl_atomic_increment(volatile int32_t* val);
+int64_t bl_atomic_increment(volatile int64_t* val);
+
+// Decrements *val. Returns the result of the operation.
+int32_t bl_atomic_decrement(volatile int32_t* val);
+int64_t bl_atomic_decrement(volatile int64_t* val);
+
+// Adds the given amount to *val. Returns the result of the operation.
+int32_t bl_atomic_add(volatile int32_t* val, int32_t amount);
+int64_t bl_atomic_add(volatile int64_t* val, int64_t amount);
+
+// Subtracts the given amount from *val. Returns the result of the operation.
+int32_t bl_atomic_sub(volatile int32_t* val, int32_t amount);
+int64_t bl_atomic_sub(volatile int64_t* val, int64_t amount);
+
+// Bitwise ANDs the mask to *val. Returns the result of the operation.
+uint32_t bl_atomic_and(volatile uint32_t* val, uint32_t mask);
+uint64_t bl_atomic_and(volatile uint64_t* val, uint64_t mask);
+
+// Bitwise ORs the mask to *val. Returns the result of the operation.
+uint32_t bl_atomic_or(volatile uint32_t* val, uint32_t mask);
+uint64_t bl_atomic_or(volatile uint64_t* val, uint64_t mask);
+
+// Bitwise XORs the mask to *val. Returns the result of the operation.
+uint32_t bl_atomic_xor(volatile uint32_t* val, uint32_t mask);
+uint64_t bl_atomic_xor(volatile uint64_t* val, uint64_t mask);
+
+
+//
+// endian swap implementation
 //
 
 //------------------------------------------------------------------------------
@@ -481,5 +524,227 @@ inline void bl_endian_swap(float* __restrict values, size_t count) {
     bl_endian_swap(values);
   }
 }
+
+
+//
+// atomic ops implementation
+//
+
+#if defined(BL_PLATFORM_OSX)
+#include <libkern/OSAtomic.h>
+
+//------------------------------------------------------------------------------
+inline void bl_atomic_barrier() {
+  OSMemoryBarrier();
+}
+
+//------------------------------------------------------------------------------
+inline bool bl_atomic_cas(volatile int32_t* val, int32_t old_value, int32_t new_value) {
+  return OSAtomicCompareAndSwap32(old_value, new_value, val);
+}
+
+//------------------------------------------------------------------------------
+inline bool bl_atomic_cas(volatile int64_t* val, int64_t old_value, int64_t new_value) {
+  return OSAtomicCompareAndSwap64(old_value, new_value, val);
+}
+
+//------------------------------------------------------------------------------
+inline bool bl_atomic_cas(void* volatile* val, void* old_value, void* new_value) {
+  return OSAtomicCompareAndSwapPtr(old_value, new_value, val);
+}
+
+//------------------------------------------------------------------------------
+inline int32_t bl_atomic_increment(volatile int32_t* val) {
+  return OSAtomicIncrement32(val);
+}
+
+//------------------------------------------------------------------------------
+inline int64_t bl_atomic_increment(volatile int64_t* val) {
+  return OSAtomicIncrement64(val);
+}
+
+//------------------------------------------------------------------------------
+inline int32_t bl_atomic_decrement(volatile int32_t* val) {
+  return OSAtomicDecrement32(val);
+}
+
+//------------------------------------------------------------------------------
+inline int64_t bl_atomic_decrement(volatile int64_t* val) {
+  return OSAtomicDecrement64(val);
+}
+
+//------------------------------------------------------------------------------
+inline int32_t bl_atomic_add(volatile int32_t* val, int32_t amount) {
+  return OSAtomicAdd32(amount, val);
+}
+
+//------------------------------------------------------------------------------
+inline int64_t bl_atomic_add(volatile int64_t* val, int64_t amount) {
+  return OSAtomicAdd64(amount, val);
+}
+
+//------------------------------------------------------------------------------
+inline int32_t bl_atomic_sub(volatile int32_t* val, int32_t amount) {
+  return OSAtomicAdd32(-amount, val);
+}
+
+//------------------------------------------------------------------------------
+inline int64_t bl_atomic_sub(volatile int64_t* val, int64_t amount) {
+  return OSAtomicAdd64(-amount, val);
+}
+
+//------------------------------------------------------------------------------
+inline uint32_t bl_atomic_and(volatile uint32_t* val, uint32_t mask) {
+  return OSAtomicAnd32(mask, val);
+}
+
+//------------------------------------------------------------------------------
+inline uint64_t bl_atomic_and(volatile uint64_t* val, uint64_t mask) {
+  for (;;) {
+    uint64_t old_val = *val;
+    uint64_t new_val = old_val & mask;
+    if (bl_atomic_cas((volatile int64_t*)val, (int64_t)old_val, (int64_t)new_val)) {
+      return new_val;
+    }
+  }
+}
+
+//------------------------------------------------------------------------------
+inline uint32_t bl_atomic_or(volatile uint32_t* val, uint32_t mask) {
+  return OSAtomicOr32(mask, val);
+}
+
+//------------------------------------------------------------------------------
+inline uint64_t bl_atomic_or(volatile uint64_t* val, uint64_t mask) {
+  for (;;) {
+    uint64_t old_val = *val;
+    uint64_t new_val = old_val | mask;
+    if (bl_atomic_cas((volatile int64_t*)val, (int64_t)old_val, (int64_t)new_val)) {
+      return new_val;
+    }
+  }
+}
+
+//------------------------------------------------------------------------------
+inline uint32_t bl_atomic_xor(volatile uint32_t* val, uint32_t mask) {
+  return OSAtomicXor32(mask, val);
+}
+
+//------------------------------------------------------------------------------
+inline uint64_t bl_atomic_xor(volatile uint64_t* val, uint64_t mask) {
+  for (;;) {
+    uint64_t old_val = *val;
+    uint64_t new_val = old_val ^ mask;
+    if (bl_atomic_cas((volatile int64_t*)val, (int64_t)old_val, (int64_t)new_val)) {
+      return new_val;
+    }
+  }
+}
+
+#elif defined(BL_PLATFORM_WINDOWS)
+
+//------------------------------------------------------------------------------
+inline void atomic_barrier() {
+  MemoryBarrier();
+}
+
+//------------------------------------------------------------------------------
+inline bool atomic_cas(volatile int32_t* val, int32_t old_value, int32_t new_value) {
+  int32_t orig = InterlockedCompareExchange(val, new_value, old_value);
+  return (orig == old_value);
+}
+
+//------------------------------------------------------------------------------
+inline bool atomic_cas(volatile int64_t* val, int64_t old_value, int64_t new_value) {
+  int64_t orig = InterlockedCompareExchange64(val, new_value, old_value);
+  return (orig == old_value);
+}
+
+//------------------------------------------------------------------------------
+inline bool atomic_cas(void* volatile* val, void* old_value, void* new_value) {
+  void* orig = InterlockedCompareExchange64(val, new_value, old_value);
+  return (orig == old_value);
+}
+
+//------------------------------------------------------------------------------
+inline int32_t atomic_increment(volatile int32_t* val) {
+  return InterlockedIncrement(val);
+}
+
+//------------------------------------------------------------------------------
+inline int64_t atomic_increment(volatile int64_t* val) {
+  return InterlockedIncrement64(val);
+}
+
+//------------------------------------------------------------------------------
+inline int32_t atomic_decrement(volatile int32_t* val) {
+  return InterlockedDecrement(val);
+}
+
+//------------------------------------------------------------------------------
+inline int64_t atomic_decrement(volatile int64_t* val) {
+  return InterlockedDecrement64(val);
+}
+
+//------------------------------------------------------------------------------
+inline int32_t atomic_add(volatile int32_t* val, int32_t amount) {
+  return InterlockedAdd(val, amount);
+}
+
+//------------------------------------------------------------------------------
+inline int64_t atomic_add(volatile int64_t* val, int64_t amount) {
+  return InterlockedAdd64(val, amount);
+}
+
+//------------------------------------------------------------------------------
+inline int32_t atomic_sub(volatile int32_t* val, int32_t amount) {
+  return InterlockedAdd(val, -amount);
+}
+
+//------------------------------------------------------------------------------
+inline int64_t atomic_sub(volatile int64_t* val, int64_t amount) {
+  return InterlockedAdd64(val, -amount);
+}
+
+//------------------------------------------------------------------------------
+inline uint32_t atomic_and(volatile uint32_t* val, uint32_t mask) {
+  uint32_t orig = InterlockedAnd(val, mask);
+  return orig & mask;
+}
+
+//------------------------------------------------------------------------------
+inline uint64_t atomic_and(volatile uint64_t* val, uint64_t mask) {
+  uint64_t orig = InterlockedAnd(val, mask);
+  return orig & mask;
+}
+
+//------------------------------------------------------------------------------
+inline uint32_t atomic_or(volatile uint32_t* val, uint32_t mask) {
+  uint32_t orig = InterlockedOr(val, mask);
+  return orig | mask;
+}
+
+//------------------------------------------------------------------------------
+inline uint64_t atomic_or(volatile uint64_t* val, uint64_t mask) {
+  uint64_t orig = InterlockedOr64(val, mask);
+  return orig | mask;
+}
+
+//------------------------------------------------------------------------------
+inline uint32_t atomic_xor(volatile uint32_t* val, uint32_t mask) {
+  uint32_t orig = InterlockedXor(val, mask);
+  return orig ^ mask;
+}
+
+//------------------------------------------------------------------------------
+inline uint64_t atomic_xor(volatile uint64_t* val, uint64_t mask) {
+  uint64_t orig = InterlockedXor64(val, mask);
+  return orig ^ mask;
+}
+
+#else
+# error unsupported platform
+#endif
+
 
 #endif
