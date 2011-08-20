@@ -104,6 +104,14 @@ void bl_base_lib_finalize();
 
 
 //
+// memory
+//
+
+void* bl_alloc(size_t size, size_t alignment);
+void bl_free(void* ptr);
+
+
+//
 // string manipulation
 //
 
