@@ -174,7 +174,19 @@ void bl_endian_swap(float* __restrict values, size_t count);
 #endif
 
 // ensure an intentionally unused expression does not generate a warning
-# define BL_UNUSED(x)         do { (void)sizeof(x); } while (0)
+#define BL_UNUSED(x)          do { (void)sizeof(x); } while (0)
+
+// align a value up
+#define BL_ALIGN(x, align)              (((x) + (align) - 1) & (~((align) - 1)))
+#define BL_ALIGN_PTR(T, p, align)       ((T*)BL_ALIGN((uintptr_t)(p), align))
+
+// align a value down
+#define BL_ALIGN_DOWN(x, align)         ((x) & (~((align) - 1)))
+#define BL_ALIGN_DOWN_PTR(T, p, align)  ((T*)BL_ALIGN_DOWN((uintptr_t)(p), align))
+
+// check if a value is aligned
+#define BL_IS_ALIGNED(x, align)         (((x) & ((align) - 1)) == 0)
+#define BL_IS_ALIGNED_PTR(p, align)     BL_IS_ALIGNED((uintptr_t)(p), align)
 
 
 //
