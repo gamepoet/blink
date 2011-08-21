@@ -60,7 +60,7 @@ void bl_queue_read_consume(BLQueueSWSR* __restrict queue);
 // element that can be added; NULL if the queue is full. This call only returns
 // a pointer to the new element in the queue, bl_queue_write_commit() must be
 // called to actually advance the write head.
-void* bl_queue_write_prepare(BLQueueSWSR* __restrict queue, bool * __restrict empty);
+void* bl_queue_write_prepare(BLQueueSWSR* __restrict queue, bool* __restrict empty);
 
 // Commits a new element to the queue. This should only be called after a
 // successful call to bl_queue_write_prepare().

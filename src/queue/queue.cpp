@@ -63,7 +63,7 @@ void bl_queue_read_consume(BLQueueSWSR* __restrict queue) {
 }
 
 //------------------------------------------------------------------------------
-void* bl_queue_write_prepare(BLQueueSWSR* __restrict queue, bool * __restrict empty) {
+void* bl_queue_write_prepare(BLQueueSWSR* __restrict queue, bool* __restrict empty) {
   int32_t get          = queue->get;
   bl_atomic_barrier();
   int32_t put          = queue->put;
