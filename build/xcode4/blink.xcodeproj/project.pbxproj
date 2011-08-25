@@ -29,6 +29,8 @@
 		5BBBD81814004630001F3C9B /* queue.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBBD81614004630001F3C9B /* queue.h */; };
 		5BBBD81B14004CA1001F3C9B /* job_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD81A14004CA1001F3C9B /* job_test.cpp */; };
 		5BBBD81F1400804B001F3C9B /* queue_swsr_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */; };
+		5BBBD82314074FB5001F3C9B /* vec_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD82214074FB5001F3C9B /* vec_test.cpp */; };
+		5BBBD82714074FD7001F3C9B /* math.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBBD82614074FD7001F3C9B /* math.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +81,8 @@
 		5BBBD81614004630001F3C9B /* queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queue.h; sourceTree = "<group>"; };
 		5BBBD81A14004CA1001F3C9B /* job_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = job_test.cpp; sourceTree = "<group>"; };
 		5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queue_swsr_test.cpp; sourceTree = "<group>"; };
+		5BBBD82214074FB5001F3C9B /* vec_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vec_test.cpp; sourceTree = "<group>"; };
+		5BBBD82614074FD7001F3C9B /* math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +120,7 @@
 			children = (
 				5B6B5BD813F38FEA007DF59B /* base */,
 				5B46110513FF7B1C0061F55B /* job */,
+				5BBBD82414074FD7001F3C9B /* math */,
 				5BBBD81214004630001F3C9B /* queue */,
 				5B6B5BF013F3919C007DF59B /* test */,
 				5B6B5BCF13F38F99007DF59B /* Products */,
@@ -151,6 +156,7 @@
 			children = (
 				5B6B5BF113F3919C007DF59B /* base */,
 				5BBBD81914004CA1001F3C9B /* job */,
+				5BBBD82014074FB5001F3C9B /* math */,
 				5BBBD81C1400804B001F3C9B /* queue */,
 				5B6B5BF313F3919C007DF59B /* main.cpp */,
 				5B8971D013F3934A0087D363 /* libUnitTest++.a */,
@@ -208,6 +214,23 @@
 			path = queue;
 			sourceTree = "<group>";
 		};
+		5BBBD82014074FB5001F3C9B /* math */ = {
+			isa = PBXGroup;
+			children = (
+				5BBBD82214074FB5001F3C9B /* vec_test.cpp */,
+			);
+			path = math;
+			sourceTree = "<group>";
+		};
+		5BBBD82414074FD7001F3C9B /* math */ = {
+			isa = PBXGroup;
+			children = (
+				5BBBD82614074FD7001F3C9B /* math.h */,
+			);
+			name = math;
+			path = ../../src/math;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -219,6 +242,7 @@
 				5B9A680F13F7597D00E40577 /* base_int.h in Headers */,
 				5B46110913FF7B1C0061F55B /* job.h in Headers */,
 				5BBBD81814004630001F3C9B /* queue.h in Headers */,
+				5BBBD82714074FD7001F3C9B /* math.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,6 +335,7 @@
 				5B46110113FF71810061F55B /* atomic_test.cpp in Sources */,
 				5BBBD81B14004CA1001F3C9B /* job_test.cpp in Sources */,
 				5BBBD81F1400804B001F3C9B /* queue_swsr_test.cpp in Sources */,
+				5BBBD82314074FB5001F3C9B /* vec_test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
