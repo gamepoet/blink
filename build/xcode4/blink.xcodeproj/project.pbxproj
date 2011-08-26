@@ -31,6 +31,7 @@
 		5BBBD81F1400804B001F3C9B /* queue_swsr_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */; };
 		5BBBD82314074FB5001F3C9B /* vec_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD82214074FB5001F3C9B /* vec_test.cpp */; };
 		5BBBD82714074FD7001F3C9B /* math.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBBD82614074FD7001F3C9B /* math.h */; };
+		5BBBD829140802CE001F3C9B /* mtx_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD828140802CE001F3C9B /* mtx_test.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 		5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queue_swsr_test.cpp; sourceTree = "<group>"; };
 		5BBBD82214074FB5001F3C9B /* vec_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vec_test.cpp; sourceTree = "<group>"; };
 		5BBBD82614074FD7001F3C9B /* math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
+		5BBBD828140802CE001F3C9B /* mtx_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mtx_test.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,6 +219,7 @@
 		5BBBD82014074FB5001F3C9B /* math */ = {
 			isa = PBXGroup;
 			children = (
+				5BBBD828140802CE001F3C9B /* mtx_test.cpp */,
 				5BBBD82214074FB5001F3C9B /* vec_test.cpp */,
 			);
 			path = math;
@@ -336,6 +339,7 @@
 				5BBBD81B14004CA1001F3C9B /* job_test.cpp in Sources */,
 				5BBBD81F1400804B001F3C9B /* queue_swsr_test.cpp in Sources */,
 				5BBBD82314074FB5001F3C9B /* vec_test.cpp in Sources */,
+				5BBBD829140802CE001F3C9B /* mtx_test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
