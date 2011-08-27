@@ -210,8 +210,11 @@ void bl_set_assert_handler(BLAssertHandler handler);
 // Called by a failing assertion. This function will invoke the current assert handler.
 BLAssertResponse bl_assert_failed(const char* cond, const char* file, unsigned int line, const char* format, ...);
 
-// Prints a message to the debug tty.
+// Prints a message to the debug tty. A newline will be appended to the string.
 void bl_debug_msg(const char* format, ...);
+
+// Prints a message to the debug tty as is.
+void bl_debug_msg_raw(const char* format, ...);
 
 // break into the debugger
 #ifdef NDEBUG
@@ -235,8 +238,10 @@ void bl_debug_msg(const char* format, ...);
 // print debug message in debugger console
 #ifdef NDEBUG
 # define BL_DEBUG_MSG(...)        ((void)0)
+# define BL_DEBUG_MSG_RAW(...)    ((void)0)
 #else
 # define BL_DEBUG_MSG(...)        bl_debug_msg(__VA_ARGS__)
+# define BL_DEBUG_MSG_RAW(...)    bl_debug_msg_raw(__VA_ARGS__)
 #endif
 
 // static assert

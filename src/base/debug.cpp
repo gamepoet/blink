@@ -166,3 +166,13 @@ void bl_debug_msg(const char* format, ...) {
   vprintf(new_format, args);
   va_end(args);
 }
+
+//------------------------------------------------------------------------------
+void bl_debug_msg_raw(const char* format, ...) {
+  va_list args;
+  va_start(args, format);
+  vprintf(format, args);
+  va_end(args);
+}
+
+

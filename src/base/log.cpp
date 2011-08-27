@@ -51,7 +51,7 @@ static void log(const char* __restrict format, va_list args) {
   bl_vsprintf(buf, sizeof(buf), fmt, args);
 
   // send to the debugger
-  BL_DEBUG_MSG(buf);
+  BL_DEBUG_MSG_RAW(buf);
 
   // write to the log
   if (s_log_fh) {
