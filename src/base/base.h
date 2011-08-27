@@ -33,9 +33,9 @@
 //
 
 enum BL_ARCH_T {
-  BL_ARCH_PPC64,
-  BL_ARCH_IA32,
-  BL_ARCH_X64,
+  BL_ARCH_TYPE_PPC64,
+  BL_ARCH_TYPE_IA32,
+  BL_ARCH_TYPE_X64,
 };
 enum BL_PLATFORM_T {
   BL_PLATFORM_TYPE_OSX,
@@ -44,17 +44,20 @@ enum BL_PLATFORM_T {
 
 // determine architecture
 #if defined(__ppc64__)
-# define BL_ARCH BL_ARCH_PPC64
+# define BL_ARCH_PPC64
+# define BL_ARCH BL_ARCH_TYPE_PPC64
 # define BL_BIG_ENDIAN
 # define BL_POINTER_SIZE 8
 
 #elif defined(__i386__) || defined(_M_IX86)
-# define BL_ARCH BL_ARCH_IA32
+# define BL_ARCH_IA32
+# define BL_ARCH BL_ARCH_TYPE_IA32
 # define BL_LITTLE_ENDIAN
 # define BL_POINTER_SIZE 4
 
 #elif defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64)
-# define BL_ARCH BL_ARCH_X64
+# define BL_ARCH_X64
+# define BL_ARCH BL_ARCH_TYPE_X64
 # define BL_LITTLE_ENDIAN
 # define BL_POINTER_SIZE 8
 
