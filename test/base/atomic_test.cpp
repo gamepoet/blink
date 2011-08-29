@@ -24,7 +24,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include <unittest++/UnitTest++.h>
-#include <base/base.h>
+#include <blink/base.h>
 
 //------------------------------------------------------------------------------
 static void atomic_increment_decrement_test_func(void* param) {

@@ -24,7 +24,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include <unittest++/UnitTest++.h>
-#include <queue/queue.h>
+#include <blink/queue.h>
 
 SUITE(queue) {
   //----------------------------------------------------------------------------

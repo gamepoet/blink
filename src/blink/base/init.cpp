@@ -23,25 +23,17 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include <stdlib.h>
 #include "../base.h"
-
-
-//
-// exported functions
-//
+#include "base_int.h"
 
 //------------------------------------------------------------------------------
-void* bl_alloc(size_t size, size_t alignment) {
-  void* mem;
-  int ret = posix_memalign(&mem, alignment, size);
-  if (0 == ret) {
-    return mem;
-  }
-  return NULL;
+void bl_base_lib_initialize(BLBaseInitAttr* attr) {
+  crash_handler_initialize();
+  log_initialize(attr->log_filename);
 }
 
 //------------------------------------------------------------------------------
-void bl_free(void* ptr) {
-  free(ptr);
+void bl_base_lib_finalize() {
+  log_finalize();
+  crash_handler_finalize();
 }

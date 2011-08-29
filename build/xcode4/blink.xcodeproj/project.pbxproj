@@ -7,30 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B3D702F140B40280014D68C /* base_int.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D701F140B40280014D68C /* base_int.h */; };
+		5B3D7030140B40280014D68C /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7020140B40280014D68C /* debug.cpp */; };
+		5B3D7031140B40280014D68C /* init.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7021140B40280014D68C /* init.cpp */; };
+		5B3D7032140B40280014D68C /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7022140B40280014D68C /* log.cpp */; };
+		5B3D7033140B40280014D68C /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7024140B40280014D68C /* mem.cpp */; };
+		5B3D7034140B40280014D68C /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7025140B40280014D68C /* thread.cpp */; };
+		5B3D7035140B40280014D68C /* str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7026140B40280014D68C /* str.cpp */; };
+		5B3D7036140B40280014D68C /* base.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D7027140B40280014D68C /* base.h */; };
+		5B3D7037140B40280014D68C /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7029140B40280014D68C /* job.cpp */; };
+		5B3D7038140B40280014D68C /* job.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D702A140B40280014D68C /* job.h */; };
+		5B3D7039140B40280014D68C /* math.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D702B140B40280014D68C /* math.h */; };
+		5B3D703A140B40280014D68C /* queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D702D140B40280014D68C /* queue.cpp */; };
+		5B3D703B140B40280014D68C /* queue.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D702E140B40280014D68C /* queue.h */; };
 		5B46110113FF71810061F55B /* atomic_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B46110013FF71810061F55B /* atomic_test.cpp */; };
-		5B46110413FF79FA0061F55B /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B46110313FF79FA0061F55B /* mem.cpp */; };
-		5B46110813FF7B1C0061F55B /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B46110613FF7B1C0061F55B /* job.cpp */; };
-		5B46110913FF7B1C0061F55B /* job.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B46110713FF7B1C0061F55B /* job.h */; };
-		5B6B5BDB13F38FEA007DF59B /* base.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B6B5BD913F38FEA007DF59B /* base.h */; };
-		5B6B5BDC13F38FEA007DF59B /* str.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B5BDA13F38FEA007DF59B /* str.cpp */; };
 		5B6B5BF613F391B9007DF59B /* str_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B5BF213F3919C007DF59B /* str_test.cpp */; };
 		5B8971CE13F392420087D363 /* libblink.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B6B5BCE13F38F99007DF59B /* libblink.a */; };
 		5B8971D113F3934A0087D363 /* libUnitTest++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8971D013F3934A0087D363 /* libUnitTest++.a */; };
 		5B8971D413F3A0220087D363 /* endian_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8971D213F39FF70087D363 /* endian_test.cpp */; };
 		5B8971D513F3A0260087D363 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B5BF313F3919C007DF59B /* main.cpp */; };
-		5B9A680413F6488B00E40577 /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A680313F6488B00E40577 /* debug.cpp */; };
 		5B9A680813F7046B00E40577 /* debug_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A680613F7028D00E40577 /* debug_test.cpp */; };
-		5B9A680F13F7597D00E40577 /* base_int.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B9A680D13F7597D00E40577 /* base_int.h */; };
-		5B9A681013F7597D00E40577 /* init.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A680E13F7597D00E40577 /* init.cpp */; };
-		5B9A681313F75B2300E40577 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A681213F75B2300E40577 /* log.cpp */; };
-		5B9A681B13F83FDE00E40577 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A681A13F83FDE00E40577 /* thread.cpp */; };
 		5B9A681D13F844ED00E40577 /* thread_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A681C13F844ED00E40577 /* thread_test.cpp */; };
-		5BBBD81714004630001F3C9B /* queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD81514004630001F3C9B /* queue.cpp */; };
-		5BBBD81814004630001F3C9B /* queue.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBBD81614004630001F3C9B /* queue.h */; };
 		5BBBD81B14004CA1001F3C9B /* job_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD81A14004CA1001F3C9B /* job_test.cpp */; };
 		5BBBD81F1400804B001F3C9B /* queue_swsr_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */; };
 		5BBBD82314074FB5001F3C9B /* vec_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD82214074FB5001F3C9B /* vec_test.cpp */; };
-		5BBBD82714074FD7001F3C9B /* math.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BBBD82614074FD7001F3C9B /* math.h */; };
 		5BBBD829140802CE001F3C9B /* mtx_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD828140802CE001F3C9B /* mtx_test.cpp */; };
 /* End PBXBuildFile section */
 
@@ -57,31 +57,31 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5B3D701F140B40280014D68C /* base_int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base_int.h; sourceTree = "<group>"; };
+		5B3D7020140B40280014D68C /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
+		5B3D7021140B40280014D68C /* init.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = init.cpp; sourceTree = "<group>"; };
+		5B3D7022140B40280014D68C /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
+		5B3D7024140B40280014D68C /* mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mem.cpp; sourceTree = "<group>"; };
+		5B3D7025140B40280014D68C /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread.cpp; sourceTree = "<group>"; };
+		5B3D7026140B40280014D68C /* str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = str.cpp; sourceTree = "<group>"; };
+		5B3D7027140B40280014D68C /* base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = base.h; path = ../../src/blink/base.h; sourceTree = "<group>"; };
+		5B3D7029140B40280014D68C /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = job.cpp; sourceTree = "<group>"; };
+		5B3D702A140B40280014D68C /* job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = job.h; path = ../../src/blink/job.h; sourceTree = "<group>"; };
+		5B3D702B140B40280014D68C /* math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = math.h; path = ../../src/blink/math.h; sourceTree = "<group>"; };
+		5B3D702D140B40280014D68C /* queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queue.cpp; sourceTree = "<group>"; };
+		5B3D702E140B40280014D68C /* queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queue.h; path = ../../src/blink/queue.h; sourceTree = "<group>"; };
 		5B46110013FF71810061F55B /* atomic_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = atomic_test.cpp; sourceTree = "<group>"; };
-		5B46110313FF79FA0061F55B /* mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mem.cpp; sourceTree = "<group>"; };
-		5B46110613FF7B1C0061F55B /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = job.cpp; sourceTree = "<group>"; };
-		5B46110713FF7B1C0061F55B /* job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = job.h; sourceTree = "<group>"; };
 		5B6B5BCE13F38F99007DF59B /* libblink.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libblink.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		5B6B5BD913F38FEA007DF59B /* base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base.h; sourceTree = "<group>"; };
-		5B6B5BDA13F38FEA007DF59B /* str.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = str.cpp; sourceTree = "<group>"; };
 		5B6B5BE613F39160007DF59B /* tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tests; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6B5BF213F3919C007DF59B /* str_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = str_test.cpp; sourceTree = "<group>"; };
 		5B6B5BF313F3919C007DF59B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5B8971D013F3934A0087D363 /* libUnitTest++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libUnitTest++.a"; path = "/opt/local/lib/libUnitTest++.a"; sourceTree = "<absolute>"; };
 		5B8971D213F39FF70087D363 /* endian_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = endian_test.cpp; sourceTree = "<group>"; };
-		5B9A680313F6488B00E40577 /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
 		5B9A680613F7028D00E40577 /* debug_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug_test.cpp; sourceTree = "<group>"; };
-		5B9A680D13F7597D00E40577 /* base_int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base_int.h; sourceTree = "<group>"; };
-		5B9A680E13F7597D00E40577 /* init.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = init.cpp; sourceTree = "<group>"; };
-		5B9A681213F75B2300E40577 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
-		5B9A681A13F83FDE00E40577 /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread.cpp; sourceTree = "<group>"; };
 		5B9A681C13F844ED00E40577 /* thread_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread_test.cpp; sourceTree = "<group>"; };
-		5BBBD81514004630001F3C9B /* queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queue.cpp; sourceTree = "<group>"; };
-		5BBBD81614004630001F3C9B /* queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queue.h; sourceTree = "<group>"; };
 		5BBBD81A14004CA1001F3C9B /* job_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = job_test.cpp; sourceTree = "<group>"; };
 		5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queue_swsr_test.cpp; sourceTree = "<group>"; };
 		5BBBD82214074FB5001F3C9B /* vec_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vec_test.cpp; sourceTree = "<group>"; };
-		5BBBD82614074FD7001F3C9B /* math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
 		5BBBD828140802CE001F3C9B /* mtx_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mtx_test.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,23 +105,65 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5B46110513FF7B1C0061F55B /* job */ = {
+		5B3D701C140B400D0014D68C /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				5B46110713FF7B1C0061F55B /* job.h */,
-				5B46110613FF7B1C0061F55B /* job.cpp */,
+				5B3D701E140B40280014D68C /* base */,
+				5B3D7028140B40280014D68C /* job */,
+				5B3D702C140B40280014D68C /* queue */,
+				5B3D7027140B40280014D68C /* base.h */,
+				5B3D702A140B40280014D68C /* job.h */,
+				5B3D702B140B40280014D68C /* math.h */,
+				5B3D702E140B40280014D68C /* queue.h */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+		5B3D701E140B40280014D68C /* base */ = {
+			isa = PBXGroup;
+			children = (
+				5B3D701F140B40280014D68C /* base_int.h */,
+				5B3D7020140B40280014D68C /* debug.cpp */,
+				5B3D7021140B40280014D68C /* init.cpp */,
+				5B3D7022140B40280014D68C /* log.cpp */,
+				5B3D7023140B40280014D68C /* osx */,
+				5B3D7026140B40280014D68C /* str.cpp */,
+			);
+			name = base;
+			path = ../../src/blink/base;
+			sourceTree = "<group>";
+		};
+		5B3D7023140B40280014D68C /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				5B3D7024140B40280014D68C /* mem.cpp */,
+				5B3D7025140B40280014D68C /* thread.cpp */,
+			);
+			path = osx;
+			sourceTree = "<group>";
+		};
+		5B3D7028140B40280014D68C /* job */ = {
+			isa = PBXGroup;
+			children = (
+				5B3D7029140B40280014D68C /* job.cpp */,
 			);
 			name = job;
-			path = ../../src/job;
+			path = ../../src/blink/job;
+			sourceTree = "<group>";
+		};
+		5B3D702C140B40280014D68C /* queue */ = {
+			isa = PBXGroup;
+			children = (
+				5B3D702D140B40280014D68C /* queue.cpp */,
+			);
+			name = queue;
+			path = ../../src/blink/queue;
 			sourceTree = "<group>";
 		};
 		5B6B5BC313F38F99007DF59B = {
 			isa = PBXGroup;
 			children = (
-				5B6B5BD813F38FEA007DF59B /* base */,
-				5B46110513FF7B1C0061F55B /* job */,
-				5BBBD82414074FD7001F3C9B /* math */,
-				5BBBD81214004630001F3C9B /* queue */,
+				5B3D701C140B400D0014D68C /* lib */,
 				5B6B5BF013F3919C007DF59B /* test */,
 				5B6B5BCF13F38F99007DF59B /* Products */,
 			);
@@ -134,21 +176,6 @@
 				5B6B5BE613F39160007DF59B /* tests */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		5B6B5BD813F38FEA007DF59B /* base */ = {
-			isa = PBXGroup;
-			children = (
-				5B9A681813F83FDE00E40577 /* osx */,
-				5B6B5BD913F38FEA007DF59B /* base.h */,
-				5B9A680D13F7597D00E40577 /* base_int.h */,
-				5B9A680313F6488B00E40577 /* debug.cpp */,
-				5B9A680E13F7597D00E40577 /* init.cpp */,
-				5B9A681213F75B2300E40577 /* log.cpp */,
-				5B6B5BDA13F38FEA007DF59B /* str.cpp */,
-			);
-			name = base;
-			path = ../../src/base;
 			sourceTree = "<group>";
 		};
 		5B6B5BF013F3919C007DF59B /* test */ = {
@@ -177,25 +204,6 @@
 			path = base;
 			sourceTree = "<group>";
 		};
-		5B9A681813F83FDE00E40577 /* osx */ = {
-			isa = PBXGroup;
-			children = (
-				5B46110313FF79FA0061F55B /* mem.cpp */,
-				5B9A681A13F83FDE00E40577 /* thread.cpp */,
-			);
-			path = osx;
-			sourceTree = "<group>";
-		};
-		5BBBD81214004630001F3C9B /* queue */ = {
-			isa = PBXGroup;
-			children = (
-				5BBBD81514004630001F3C9B /* queue.cpp */,
-				5BBBD81614004630001F3C9B /* queue.h */,
-			);
-			name = queue;
-			path = ../../src/queue;
-			sourceTree = "<group>";
-		};
 		5BBBD81914004CA1001F3C9B /* job */ = {
 			isa = PBXGroup;
 			children = (
@@ -221,15 +229,6 @@
 			path = math;
 			sourceTree = "<group>";
 		};
-		5BBBD82414074FD7001F3C9B /* math */ = {
-			isa = PBXGroup;
-			children = (
-				5BBBD82614074FD7001F3C9B /* math.h */,
-			);
-			name = math;
-			path = ../../src/math;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -237,11 +236,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B6B5BDB13F38FEA007DF59B /* base.h in Headers */,
-				5B9A680F13F7597D00E40577 /* base_int.h in Headers */,
-				5B46110913FF7B1C0061F55B /* job.h in Headers */,
-				5BBBD81814004630001F3C9B /* queue.h in Headers */,
-				5BBBD82714074FD7001F3C9B /* math.h in Headers */,
+				5B3D702F140B40280014D68C /* base_int.h in Headers */,
+				5B3D7036140B40280014D68C /* base.h in Headers */,
+				5B3D7038140B40280014D68C /* job.h in Headers */,
+				5B3D7039140B40280014D68C /* math.h in Headers */,
+				5B3D703B140B40280014D68C /* queue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,14 +310,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B6B5BDC13F38FEA007DF59B /* str.cpp in Sources */,
-				5B9A680413F6488B00E40577 /* debug.cpp in Sources */,
-				5B9A681013F7597D00E40577 /* init.cpp in Sources */,
-				5B9A681313F75B2300E40577 /* log.cpp in Sources */,
-				5B9A681B13F83FDE00E40577 /* thread.cpp in Sources */,
-				5B46110413FF79FA0061F55B /* mem.cpp in Sources */,
-				5B46110813FF7B1C0061F55B /* job.cpp in Sources */,
-				5BBBD81714004630001F3C9B /* queue.cpp in Sources */,
+				5B3D7030140B40280014D68C /* debug.cpp in Sources */,
+				5B3D7031140B40280014D68C /* init.cpp in Sources */,
+				5B3D7032140B40280014D68C /* log.cpp in Sources */,
+				5B3D7033140B40280014D68C /* mem.cpp in Sources */,
+				5B3D7034140B40280014D68C /* thread.cpp in Sources */,
+				5B3D7035140B40280014D68C /* str.cpp in Sources */,
+				5B3D7037140B40280014D68C /* job.cpp in Sources */,
+				5B3D703A140B40280014D68C /* queue.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

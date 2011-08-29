@@ -23,45 +23,25 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include "base.h"
-#include <string.h>
-#include <stdio.h>
+#include <stdlib.h>
+#include "../../base.h"
+
+
+//
+// exported functions
+//
 
 //------------------------------------------------------------------------------
-size_t bl_strlen(const char* __restrict src, size_t size) {
-  return strnlen(src, size);
+void* bl_alloc(size_t size, size_t alignment) {
+  void* mem;
+  int ret = posix_memalign(&mem, alignment, size);
+  if (0 == ret) {
+    return mem;
+  }
+  return NULL;
 }
 
 //------------------------------------------------------------------------------
-int bl_strcmp(const char* __restrict a, const char* __restrict b, size_t size) {
-  return strncmp(a, b, size);
-}
-
-//------------------------------------------------------------------------------
-int bl_stricmp(const char* __restrict a, const char* __restrict b, size_t size) {
-  return strncasecmp(a, b, size);
-}
-
-//------------------------------------------------------------------------------
-size_t bl_strcpy(char* __restrict dest, const char* __restrict src, size_t size) {
-  return strlcpy(dest, src, size);
-}
-
-//------------------------------------------------------------------------------
-size_t bl_strcat(char* __restrict dest, const char* __restrict src, size_t size) {
-  return strlcat(dest, src, size);
-}
-
-//------------------------------------------------------------------------------
-int bl_sprintf(char* __restrict dest, size_t size, const char* __restrict format, ...) {
-  va_list args;
-  va_start(args, format);
-  int ret = bl_vsprintf(dest, size, format, args);
-  va_end(args);
-  return ret;
-}
-
-//------------------------------------------------------------------------------
-int bl_vsprintf(char* __restrict dest, size_t size, const char* __restrict format, va_list args) {
-  return vsnprintf(dest, size, format, args);
+void bl_free(void* ptr) {
+  free(ptr);
 }

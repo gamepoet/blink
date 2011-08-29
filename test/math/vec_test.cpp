@@ -24,8 +24,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include <unittest++/UnitTest++.h>
-#include <math/math.h>
-#include <math.h>
+#include <blink/math.h>
 
 SUITE(math) {
   //----------------------------------------------------------------------------

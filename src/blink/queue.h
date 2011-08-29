@@ -27,7 +27,7 @@
 #ifndef BL_QUEUE_H
 #define BL_QUEUE_H
 
-#include <base/base.h>
+#include <blink/base.h>
 
 // This SWSR implementation of a bounded queue is simple, but bad on cache-line
 // sharing. The basic issue is that both threads want to access the get and put

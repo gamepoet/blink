@@ -23,7 +23,7 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include "../base.h"
+#include "../../base.h"
 //#include <sys/sysctl.h>
 //#include <unistd.h>
 //#include <err.h>

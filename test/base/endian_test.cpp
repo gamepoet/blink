@@ -24,7 +24,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include <unittest++/UnitTest++.h>
-#include <base/base.h>
+#include <blink/base.h>
 
 SUITE(base) {
   //----------------------------------------------------------------------------

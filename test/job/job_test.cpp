@@ -24,7 +24,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include <unittest++/UnitTest++.h>
-#include <job/job.h>
+#include <blink/job.h>
 
 struct UserData {
   volatile int32_t * completed_count;

@@ -23,8 +23,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include "job.h"
-#include <queue/queue.h>
+#include "../job.h"
+#include "..//queue.h"
 
 //
 // macros
