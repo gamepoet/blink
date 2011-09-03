@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B07E0501413EB370004ACA4 /* vecmath.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B07E04F1413EB370004ACA4 /* vecmath.h */; };
 		5B3D702F140B40280014D68C /* base_int.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D701F140B40280014D68C /* base_int.h */; };
 		5B3D7030140B40280014D68C /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7020140B40280014D68C /* debug.cpp */; };
 		5B3D7031140B40280014D68C /* init.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7021140B40280014D68C /* init.cpp */; };
@@ -17,7 +18,6 @@
 		5B3D7036140B40280014D68C /* base.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D7027140B40280014D68C /* base.h */; };
 		5B3D7037140B40280014D68C /* job.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7029140B40280014D68C /* job.cpp */; };
 		5B3D7038140B40280014D68C /* job.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D702A140B40280014D68C /* job.h */; };
-		5B3D7039140B40280014D68C /* math.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D702B140B40280014D68C /* math.h */; };
 		5B3D703A140B40280014D68C /* queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D702D140B40280014D68C /* queue.cpp */; };
 		5B3D703B140B40280014D68C /* queue.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D702E140B40280014D68C /* queue.h */; };
 		5B46110113FF71810061F55B /* atomic_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B46110013FF71810061F55B /* atomic_test.cpp */; };
@@ -57,6 +57,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5B07E04F1413EB370004ACA4 /* vecmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vecmath.h; path = ../../src/blink/vecmath.h; sourceTree = "<group>"; };
 		5B3D701F140B40280014D68C /* base_int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base_int.h; sourceTree = "<group>"; };
 		5B3D7020140B40280014D68C /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
 		5B3D7021140B40280014D68C /* init.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = init.cpp; sourceTree = "<group>"; };
@@ -67,7 +68,6 @@
 		5B3D7027140B40280014D68C /* base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = base.h; path = ../../src/blink/base.h; sourceTree = "<group>"; };
 		5B3D7029140B40280014D68C /* job.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = job.cpp; sourceTree = "<group>"; };
 		5B3D702A140B40280014D68C /* job.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = job.h; path = ../../src/blink/job.h; sourceTree = "<group>"; };
-		5B3D702B140B40280014D68C /* math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = math.h; path = ../../src/blink/math.h; sourceTree = "<group>"; };
 		5B3D702D140B40280014D68C /* queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queue.cpp; sourceTree = "<group>"; };
 		5B3D702E140B40280014D68C /* queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queue.h; path = ../../src/blink/queue.h; sourceTree = "<group>"; };
 		5B46110013FF71810061F55B /* atomic_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = atomic_test.cpp; sourceTree = "<group>"; };
@@ -113,8 +113,8 @@
 				5B3D702C140B40280014D68C /* queue */,
 				5B3D7027140B40280014D68C /* base.h */,
 				5B3D702A140B40280014D68C /* job.h */,
-				5B3D702B140B40280014D68C /* math.h */,
 				5B3D702E140B40280014D68C /* queue.h */,
+				5B07E04F1413EB370004ACA4 /* vecmath.h */,
 			);
 			name = lib;
 			sourceTree = "<group>";
@@ -239,8 +239,8 @@
 				5B3D702F140B40280014D68C /* base_int.h in Headers */,
 				5B3D7036140B40280014D68C /* base.h in Headers */,
 				5B3D7038140B40280014D68C /* job.h in Headers */,
-				5B3D7039140B40280014D68C /* math.h in Headers */,
 				5B3D703B140B40280014D68C /* queue.h in Headers */,
+				5B07E0501413EB370004ACA4 /* vecmath.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
