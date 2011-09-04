@@ -654,4 +654,34 @@ SUITE(math) {
     CHECK_EQUAL(19, dst[14]);
     CHECK_EQUAL(5,  dst[15]);
   }
+
+  //----------------------------------------------------------------------------
+  TEST(vec_merge_xy) {
+    BLVec a, b, c;
+    a = bl_vec_set_f(1.0f, 2.0f, 3.0f, 4.0f);
+    b = bl_vec_set_f(5.0f, 6.0f, 7.0f, 8.0f);
+    c = bl_vec_merge_xy(a, b);
+    
+    float dst[4] __attribute__((aligned(16))) = { 0.0f };
+    bl_vec_store_f4a(dst, c);
+    CHECK_EQUAL(1.0f, dst[0]);
+    CHECK_EQUAL(5.0f, dst[1]);
+    CHECK_EQUAL(2.0f, dst[2]);
+    CHECK_EQUAL(6.0f, dst[3]);
+  }
+  
+  //----------------------------------------------------------------------------
+  TEST(vec_merge_zw) {
+    BLVec a, b, c;
+    a = bl_vec_set_f(1.0f, 2.0f, 3.0f, 4.0f);
+    b = bl_vec_set_f(5.0f, 6.0f, 7.0f, 8.0f);
+    c = bl_vec_merge_zw(a, b);
+    
+    float dst[4] __attribute__((aligned(16))) = { 0.0f };
+    bl_vec_store_f4a(dst, c);
+    CHECK_EQUAL(3.0f, dst[0]);
+    CHECK_EQUAL(7.0f, dst[1]);
+    CHECK_EQUAL(4.0f, dst[2]);
+    CHECK_EQUAL(8.0f, dst[3]);
+  }
 }

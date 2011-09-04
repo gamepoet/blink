@@ -261,6 +261,9 @@ BLVec bl_vec_shuffle_mask16(uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint
 BLVec bl_vec_shuffle_mask8(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e, uint8_t f, uint8_t g, uint8_t h, uint8_t i, uint8_t j, uint8_t k, uint8_t l, uint8_t m, uint8_t n, uint8_t o, uint8_t p);
 BLVec bl_vec_shuffle(BLVec v1, BLVec v2, BLVec mask);
 
+BLVec bl_vec_merge_xy(BLVec v1, BLVec v2);
+BLVec bl_vec_merge_zw(BLVec v1, BLVec v2);
+
 BLVec bl_vec_select(BLVec v1, BLVec v2, BLVec mask);
 BLVec bl_vec_cmp_eq(BLVec v1, BLVec v2);
 BLVec bl_vec_cmp_ge(BLVec v1, BLVec v2);
@@ -595,9 +598,13 @@ inline BLVec bl_vec_sqrt(BLVec v) {
 inline BLVec bl_vec_shuffle_mask32(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
   return _mm_set_epi32(d, c, b, a);
 }
+
+//------------------------------------------------------------------------------
 inline BLVec bl_vec_shuffle_mask16(uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e, uint16_t f, uint16_t g, uint16_t h) {
   return _mm_set_epi16(h, g, f, e, d, c, b, a);
 }
+
+//------------------------------------------------------------------------------
 inline BLVec bl_vec_shuffle_mask8(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e, uint8_t f, uint8_t g, uint8_t h, uint8_t i, uint8_t j, uint8_t k, uint8_t l, uint8_t m, uint8_t n, uint8_t o, uint8_t p) {
   return _mm_set_epi8(p, o, n, m, l, k, j, i, h, g, f, e, d, c, b, a);
 }
@@ -614,6 +621,16 @@ inline BLVec bl_vec_shuffle(BLVec v1, BLVec v2, BLVec mask) {
   shuf2     = _mm_shuffle_epi8(v2, mask2);
   result    = _mm_or_ps(shuf1, shuf2);
   return result;
+}
+
+//------------------------------------------------------------------------------
+inline BLVec bl_vec_merge_xy(BLVec v1, BLVec v2) {
+  return _mm_unpacklo_ps(v1, v2);
+}
+
+//------------------------------------------------------------------------------
+inline BLVec bl_vec_merge_zw(BLVec v1, BLVec v2) {
+  return _mm_unpackhi_ps(v1, v2);
 }
 
 //------------------------------------------------------------------------------
