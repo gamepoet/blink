@@ -61,11 +61,10 @@
 //
 
 #if defined(BL_MATH_USE_SSE)
-# include <xmmintrin.h>
+# include <immintrin.h>
 
 typedef __m128 BLVec;
 
-#elif defined(BL_MATH_USE_ALTIVEC)
 #else
 # error Unsupported architecture
 #endif
@@ -95,6 +94,118 @@ struct BLMatrixT {
 
 
 //
+// constants
+//
+
+#if defined(BL_MATH_USE_SSE)
+
+// 32-bit shuffle mask constants
+# define BL_VEC_SHUFFLE_MASK_32_A   0x03020100
+# define BL_VEC_SHUFFLE_MASK_32_B   0x07060504
+# define BL_VEC_SHUFFLE_MASK_32_C   0x0b0a0908
+# define BL_VEC_SHUFFLE_MASK_32_D   0x0f0e0d0c
+# define BL_VEC_SHUFFLE_MASK_32_a   0x13121110
+# define BL_VEC_SHUFFLE_MASK_32_b   0x17161514
+# define BL_VEC_SHUFFLE_MASK_32_c   0x1b1a1918
+# define BL_VEC_SHUFFLE_MASK_32_d   0x1f1e1d1c
+# define BL_VEC_SHUFFLE_MASK_32_0   0x80808080
+
+#define BL_VEC_SHUFFLE_MASK_32(a, b, c, d)  \
+  bl_vec_shuffle_mask32(                    \
+    BL_JOIN(BL_VEC_SHUFFLE_MASK_32_, a),    \
+    BL_JOIN(BL_VEC_SHUFFLE_MASK_32_, b),    \
+    BL_JOIN(BL_VEC_SHUFFLE_MASK_32_, c),    \
+    BL_JOIN(BL_VEC_SHUFFLE_MASK_32_, d))
+
+// 16-bit shuffle mask constants
+# define BL_VEC_SHUFFLE_MASK_16_A   0x0100
+# define BL_VEC_SHUFFLE_MASK_16_B   0x0302
+# define BL_VEC_SHUFFLE_MASK_16_C   0x0504
+# define BL_VEC_SHUFFLE_MASK_16_D   0x0706
+# define BL_VEC_SHUFFLE_MASK_16_E   0x0908
+# define BL_VEC_SHUFFLE_MASK_16_F   0x0b0a
+# define BL_VEC_SHUFFLE_MASK_16_G   0x0d0c
+# define BL_VEC_SHUFFLE_MASK_16_H   0x0f0e
+# define BL_VEC_SHUFFLE_MASK_16_a   0x1110
+# define BL_VEC_SHUFFLE_MASK_16_b   0x1312
+# define BL_VEC_SHUFFLE_MASK_16_c   0x1514
+# define BL_VEC_SHUFFLE_MASK_16_d   0x1716
+# define BL_VEC_SHUFFLE_MASK_16_e   0x1918
+# define BL_VEC_SHUFFLE_MASK_16_f   0x1b1a
+# define BL_VEC_SHUFFLE_MASK_16_g   0x1d1c
+# define BL_VEC_SHUFFLE_MASK_16_h   0x1f1e
+# define BL_VEC_SHUFFLE_MASK_16_0   0x8080
+
+#define BL_VEC_SHUFFLE_MASK_16(a, b, c, d, e, f, g, h)    \
+  bl_vec_shuffle_mask16(                                  \
+    BL_VEC_SHUFFLE_MASK_16_ ## a,                         \
+    BL_VEC_SHUFFLE_MASK_16_ ## b,                         \
+    BL_VEC_SHUFFLE_MASK_16_ ## c,                         \
+    BL_VEC_SHUFFLE_MASK_16_ ## d,                         \
+    BL_VEC_SHUFFLE_MASK_16_ ## e,                         \
+    BL_VEC_SHUFFLE_MASK_16_ ## f,                         \
+    BL_VEC_SHUFFLE_MASK_16_ ## g,                         \
+    BL_VEC_SHUFFLE_MASK_16_ ## h)
+
+// 8-bit shufle mask constants
+# define BL_VEC_SHUFFLE_MASK_8_A    0x00
+# define BL_VEC_SHUFFLE_MASK_8_B    0x01
+# define BL_VEC_SHUFFLE_MASK_8_C    0x02
+# define BL_VEC_SHUFFLE_MASK_8_D    0x03
+# define BL_VEC_SHUFFLE_MASK_8_E    0x04
+# define BL_VEC_SHUFFLE_MASK_8_F    0x05
+# define BL_VEC_SHUFFLE_MASK_8_G    0x06
+# define BL_VEC_SHUFFLE_MASK_8_H    0x07
+# define BL_VEC_SHUFFLE_MASK_8_I    0x08
+# define BL_VEC_SHUFFLE_MASK_8_J    0x09
+# define BL_VEC_SHUFFLE_MASK_8_K    0x0a
+# define BL_VEC_SHUFFLE_MASK_8_L    0x0b
+# define BL_VEC_SHUFFLE_MASK_8_M    0x0c
+# define BL_VEC_SHUFFLE_MASK_8_N    0x0d
+# define BL_VEC_SHUFFLE_MASK_8_O    0x0e
+# define BL_VEC_SHUFFLE_MASK_8_P    0x0f
+# define BL_VEC_SHUFFLE_MASK_8_a    0x10
+# define BL_VEC_SHUFFLE_MASK_8_b    0x11
+# define BL_VEC_SHUFFLE_MASK_8_c    0x12
+# define BL_VEC_SHUFFLE_MASK_8_d    0x13
+# define BL_VEC_SHUFFLE_MASK_8_e    0x14
+# define BL_VEC_SHUFFLE_MASK_8_f    0x15
+# define BL_VEC_SHUFFLE_MASK_8_g    0x16
+# define BL_VEC_SHUFFLE_MASK_8_h    0x17
+# define BL_VEC_SHUFFLE_MASK_8_i    0x18
+# define BL_VEC_SHUFFLE_MASK_8_j    0x19
+# define BL_VEC_SHUFFLE_MASK_8_k    0x1a
+# define BL_VEC_SHUFFLE_MASK_8_l    0x1b
+# define BL_VEC_SHUFFLE_MASK_8_m    0x1c
+# define BL_VEC_SHUFFLE_MASK_8_n    0x1d
+# define BL_VEC_SHUFFLE_MASK_8_o    0x1e
+# define BL_VEC_SHUFFLE_MASK_8_p    0x1f
+# define BL_VEC_SHUFFLE_MASK_8_0    0x80
+
+#define BL_VEC_SHUFFLE_MASK_8(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) \
+  bl_vec_shuffle_mask8(                                                       \
+    BL_VEC_SHUFFLE_MASK_8_ ## a,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## b,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## c,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## d,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## e,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## f,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## g,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## h,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## i,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## j,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## k,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## l,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## m,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## n,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## o,                                              \
+    BL_VEC_SHUFFLE_MASK_8_ ## p)
+
+#else
+# error Unsupported architecture
+#endif
+
+//
 // api
 //
 
@@ -104,11 +215,15 @@ BLVec bl_vec_load_f4a(const float* __restrict src);
 BLVec bl_vec_load_i4a(const uint32_t* __restrict src);
 BLVec bl_vec_set_f(float x, float y, float z, float w);
 BLVec bl_vec_set_i(uint32_t x, uint32_t y, uint32_t z, uint32_t w);
+BLVec bl_vec_set_i16(uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e, uint16_t f, uint16_t g, uint16_t h);
+BLVec bl_vec_set_i8(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e, uint8_t f, uint8_t g, uint8_t h, uint8_t i, uint8_t j, uint8_t k, uint8_t l, uint8_t m, uint8_t n, uint8_t o, uint8_t p);
 BLVec bl_vec_splat_scalar(float scalar);
 void bl_vec_store_f3(float* __restrict dest, BLVec v);
 void bl_vec_store_f3a(float* __restrict dest, BLVec v);
 void bl_vec_store_f4a(float* __restrict dest, BLVec v);
 void bl_vec_store_i4a(uint32_t* __restrict dest, BLVec v);
+void bl_vec_store_i16a(uint16_t* __restrict dest, BLVec v);
+void bl_vec_store_i8a(uint8_t* __restrict dest, BLVec v);
 
 BLVec bl_vec_make_zero();
 BLVec bl_vec_make_axis_x();
@@ -141,6 +256,12 @@ BLVec bl_vec_rsqrt(BLVec v);
 BLVec bl_vec_sub(BLVec v1, BLVec v2);
 BLVec bl_vec_sqrt(BLVec v);
 
+BLVec bl_vec_shuffle_mask32(uint32_t a, uint32_t b, uint32_t c, uint32_t d);
+BLVec bl_vec_shuffle_mask16(uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e, uint16_t f, uint16_t g, uint16_t h);
+BLVec bl_vec_shuffle_mask8(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e, uint8_t f, uint8_t g, uint8_t h, uint8_t i, uint8_t j, uint8_t k, uint8_t l, uint8_t m, uint8_t n, uint8_t o, uint8_t p);
+BLVec bl_vec_shuffle(BLVec v1, BLVec v2, BLVec mask);
+
+BLVec bl_vec_select(BLVec v1, BLVec v2, BLVec mask);
 BLVec bl_vec_cmp_eq(BLVec v1, BLVec v2);
 BLVec bl_vec_cmp_ge(BLVec v1, BLVec v2);
 BLVec bl_vec_cmp_gt(BLVec v1, BLVec v2);
@@ -221,6 +342,16 @@ inline BLVec bl_vec_set_i(uint32_t x, uint32_t y, uint32_t z, uint32_t w) {
 }
 
 //------------------------------------------------------------------------------
+inline BLVec bl_vec_set_i16(uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e, uint16_t f, uint16_t g, uint16_t h) {
+  return _mm_set_epi16(h, g, f, e, d, c, b, a);
+}
+
+//------------------------------------------------------------------------------
+inline BLVec bl_vec_set_i8(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e, uint8_t f, uint8_t g, uint8_t h, uint8_t i, uint8_t j, uint8_t k, uint8_t l, uint8_t m, uint8_t n, uint8_t o, uint8_t p) {
+  return _mm_set_epi8(p, o, n, m, l, k, j, i, h, g, f, e, d, c, b, a);
+}
+
+//------------------------------------------------------------------------------
 inline BLVec bl_vec_splat_scalar(float scalar) {
   return _mm_set_ps(scalar, scalar, scalar, scalar);
 }
@@ -257,6 +388,18 @@ inline void bl_vec_store_i4(uint32_t* __restrict dest, BLVec v) {
 
 //------------------------------------------------------------------------------
 inline void bl_vec_store_i4a(uint32_t* __restrict dest, BLVec v) {
+  BL_MATH_ASSERT(dest && BL_IS_ALIGNED_PTR(dest, 16));
+  _mm_store_si128((__m128i*)dest, *(__m128i*)&v);
+}
+
+//------------------------------------------------------------------------------
+inline void bl_vec_store_i16a(uint16_t* __restrict dest, BLVec v) {
+  BL_MATH_ASSERT(dest && BL_IS_ALIGNED_PTR(dest, 16));
+  _mm_store_si128((__m128i*)dest, *(__m128i*)&v);
+}
+
+//------------------------------------------------------------------------------
+inline void bl_vec_store_i8a(uint8_t* __restrict dest, BLVec v) {
   BL_MATH_ASSERT(dest && BL_IS_ALIGNED_PTR(dest, 16));
   _mm_store_si128((__m128i*)dest, *(__m128i*)&v);
 }
@@ -446,6 +589,40 @@ inline BLVec bl_vec_sqrt(BLVec v) {
   t   = _mm_rsqrt_ps(v);
   r   = _mm_rcp_ps(t);
   return r;
+}
+
+//------------------------------------------------------------------------------
+inline BLVec bl_vec_shuffle_mask32(uint32_t a, uint32_t b, uint32_t c, uint32_t d) {
+  return _mm_set_epi32(d, c, b, a);
+}
+inline BLVec bl_vec_shuffle_mask16(uint16_t a, uint16_t b, uint16_t c, uint16_t d, uint16_t e, uint16_t f, uint16_t g, uint16_t h) {
+  return _mm_set_epi16(h, g, f, e, d, c, b, a);
+}
+inline BLVec bl_vec_shuffle_mask8(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e, uint8_t f, uint8_t g, uint8_t h, uint8_t i, uint8_t j, uint8_t k, uint8_t l, uint8_t m, uint8_t n, uint8_t o, uint8_t p) {
+  return _mm_set_epi8(p, o, n, m, l, k, j, i, h, g, f, e, d, c, b, a);
+}
+
+//------------------------------------------------------------------------------
+inline BLVec bl_vec_shuffle(BLVec v1, BLVec v2, BLVec mask) {
+  BLVec x10, x80, less_x10, mask1, mask2, shuf1, shuf2, result;
+  x10       = bl_vec_set_i(0x10101010, 0x10101010, 0x10101010, 0x10101010);
+  x80       = bl_vec_set_i(0x80808080, 0x80808080, 0x80808080, 0x80808080);
+  less_x10  = _mm_cmpgt_epi8(x10, mask);
+  mask1     = bl_vec_select(x80, mask, less_x10);
+  mask2     = bl_vec_select(mask, x80, less_x10);
+  shuf1     = _mm_shuffle_epi8(v1, mask1);
+  shuf2     = _mm_shuffle_epi8(v2, mask2);
+  result    = _mm_or_ps(shuf1, shuf2);
+  return result;
+}
+
+//------------------------------------------------------------------------------
+inline BLVec bl_vec_select(BLVec v1, BLVec v2, BLVec mask) {
+  __m128 t0, t1, t2;
+  t0 = _mm_andnot_ps(mask, v1);
+  t1 = _mm_and_ps(v2, mask);
+  t2 = _mm_or_ps(t0, t1);
+  return t2;
 }
 
 //------------------------------------------------------------------------------

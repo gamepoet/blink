@@ -574,4 +574,84 @@ SUITE(math) {
     CHECK_EQUAL(0xffffffff, dst[2]);
     CHECK_EQUAL(0x00000000, dst[3]);
   }
+
+  //----------------------------------------------------------------------------
+  TEST(vec_select) {
+    BLVec a, b, c, mask;
+    a     = bl_vec_set_f(1.0f, 2.0f, 3.0f, 4.0f);
+    b     = bl_vec_set_f(2.0f, 2.0f, 0.0f, 4.0f);
+    mask  = bl_vec_cmp_gt(a, b);
+    c     = bl_vec_select(a, b, mask);
+
+    float dst[] __attribute__((aligned(16))) = { 0.0f, 0.0f, 0.0f, 0.0f };
+    bl_vec_store_f4a(dst, c);
+    CHECK_EQUAL(1.0f, dst[0]);
+    CHECK_EQUAL(2.0f, dst[1]);
+    CHECK_EQUAL(0.0f, dst[2]);
+    CHECK_EQUAL(4.0f, dst[3]);
+  }
+
+  //----------------------------------------------------------------------------
+  TEST(vec_shuffle32) {
+    BLVec a, b, c, shuf_dACb;
+    a         = bl_vec_set_i(1, 2, 3, 4);
+    b         = bl_vec_set_i(5, 6, 7, 8);
+    shuf_dACb = BL_VEC_SHUFFLE_MASK_32(d,A,C,b);
+    c         = bl_vec_shuffle(a, b, shuf_dACb);
+    
+    uint32_t dst[] __attribute__((aligned(16))) = { 0, 0, 0, 0 };
+    bl_vec_store_i4a(dst, c);
+    CHECK_EQUAL(8, dst[0]);
+    CHECK_EQUAL(1, dst[1]);
+    CHECK_EQUAL(3, dst[2]);
+    CHECK_EQUAL(6, dst[3]);
+  }
+
+  //----------------------------------------------------------------------------
+  TEST(vec_shuffle16) {
+    BLVec a, b, c, shuf_hGAd_fCcE;
+    a               = bl_vec_set_i16(1, 2, 3, 4, 5, 6, 7, 8);
+    b               = bl_vec_set_i16(9, 10, 11, 12, 13, 14, 15, 16);
+    shuf_hGAd_fCcE  = BL_VEC_SHUFFLE_MASK_16(h,G,A,d, f,C,c,E);
+    c               = bl_vec_shuffle(a, b, shuf_hGAd_fCcE);
+    
+    uint16_t dst[] __attribute__((aligned(16))) = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    bl_vec_store_i16a(dst, c);
+    CHECK_EQUAL(16, dst[0]);
+    CHECK_EQUAL(7,  dst[1]);
+    CHECK_EQUAL(1,  dst[2]);
+    CHECK_EQUAL(12, dst[3]);
+    CHECK_EQUAL(14, dst[4]);
+    CHECK_EQUAL(3,  dst[5]);
+    CHECK_EQUAL(11, dst[6]);
+    CHECK_EQUAL(5,  dst[7]);
+  }
+  
+  //----------------------------------------------------------------------------
+  TEST(vec_shuffle8) {
+    BLVec a, b, c, shuf_pOcA_LNop_hGAd_fCcE;
+    a                         = bl_vec_set_i8(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+    b                         = bl_vec_set_i8(17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32);
+    shuf_pOcA_LNop_hGAd_fCcE  = BL_VEC_SHUFFLE_MASK_8(p,O,c,A, L,N,o,p, h,G,A,d, f,C,c,E);
+    c                         = bl_vec_shuffle(a, b, shuf_pOcA_LNop_hGAd_fCcE);
+    
+    uint8_t dst[] __attribute__((aligned(16))) = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    bl_vec_store_i8a(dst, c);
+    CHECK_EQUAL(32, dst[0]);
+    CHECK_EQUAL(15, dst[1]);
+    CHECK_EQUAL(19, dst[2]);
+    CHECK_EQUAL(1,  dst[3]);
+    CHECK_EQUAL(12, dst[4]);
+    CHECK_EQUAL(14, dst[5]);
+    CHECK_EQUAL(31, dst[6]);
+    CHECK_EQUAL(32, dst[7]);
+    CHECK_EQUAL(24, dst[8]);
+    CHECK_EQUAL(7,  dst[9]);
+    CHECK_EQUAL(1,  dst[10]);
+    CHECK_EQUAL(20, dst[11]);
+    CHECK_EQUAL(22, dst[12]);
+    CHECK_EQUAL(3,  dst[13]);
+    CHECK_EQUAL(19, dst[14]);
+    CHECK_EQUAL(5,  dst[15]);
+  }
 }
