@@ -1,8 +1,8 @@
 # blink
 
-Blink is a collection of libraries useful to facilitate development of games. It
-is initially being used as a framework for exploring highly parallel game
-systems.
+Blink is a collection of libraries useful to facilitate development of games.
+It is initially being used as a framework for exploring highly parallel game
+systems based around breaking work down into asynchronous jobs.
 
-All functions and types use a 'bl_' prefix and all preprocessor symbols use
-'BL_'.
+All functions use a 'bl\_' prefix and all types and preprocessor symbols use
+'BL\_'.
