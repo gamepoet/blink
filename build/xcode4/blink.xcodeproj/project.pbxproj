@@ -32,6 +32,8 @@
 		5BBBD81F1400804B001F3C9B /* queue_swsr_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */; };
 		5BBBD82314074FB5001F3C9B /* vec_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD82214074FB5001F3C9B /* vec_test.cpp */; };
 		5BBBD829140802CE001F3C9B /* mtx_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD828140802CE001F3C9B /* mtx_test.cpp */; };
+		5BDB697C1480354900291781 /* io.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BDB697B1480354900291781 /* io.h */; };
+		5BDB69811480355F00291781 /* io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB69801480355F00291781 /* io.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +85,8 @@
 		5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queue_swsr_test.cpp; sourceTree = "<group>"; };
 		5BBBD82214074FB5001F3C9B /* vec_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vec_test.cpp; sourceTree = "<group>"; };
 		5BBBD828140802CE001F3C9B /* mtx_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mtx_test.cpp; sourceTree = "<group>"; };
+		5BDB697B1480354900291781 /* io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = io.h; path = ../../src/blink/io.h; sourceTree = "<group>"; };
+		5BDB69801480355F00291781 /* io.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = io.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,9 +114,11 @@
 			children = (
 				5B3D701E140B40280014D68C /* base */,
 				5B3D7028140B40280014D68C /* job */,
+				5BDB697D1480355F00291781 /* io */,
 				5B3D702C140B40280014D68C /* queue */,
 				5B3D7027140B40280014D68C /* base.h */,
 				5B3D702A140B40280014D68C /* job.h */,
+				5BDB697B1480354900291781 /* io.h */,
 				5B3D702E140B40280014D68C /* queue.h */,
 				5B07E04F1413EB370004ACA4 /* vecmath.h */,
 			);
@@ -122,11 +128,11 @@
 		5B3D701E140B40280014D68C /* base */ = {
 			isa = PBXGroup;
 			children = (
+				5B3D7023140B40280014D68C /* osx */,
 				5B3D701F140B40280014D68C /* base_int.h */,
 				5B3D7020140B40280014D68C /* debug.cpp */,
 				5B3D7021140B40280014D68C /* init.cpp */,
 				5B3D7022140B40280014D68C /* log.cpp */,
-				5B3D7023140B40280014D68C /* osx */,
 				5B3D7026140B40280014D68C /* str.cpp */,
 			);
 			name = base;
@@ -229,6 +235,23 @@
 			path = math;
 			sourceTree = "<group>";
 		};
+		5BDB697D1480355F00291781 /* io */ = {
+			isa = PBXGroup;
+			children = (
+				5BDB697E1480355F00291781 /* osx */,
+			);
+			name = io;
+			path = ../../src/blink/io;
+			sourceTree = "<group>";
+		};
+		5BDB697E1480355F00291781 /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				5BDB69801480355F00291781 /* io.cpp */,
+			);
+			path = osx;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -241,6 +264,7 @@
 				5B3D7038140B40280014D68C /* job.h in Headers */,
 				5B3D703B140B40280014D68C /* queue.h in Headers */,
 				5B07E0501413EB370004ACA4 /* vecmath.h in Headers */,
+				5BDB697C1480354900291781 /* io.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +311,9 @@
 /* Begin PBXProject section */
 		5B6B5BC513F38F99007DF59B /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
 			buildConfigurationList = 5B6B5BC813F38F99007DF59B /* Build configuration list for PBXProject "blink" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -318,6 +345,7 @@
 				5B3D7035140B40280014D68C /* str.cpp in Sources */,
 				5B3D7037140B40280014D68C /* job.cpp in Sources */,
 				5B3D703A140B40280014D68C /* queue.cpp in Sources */,
+				5BDB69811480355F00291781 /* io.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
