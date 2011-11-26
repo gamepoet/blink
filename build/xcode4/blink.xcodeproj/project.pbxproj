@@ -32,6 +32,10 @@
 		5BBBD81F1400804B001F3C9B /* queue_swsr_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */; };
 		5BBBD82314074FB5001F3C9B /* vec_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD82214074FB5001F3C9B /* vec_test.cpp */; };
 		5BBBD829140802CE001F3C9B /* mtx_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD828140802CE001F3C9B /* mtx_test.cpp */; };
+		5BC72121148176B8008635D9 /* murmur3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BC7211E148176B8008635D9 /* murmur3.cpp */; };
+		5BC72122148176B8008635D9 /* hash.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BC7211F148176B8008635D9 /* hash.h */; };
+		5BC7212714817EAD008635D9 /* hash_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BC7212614817EAD008635D9 /* hash_test.cpp */; };
+		5BC7212914817F97008635D9 /* lookup3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BC7212814817F97008635D9 /* lookup3.cpp */; };
 		5BDB697C1480354900291781 /* io.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BDB697B1480354900291781 /* io.h */; };
 		5BDB69811480355F00291781 /* io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB69801480355F00291781 /* io.cpp */; };
 /* End PBXBuildFile section */
@@ -85,6 +89,10 @@
 		5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queue_swsr_test.cpp; sourceTree = "<group>"; };
 		5BBBD82214074FB5001F3C9B /* vec_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vec_test.cpp; sourceTree = "<group>"; };
 		5BBBD828140802CE001F3C9B /* mtx_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mtx_test.cpp; sourceTree = "<group>"; };
+		5BC7211E148176B8008635D9 /* murmur3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = murmur3.cpp; sourceTree = "<group>"; };
+		5BC7211F148176B8008635D9 /* hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hash.h; path = ../../src/blink/hash.h; sourceTree = "<group>"; };
+		5BC7212614817EAD008635D9 /* hash_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hash_test.cpp; sourceTree = "<group>"; };
+		5BC7212814817F97008635D9 /* lookup3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lookup3.cpp; sourceTree = "<group>"; };
 		5BDB697B1480354900291781 /* io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = io.h; path = ../../src/blink/io.h; sourceTree = "<group>"; };
 		5BDB69801480355F00291781 /* io.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = io.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -113,10 +121,12 @@
 			isa = PBXGroup;
 			children = (
 				5B3D701E140B40280014D68C /* base */,
+				5BC7211B148176B8008635D9 /* hash */,
 				5B3D7028140B40280014D68C /* job */,
 				5BDB697D1480355F00291781 /* io */,
 				5B3D702C140B40280014D68C /* queue */,
 				5B3D7027140B40280014D68C /* base.h */,
+				5BC7211F148176B8008635D9 /* hash.h */,
 				5B3D702A140B40280014D68C /* job.h */,
 				5BDB697B1480354900291781 /* io.h */,
 				5B3D702E140B40280014D68C /* queue.h */,
@@ -188,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				5B6B5BF113F3919C007DF59B /* base */,
+				5BC7212414817EAD008635D9 /* hash */,
 				5BBBD81914004CA1001F3C9B /* job */,
 				5BBBD82014074FB5001F3C9B /* math */,
 				5BBBD81C1400804B001F3C9B /* queue */,
@@ -235,6 +246,24 @@
 			path = math;
 			sourceTree = "<group>";
 		};
+		5BC7211B148176B8008635D9 /* hash */ = {
+			isa = PBXGroup;
+			children = (
+				5BC7212814817F97008635D9 /* lookup3.cpp */,
+				5BC7211E148176B8008635D9 /* murmur3.cpp */,
+			);
+			name = hash;
+			path = ../../src/blink/hash;
+			sourceTree = "<group>";
+		};
+		5BC7212414817EAD008635D9 /* hash */ = {
+			isa = PBXGroup;
+			children = (
+				5BC7212614817EAD008635D9 /* hash_test.cpp */,
+			);
+			path = hash;
+			sourceTree = "<group>";
+		};
 		5BDB697D1480355F00291781 /* io */ = {
 			isa = PBXGroup;
 			children = (
@@ -265,6 +294,7 @@
 				5B3D703B140B40280014D68C /* queue.h in Headers */,
 				5B07E0501413EB370004ACA4 /* vecmath.h in Headers */,
 				5BDB697C1480354900291781 /* io.h in Headers */,
+				5BC72122148176B8008635D9 /* hash.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,6 +376,8 @@
 				5B3D7037140B40280014D68C /* job.cpp in Sources */,
 				5B3D703A140B40280014D68C /* queue.cpp in Sources */,
 				5BDB69811480355F00291781 /* io.cpp in Sources */,
+				5BC72121148176B8008635D9 /* murmur3.cpp in Sources */,
+				5BC7212914817F97008635D9 /* lookup3.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +395,7 @@
 				5BBBD81F1400804B001F3C9B /* queue_swsr_test.cpp in Sources */,
 				5BBBD82314074FB5001F3C9B /* vec_test.cpp in Sources */,
 				5BBBD829140802CE001F3C9B /* mtx_test.cpp in Sources */,
+				5BC7212714817EAD008635D9 /* hash_test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
