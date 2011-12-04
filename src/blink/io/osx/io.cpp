@@ -468,10 +468,15 @@ void bl_io_file_seek_sync(BLIoFile* file, uint64_t offset) {
 }
 
 //------------------------------------------------------------------------------
-uint64_t bl_io_file_tell_sync(BLIoFile* file) {
+uint64_t bl_io_file_tell_sync(const BLIoFile* file) {
   BL_ASSERT(file);
-
   return file->offset;
+}
+
+//------------------------------------------------------------------------------
+const char* bl_io_file_get_filename(const BLIoFile* file) {
+  BL_ASSERT(file);
+  return file->file_name;
 }
 
 //------------------------------------------------------------------------------

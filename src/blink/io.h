@@ -95,7 +95,9 @@ BLIoOp* bl_io_file_read(BLIoFile* file, const BLIoOpAttr* attr, void* buffer, ui
 BLIoStatus bl_io_file_read_sync(BLIoFile* file, const BLIoOpAttr* attr, void* buffer, uint64_t size);
 
 void bl_io_file_seek_sync(BLIoFile* file, uint64_t offset);
-uint64_t bl_io_file_tell_sync(BLIoFile* file);
+uint64_t bl_io_file_tell_sync(const BLIoFile* file);
+
+const char* bl_io_file_get_filename(const BLIoFile* file);
 
 
 //
