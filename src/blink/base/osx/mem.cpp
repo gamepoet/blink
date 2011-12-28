@@ -33,6 +33,7 @@
 
 //------------------------------------------------------------------------------
 void* bl_alloc(size_t size, size_t alignment) {
+  alignment = alignment < sizeof(void*) ? sizeof(void*) : alignment;
   void* mem;
   int ret = posix_memalign(&mem, alignment, size);
   if (0 == ret) {
