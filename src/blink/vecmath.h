@@ -24,8 +24,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
-#ifndef BL_MATH_H
-#define BL_MATH_H
+#ifndef BL_VECMATH_H
+#define BL_VECMATH_H
 
 #include <blink/base.h>
 #include <math.h>
