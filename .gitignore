@@ -1,6 +1,9 @@
 # Vim-generated files
 .*.swp
 
+# rvm
+.rvmrc
+
 # OSX
 .DS_Store
 
