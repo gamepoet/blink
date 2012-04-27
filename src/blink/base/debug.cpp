@@ -26,6 +26,8 @@
 #include "../base.h"
 #include "base_int.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <sys/sysctl.h>
 
 //
@@ -80,17 +82,19 @@ static void signal_handler(int sig) {
 }
 
 //------------------------------------------------------------------------------
-static BLAssertResponse default_assert_handler(const char* cond, const char* msg, const char* file, unsigned int line) {
+static void default_assert_handler(const char* cond, const char* msg, const char* func, const char* file, unsigned int line) {
   BL_DEBUG_MSG(
-      "ASSERT: %s%s%s%s%s(%d)",
+      "ASSERT: %s%s%s%s%s%s(%d)",
       cond ? cond : "",
       cond ? ". " : "",
       msg ? msg : "",
       msg ? ". " : "",
+      func,
       file,
       line
       );
-  return BL_ASSERT_RESPONSE_HALT;
+
+  abort();
 }
 
 
@@ -135,7 +139,7 @@ void bl_set_assert_handler(BLAssertHandler handler) {
 }
 
 //------------------------------------------------------------------------------
-BLAssertResponse bl_assert_failed(const char* cond, const char* file, unsigned int line, const char* format, ...) {
+void bl_assert_failed(const char* cond, const char* func, const char* file, unsigned int line, const char* format, ...) {
   BLAssertHandler handler = s_assert_handler;
   if (!handler) {
     handler = &default_assert_handler;
@@ -152,7 +156,7 @@ BLAssertResponse bl_assert_failed(const char* cond, const char* file, unsigned i
     msg[0] = 0;
   }
 
-  return handler(cond, msg, file, line);
+  handler(cond, msg, func, file, line);
 }
 
 //------------------------------------------------------------------------------
@@ -175,4 +179,31 @@ void bl_debug_msg_raw(const char* format, ...) {
   va_end(args);
 }
 
+//------------------------------------------------------------------------------
+bool bl_debugger_is_attached() {
+#ifdef BL_PLATFORM_OSX
+  int               junk;
+  int               mib[4];
+  struct kinfo_proc info;
+  size_t            size;
+
+  // initialize the flags so that, if sysctl fails for some bizarre
+  // reason, we get a predictable result
+  info.kp_proc.p_flag = 0;
+
+  // initialize mib, which tells sysctl the info we want, in this case
+  // we're looking for information about a specific process id
+  mib[0] = CTL_KERN;
+  mib[1] = KERN_PROC;
+  mib[2] = KERN_PROC_PID;
+  mib[3] = getpid();
+
+  // call sysctl
+  size = sizeof(info);
+  junk = sysctl(mib, sizeof(mib) / sizeof(*mib), &info, &size, NULL, 0);
+
+  // we're being debugged if the P_TRACED flag is set
+  return ((info.kp_proc.p_flag & P_TRACED) != 0);
+#endif
+}
 

@@ -196,25 +196,22 @@ void bl_endian_swap(float* __restrict values, size_t count);
 // debug support
 //
 
-// Response codes from an assert handler.
-enum BLAssertResponse {
-  BL_ASSERT_RESPONSE_HALT,
-  BL_ASSERT_RESPONSE_CONTINUE,
-};
-
-typedef BLAssertResponse (*BLAssertHandler)(const char* cond, const char* msg, const char* file, unsigned int line);
+typedef void (*BLAssertHandler)(const char* cond, const char* msg, const char* func, const char* file, unsigned int line);
 
 // Sets the current assert handler. Set to NULL to reset to the default handler.
 void bl_set_assert_handler(BLAssertHandler handler);
 
 // Called by a failing assertion. This function will invoke the current assert handler.
-BLAssertResponse bl_assert_failed(const char* cond, const char* file, unsigned int line, const char* format, ...);
+void bl_assert_failed(const char* cond, const char* func, const char* file, unsigned int line, const char* format, ...);
 
 // Prints a message to the debug tty. A newline will be appended to the string.
 void bl_debug_msg(const char* format, ...);
 
 // Prints a message to the debug tty as is.
 void bl_debug_msg_raw(const char* format, ...);
+
+// Reports whether this program is running under a debugger.
+bool bl_debugger_is_attached();
 
 // break into the debugger
 #ifdef NDEBUG
@@ -226,7 +223,8 @@ void bl_debug_msg_raw(const char* format, ...);
 #   if defined(__ppc__) || defined(__ppc64__)
 #     define BL_DEBUG_BREAK() asm { trap }
 #   elif defined(__i386) || defined(__x86_64__)
-#     define BL_DEBUG_BREAK() asm("int $3")
+      inline void bl_debug_break() { asm("int3"); }
+#     define BL_DEBUG_BREAK() bl_debug_break()
 #   else
 #     error unsupported architecture
 #   endif
@@ -253,35 +251,38 @@ struct BL_STATIC_ASSERTION_FAILURE<true> {};
 
 // assertion
 #ifdef NDEBUG
-# define BL_ASSERT(cond)                do { BL_UNUSED(cond); } while (0)
-# define BL_ASSERT_MSG(cond, ...)       do { BL_UNUSED(cond); } while (0)
+# define BL_ASSERT(cond)                (cond)
+# define BL_ASSERT_MSG(cond, ...)       (cond)
+# define BL_ASSERT_DBG(cond)            do { BL_UNUSED(cond); } while (0)
+# define BL_ASSERT_DBG_MSG(cond, ...)   do { BL_UNUSED(cond); } while (0)
 # define BL_FATAL(...)                  ((void)0)
 #else
-# define BL_ASSERT(cond)                                                                          \
-  do {                                                                                            \
-    if (BL_UNLIKELY(!(cond))) {                                                                   \
-      if (bl_assert_failed(#cond, __FILE__, __LINE__, 0) == BL_ASSERT_RESPONSE_HALT) {            \
-        BL_DEBUG_BREAK();                                                                         \
-      }                                                                                           \
-    }                                                                                             \
-  }                                                                                               \
-  while (0)
-# define BL_ASSERT_MSG(cond, ...)                                                                 \
-  do {                                                                                            \
-    if (BL_UNLIKELY(!(cond))) {                                                                   \
-      if (bl_assert_failed(#cond, __FILE__, __LINE__, __VA_ARGS__) == BL_ASSERT_RESPONSE_HALT) {  \
-        BL_DEBUG_BREAK();                                                                         \
-      }                                                                                           \
-    }                                                                                             \
-  }                                                                                               \
-  while (0)
-# define BL_FATAL(...)                                                                            \
-  do {                                                                                            \
-    if (bl_assert_failed(0, __FILE__, __LINE__, __VA_ARGS__) == BL_ASSERT_RESPONSE_HALT) {        \
-      BL_DEBUG_BREAK();                                                                           \
-    }                                                                                             \
-  }                                                                                               \
-  while (0)
+# define BL_ASSERT(cond)                                                    \
+  (                                                                         \
+    BL_LIKELY(cond) ?                                                       \
+      true : (                                                              \
+        (bl_debugger_is_attached() ? (void)BL_DEBUG_BREAK() : (void)0),     \
+        bl_assert_failed(#cond, __func__, __FILE__, __LINE__, 0),           \
+        false                                                               \
+      )                                                                     \
+  )
+
+# define BL_ASSERT_MSG(cond, ...)                                           \
+  (                                                                         \
+    BL_LIKELY(cond) ?                                                       \
+      true : (                                                              \
+        (bl_debugger_is_attached() ? (void)BL_DEBUG_BREAK() : (void)0),     \
+        bl_assert_failed(#cond, __func__, __FILE__, __LINE__, __VA_ARGS__), \
+        false                                                               \
+      )                                                                     \
+  )
+
+# define BL_ASSERT_DBG(cond)            BL_ASSERT(cond)
+# define BL_ASSERT_MSG_DBG(cond, ...)   BL_ASSERT_MSG(cond, __VA_ARGS__)
+
+# define BL_FATAL(...)                                                      \
+  BL_DEBUG_BREAK();                                                         \
+  bl_assert_failed(0, __func__, __FILE__, __LINE__, __VA_ARGS__)
 #endif
 
 

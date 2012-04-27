@@ -29,9 +29,8 @@
 static bool s_assert_fired;
 
 //------------------------------------------------------------------------------
-static BLAssertResponse assert_handler(const char* cond, const char* msg, const char* file, unsigned int line) {
+static void assert_handler(const char* cond, const char* msg, const char* func, const char* file, unsigned int line) {
   s_assert_fired = true;
-  return BL_ASSERT_RESPONSE_CONTINUE;
 }
 
 SUITE(base) {
