@@ -32,10 +32,11 @@
 // types
 //
 
-struct Instance {
+struct Plugin {
   NPP       npp;
   NPWindow  window;
   void*     ca_layer;
+  bool      is_invalidating_core_anim_model;
 };
 
 
@@ -71,14 +72,26 @@ static void log(const char* format, ...) {
 
 //------------------------------------------------------------------------------
 static void render(NPP npp, NPCocoaEvent* __restrict evt) {
-  Instance* __restrict obj = (Instance*)npp->pdata;
-  core_anim_layer_render(obj->ca_layer);
+  Plugin* __restrict plugin = (Plugin*)npp->pdata;
+  core_anim_layer_render(plugin->ca_layer);
 }
 
 
 //
 // exported functions
 //
+
+//------------------------------------------------------------------------------
+void issue_invalidate_rect(Plugin* __restrict plugin, float x, float y, float w, float h) {
+  if (plugin->is_invalidating_core_anim_model) {
+    NPRect rect;
+    rect.left = (uint16_t)x;
+    rect.top = (uint16_t)y;
+    rect.right = (uint16_t)w;
+    rect.bottom = (uint16_t)h;
+    s_browser->invalidaterect(plugin->npp, &rect);
+  }
+}
 
 //------------------------------------------------------------------------------
 extern "C" NPError NPP_ClearSiteData(const char* site, uint64_t flags, uint64_t maxAge) {
@@ -88,8 +101,6 @@ extern "C" NPError NPP_ClearSiteData(const char* site, uint64_t flags, uint64_t 
 
 //------------------------------------------------------------------------------
 extern "C" NPError NP_GetEntryPoints(NPPluginFuncs* funcs) {
-  log(__FUNCTION__);
-//  sleep(100000);
   if (!funcs) {
     return NPERR_INVALID_FUNCTABLE_ERROR;
   }
@@ -142,7 +153,6 @@ extern "C" NPBool NPP_GotFocus(NPP instance, NPFocusDirection direction) {
 //------------------------------------------------------------------------------
 extern "C" NPError NP_Initialize(NPNetscapeFuncs* funcs) {
   log(__FUNCTION__);
-//  sleep(100000);
 
   if (!funcs) {
     return NPERR_INVALID_FUNCTABLE_ERROR;
@@ -177,12 +187,12 @@ extern "C" NPError NPP_Destroy(NPP instance, NPSavedData** save) {
     return NPERR_INVALID_INSTANCE_ERROR;
   }
 
-  Instance* obj = (Instance*)instance->pdata;
-  if (obj) {
-    if (obj->ca_layer) {
-      core_anim_layer_destroy(obj->ca_layer);
+  Plugin* plugin = (Plugin*)instance->pdata;
+  if (plugin) {
+    if (plugin->ca_layer) {
+      core_anim_layer_destroy(plugin->ca_layer);
     }
-    free(obj);
+    free(plugin);
     instance->pdata = NULL;
   }
 
@@ -199,13 +209,13 @@ extern "C" NPError NPP_DestroyStream(NPP instance, NPStream* stream, NPReason re
 extern "C" NPError NPP_GetValue(NPP instance, NPPVariable variable, void* value) {
   log("%s var=%d", __FUNCTION__, variable);
 
-  Instance* obj = (Instance*)instance->pdata;
+  Plugin* plugin = (Plugin*)instance->pdata;
 
   if (variable == NPPVpluginCoreAnimationLayer) {
-    if (!obj->ca_layer) {
+    if (!plugin->ca_layer) {
       return NPERR_GENERIC_ERROR;
     }
-    *(void**)value = obj->ca_layer;
+    *(void**)value = plugin->ca_layer;
     return NPERR_NO_ERROR;
   }
 
@@ -222,8 +232,6 @@ extern "C" int16_t NPP_HandleEvent(NPP instance, void* event) {
   if (!evt) {
     return 0;
   }
-
-  Instance* obj = (Instance*)instance->pdata;
 
   switch (evt->type) {
     case NPCocoaEventDrawRect:
@@ -273,7 +281,6 @@ extern "C" int16_t NPP_HandleEvent(NPP instance, void* event) {
 
     case NPCocoaEventWindowFocusChanged:
       log("%s: NPCocoaEventWindowFocusChanged", __FUNCTION__);
-      core_anim_layer_set_visible(obj->ca_layer, evt->data.focus.hasFocus);
       break;
 
     case NPCocoaEventScrollWheel:
@@ -300,49 +307,68 @@ extern "C" NPError NPP_New(NPMIMEType pluginType, NPP instance, uint16_t mode, i
     return NPERR_INVALID_INSTANCE_ERROR;
   }
 
-  Instance* obj = (Instance*)malloc(sizeof(Instance));
-  if (!obj) {
+  Plugin* plugin = (Plugin*)malloc(sizeof(Plugin));
+  if (!plugin) {
     log("out of memory");
     return NPERR_OUT_OF_MEMORY_ERROR;
   }
 
-  memset(obj, 0, sizeof(Instance));
-  obj->npp = instance;
-  instance->pdata = obj;
+  memset(plugin, 0, sizeof(Plugin));
+  plugin->npp = instance;
+  instance->pdata = plugin;
 
   // query browser caps
   NPError err;
   NPBool supports_core_animation;
   NPBool supports_cocoa;
+  NPBool supports_invalidating_core_animation;
   err = s_browser->getvalue(instance, NPNVsupportsCoreAnimationBool, &supports_core_animation);
   if (err != NPERR_NO_ERROR) {
     supports_core_animation = false;
   }
   err = s_browser->getvalue(instance, NPNVsupportsCocoaBool, &supports_cocoa);
-  if (err!= NPERR_NO_ERROR) {
+  if (err != NPERR_NO_ERROR) {
     supports_cocoa = false;
   }
+  err = s_browser->getvalue(instance, NPNVsupportsInvalidatingCoreAnimationBool, &supports_invalidating_core_animation);
+  if (err != NPERR_NO_ERROR) {
+    supports_invalidating_core_animation = false;
+  }
+//  log("invalidating core anim? %s", supports_invalidating_core_animation ? "yes" : "no");
 
   // validate browser caps
-  if (!supports_core_animation || !supports_cocoa) {
+  if (!(supports_core_animation || supports_invalidating_core_animation) || !supports_cocoa) {
+    free(plugin);
     return NPERR_INCOMPATIBLE_VERSION_ERROR;
   }
+  plugin->is_invalidating_core_anim_model = supports_invalidating_core_animation;
 
   // negotiate drawing and event models
-  err = s_browser->setvalue(instance, NPPVpluginDrawingModel, (void*)NPDrawingModelCoreAnimation);
-  if (err != NPERR_NO_ERROR) {
-    log("Failed to set CoreGraphics drawing model.");
-    return NPERR_INCOMPATIBLE_VERSION_ERROR;
+  if (supports_invalidating_core_animation) {
+    err = s_browser->setvalue(instance, NPPVpluginDrawingModel, (void*)NPDrawingModelInvalidatingCoreAnimation);
+    if (err != NPERR_NO_ERROR) {
+      log("Failed to set InvalidatingCoreAnimation drawing model.");
+      free(plugin);
+      return NPERR_INCOMPATIBLE_VERSION_ERROR;
+    }
+  }
+  else {
+    err = s_browser->setvalue(instance, NPPVpluginDrawingModel, (void*)NPDrawingModelCoreAnimation);
+    if (err != NPERR_NO_ERROR) {
+      log("Failed to set CoreAnimation drawing model.");
+      free(plugin);
+      return NPERR_INCOMPATIBLE_VERSION_ERROR;
+    }
   }
   err = s_browser->setvalue(instance, NPPVpluginEventModel, (void*)NPEventModelCocoa);
   if (err != NPERR_NO_ERROR) {
     log("Failed to set Cocoa event model.");
+    free(plugin);
     return NPERR_INCOMPATIBLE_VERSION_ERROR;
   }
 
   // create the core animation layer
-  obj->ca_layer = core_anim_layer_create();
-  log("created core anim layer: %08x", obj->ca_layer);
+  plugin->ca_layer = core_anim_layer_create(plugin);
 
   return NPERR_NO_ERROR;
 }
@@ -366,18 +392,31 @@ extern "C" NPError NPP_SetValue(NPP instance, NPNVariable variable, void* value)
 
 //------------------------------------------------------------------------------
 extern "C" NPError NPP_SetWindow(NPP instance, NPWindow* window) {
-  log(__FUNCTION__);
+//  log(__FUNCTION__);
   if (!instance || !instance->pdata) {
     return NPERR_INVALID_INSTANCE_ERROR;
   }
-  Instance* cur_instance = (Instance*)instance->pdata;
-  cur_instance->window = *window;
-  log("  window: %08x", window->window);
-  log("  x: %d", window->x);
-  log("  y: %d", window->y);
-  log("  w: %d", window->width);
-  log("  h: %d", window->height);
-  log("  clip: l=%d, t=%d, r=%d, b=%d", window->clipRect.left, window->clipRect.top, window->clipRect.right, window->clipRect.bottom);
+  Plugin* plugin = (Plugin*)instance->pdata;
+  plugin->window = *window;
+//  log("  window: %08x", window->window);
+//  log("  x: %d", window->x);
+//  log("  y: %d", window->y);
+//  log("  w: %d", window->width);
+//  log("  h: %d", window->height);
+//  log("  clip: l=%d, t=%d, r=%d, b=%d", window->clipRect.left, window->clipRect.top, window->clipRect.right, window->clipRect.bottom);
+  core_anim_layer_set_dims(plugin->ca_layer, window->width, window->height);
+
+  // use a zero-sized clip rect to determine if the window is visible
+  uint16_t clip_w, clip_h;
+  clip_w = window->clipRect.right - window->clipRect.left;
+  clip_h = window->clipRect.bottom - window->clipRect.top;
+  if (clip_w == 0 || clip_h == 0) {
+    core_anim_layer_set_visible(plugin->ca_layer, false);
+  }
+  else {
+    core_anim_layer_set_visible(plugin->ca_layer, true);
+  }
+  
   return NPERR_NO_ERROR;
 }
 

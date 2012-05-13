@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B03A6D21558D5D90080A13D /* imgview_osx.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B03A6D11558D5D90080A13D /* imgview_osx.h */; };
 		5B04F71E155103BF00E9E5E7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04F71D155103BF00E9E5E7 /* Cocoa.framework */; };
 		5B04F728155103BF00E9E5E7 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5B04F726155103BF00E9E5E7 /* InfoPlist.strings */; };
 		5B04F72D155103F600E9E5E7 /* imgview.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B04F712155101F500E9E5E7 /* imgview.cpp */; };
@@ -44,6 +45,8 @@
 		5BC7212914817F97008635D9 /* lookup3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BC7212814817F97008635D9 /* lookup3.cpp */; };
 		5BDB697C1480354900291781 /* io.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BDB697B1480354900291781 /* io.h */; };
 		5BDB69811480355F00291781 /* io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB69801480355F00291781 /* io.cpp */; };
+		5BDC8D651558E2FE009528DB /* libsquish.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BDC8D641558E2FE009528DB /* libsquish.a */; };
+		5BDC8D681558E310009528DB /* libtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BDC8D671558E310009528DB /* libtiff.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,8 +72,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5B03A6D11558D5D90080A13D /* imgview_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imgview_osx.h; path = ../../src/tools/imgview/imgview_osx.h; sourceTree = "<group>"; };
 		5B04F712155101F500E9E5E7 /* imgview.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgview.cpp; path = ../../src/tools/imgview/imgview.cpp; sourceTree = "<group>"; };
-		5B04F71B155103BF00E9E5E7 /* imgview.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = imgview.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B04F71B155103BF00E9E5E7 /* imgview.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = imgview.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B04F71D155103BF00E9E5E7 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		5B04F720155103BF00E9E5E7 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5B04F721155103BF00E9E5E7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -117,6 +121,8 @@
 		5BC7212814817F97008635D9 /* lookup3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lookup3.cpp; sourceTree = "<group>"; };
 		5BDB697B1480354900291781 /* io.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = io.h; path = ../../src/blink/io.h; sourceTree = "<group>"; };
 		5BDB69801480355F00291781 /* io.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = io.cpp; sourceTree = "<group>"; };
+		5BDC8D641558E2FE009528DB /* libsquish.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsquish.a; path = /opt/local/lib/libsquish.a; sourceTree = "<absolute>"; };
+		5BDC8D671558E310009528DB /* libtiff.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtiff.a; path = /opt/local/lib/libtiff.a; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +130,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BDC8D651558E2FE009528DB /* libsquish.a in Frameworks */,
+				5BDC8D681558E310009528DB /* libtiff.a in Frameworks */,
 				5B04F73F1554F8C600E9E5E7 /* QuartzCore.framework in Frameworks */,
 				5B04F73D1554F88000E9E5E7 /* OpenGL.framework in Frameworks */,
 				5B04F71E155103BF00E9E5E7 /* Cocoa.framework in Frameworks */,
@@ -164,6 +172,7 @@
 				5B04F726155103BF00E9E5E7 /* InfoPlist.strings */,
 				5B04F729155103BF00E9E5E7 /* imgview-Prefix.pch */,
 				5B04F712155101F500E9E5E7 /* imgview.cpp */,
+				5B03A6D11558D5D90080A13D /* imgview_osx.h */,
 				5B04F73A1554EB3F00E9E5E7 /* imgview_osx.mm */,
 			);
 			name = imgview;
@@ -172,6 +181,8 @@
 		5B04F71C155103BF00E9E5E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5BDC8D671558E310009528DB /* libtiff.a */,
+				5BDC8D641558E2FE009528DB /* libsquish.a */,
 				5B04F71D155103BF00E9E5E7 /* Cocoa.framework */,
 				5B04F73C1554F88000E9E5E7 /* OpenGL.framework */,
 				5B04F73E1554F8C600E9E5E7 /* QuartzCore.framework */,
@@ -285,7 +296,7 @@
 			children = (
 				5B6B5BCE13F38F99007DF59B /* libblink.a */,
 				5B6B5BE613F39160007DF59B /* tests */,
-				5B04F71B155103BF00E9E5E7 /* imgview.bundle */,
+				5B04F71B155103BF00E9E5E7 /* imgview.plugin */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -391,6 +402,7 @@
 				5B07E0501413EB370004ACA4 /* vecmath.h in Headers */,
 				5BDB697C1480354900291781 /* io.h in Headers */,
 				5BC72122148176B8008635D9 /* hash.h in Headers */,
+				5B03A6D21558D5D90080A13D /* imgview_osx.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,7 +423,7 @@
 			);
 			name = imgview;
 			productName = imgview;
-			productReference = 5B04F71B155103BF00E9E5E7 /* imgview.bundle */;
+			productReference = 5B04F71B155103BF00E9E5E7 /* imgview.plugin */;
 			productType = "com.apple.product-type.bundle";
 		};
 		5B6B5BCD13F38F99007DF59B /* blink */ = {
@@ -559,30 +571,44 @@
 		5B04F72B155103BF00E9E5E7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "imgview/imgview-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				HEADER_SEARCH_PATHS = "../../src/vendor/npapi/**";
+				HEADER_SEARCH_PATHS = (
+					"../../src/vendor/npapi/**",
+					/opt/local/include,
+				);
 				INFOPLIST_FILE = "imgview/imgview-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = bundle;
+				WRAPPER_EXTENSION = plugin;
 			};
 			name = Debug;
 		};
 		5B04F72C155103BF00E9E5E7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "imgview/imgview-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				HEADER_SEARCH_PATHS = "../../src/vendor/npapi/**";
+				HEADER_SEARCH_PATHS = (
+					"../../src/vendor/npapi/**",
+					/opt/local/include,
+				);
 				INFOPLIST_FILE = "imgview/imgview-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = bundle;
+				WRAPPER_EXTENSION = plugin;
 			};
 			name = Release;
 		};
@@ -691,6 +717,7 @@
 				5B04F72C155103BF00E9E5E7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5B6B5BC813F38F99007DF59B /* Build configuration list for PBXProject "blink" */ = {
 			isa = XCConfigurationList;

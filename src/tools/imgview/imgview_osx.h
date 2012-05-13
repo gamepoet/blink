@@ -25,7 +25,10 @@
 
 #pragma once
 
-void* core_anim_layer_create();
+struct Plugin;
+
+void* core_anim_layer_create(Plugin* plugin);
 void core_anim_layer_destroy(void* layer);
 void core_anim_layer_render(void* layer);
 void core_anim_layer_set_visible(void* layer, bool visible);
+void core_anim_layer_set_dims(void* layer, float width, float height);
