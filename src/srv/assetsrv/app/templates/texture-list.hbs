@@ -1,0 +1,8 @@
+{{#each App.texturesController}}
+  {{#view App.TextureListItemView}}
+    <div class="filename">{{filename}}</div>
+    <div class="width">{{doc.width}}</div>
+    <div class="height">{{doc.height}}</div>
+    <div class="semantic">{{doc.semantic}}</div>
+  {{/view}}
+{{/each}}

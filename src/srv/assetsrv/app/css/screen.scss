@@ -1,0 +1,37 @@
+//$col_bg: #111;
+//$col_fg: #fcf6e7;
+//$col_fg_highlight: #43edab;
+
+$col_bg: #233042;
+$col_fg: white;
+$col_fg_highlight: #5675e4;
+$col_fg_highlight2: black;
+$col_bg_highlight2: #d9dfe4;
+
+html {
+  background-color: $col_bg;
+  color: $col_fg;
+}
+
+.texture-list-item {
+  border-bottom: 1px solid $col_fg_highlight;
+  margin: {
+    left: 5px;
+    right: 5px;
+    top: 2px;
+    bottom: 2px;
+  }
+
+  * {
+    display: inline;
+  }
+}
+.texture-list-item.selected {
+  background-color: $col_bg_highlight2;
+  color: $col_fg_highlight2;
+}
+
+.texture-list-item:hover {
+  background-color: lighten($col_bg, 10%);
+  cursor: pointer;
+}

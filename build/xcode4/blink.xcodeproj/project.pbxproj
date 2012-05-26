@@ -15,6 +15,7 @@
 		5B04F73D1554F88000E9E5E7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04F73C1554F88000E9E5E7 /* OpenGL.framework */; };
 		5B04F73F1554F8C600E9E5E7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B04F73E1554F8C600E9E5E7 /* QuartzCore.framework */; };
 		5B07E0501413EB370004ACA4 /* vecmath.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B07E04F1413EB370004ACA4 /* vecmath.h */; };
+		5B1E58A7156CB5F6009ED276 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B1E58A6156CB5F6009ED276 /* libjson.a */; };
 		5B3D702F140B40280014D68C /* base_int.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D701F140B40280014D68C /* base_int.h */; };
 		5B3D7030140B40280014D68C /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7020140B40280014D68C /* debug.cpp */; };
 		5B3D7031140B40280014D68C /* init.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D7021140B40280014D68C /* init.cpp */; };
@@ -90,6 +91,7 @@
 		5B04F73C1554F88000E9E5E7 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		5B04F73E1554F8C600E9E5E7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5B07E04F1413EB370004ACA4 /* vecmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = vecmath.h; path = ../../src/blink/vecmath.h; sourceTree = "<group>"; };
+		5B1E58A6156CB5F6009ED276 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjson.a; path = /opt/local/lib/libjson.a; sourceTree = "<absolute>"; };
 		5B3D701F140B40280014D68C /* base_int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base_int.h; sourceTree = "<group>"; };
 		5B3D7020140B40280014D68C /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
 		5B3D7021140B40280014D68C /* init.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = init.cpp; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B1E58A7156CB5F6009ED276 /* libjson.a in Frameworks */,
 				5BDC8D651558E2FE009528DB /* libsquish.a in Frameworks */,
 				5BDC8D681558E310009528DB /* libtiff.a in Frameworks */,
 				5B04F73F1554F8C600E9E5E7 /* QuartzCore.framework in Frameworks */,
@@ -181,6 +184,7 @@
 		5B04F71C155103BF00E9E5E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5B1E58A6156CB5F6009ED276 /* libjson.a */,
 				5BDC8D671558E310009528DB /* libtiff.a */,
 				5BDC8D641558E2FE009528DB /* libsquish.a */,
 				5B04F71D155103BF00E9E5E7 /* Cocoa.framework */,
@@ -576,7 +580,7 @@
 				GCC_PREFIX_HEADER = "imgview/imgview-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
-					"../../src/vendor/npapi/**",
+					../../src/vendor/npapi,
 					/opt/local/include,
 				);
 				INFOPLIST_FILE = "imgview/imgview-Info.plist";
@@ -598,7 +602,7 @@
 				GCC_PREFIX_HEADER = "imgview/imgview-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
-					"../../src/vendor/npapi/**",
+					../../src/vendor/npapi,
 					/opt/local/include,
 				);
 				INFOPLIST_FILE = "imgview/imgview-Info.plist";

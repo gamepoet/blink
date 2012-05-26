@@ -1,18 +1,21 @@
-# Vim-generated files
-.*.swp
+# osx
+.DS_Store
 
 # rvm
 .rvmrc
 
-# OSX
-.DS_Store
+# sass
+.sass-cache/
 
-# XCode 4
-xcuserdata/
+# vim
+.*.swp
 
-# VStudio
+# vstudio
 *.ncb
 *.suo
 *.vcproj.*.user
 Debug/
 Release/
+
+# xcode 4
+xcuserdata/

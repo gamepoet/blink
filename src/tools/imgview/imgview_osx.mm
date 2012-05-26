@@ -30,6 +30,7 @@
 #include <squish.h>
 
 extern void issue_invalidate_rect(Plugin* __restrict plugin, float x, float y, float w, float h);
+extern void url_get(Plugin* __restrict plugin, const char * __restrict url, void* context);
 
 
 struct MemFile {
@@ -410,4 +411,9 @@ void core_anim_layer_render(void* layer) {
 void core_anim_layer_set_dims(void* layer, float width, float height) {
   GLLayer* gl_layer = static_cast<GLLayer*>(layer);
   [gl_layer setWidth:width height:height];
+}
+
+//------------------------------------------------------------------------------
+void core_anim_layer_url_ready(void* layer, const char* data, int data_size, void* context) {
+  GLLayer* gl_layer = static_cast<GLLayer*>(layer);
 }

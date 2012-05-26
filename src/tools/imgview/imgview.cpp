@@ -25,7 +25,7 @@
 
 #include <npapi.h>
 #include <npfunctions.h>
-#include <syslog.h>
+#include <json/json.h>
 #include "imgview_osx.h"
 
 //
@@ -37,6 +37,12 @@ struct Plugin {
   NPWindow  window;
   void*     ca_layer;
   bool      is_invalidating_core_anim_model;
+};
+
+struct Stream {
+  char*     beg;
+  char*     cur;
+  char*     end;
 };
 
 
@@ -202,6 +208,16 @@ extern "C" NPError NPP_Destroy(NPP instance, NPSavedData** save) {
 //------------------------------------------------------------------------------
 extern "C" NPError NPP_DestroyStream(NPP instance, NPStream* stream, NPReason reason) {
   log(__FUNCTION__);
+  Stream* __restrict s = (Stream*)stream->pdata;
+  
+  if (reason == NPRES_DONE) {
+    log("%s", s->beg);
+    json_object* json = json_tokener_parse(s->beg);
+    log("%s", json_object_to_json_string(json));
+    json_object_put(json);
+  }
+
+  free(s);
   return NPERR_NO_ERROR;
 }
 
@@ -369,13 +385,28 @@ extern "C" NPError NPP_New(NPMIMEType pluginType, NPP instance, uint16_t mode, i
 
   // create the core animation layer
   plugin->ca_layer = core_anim_layer_create(plugin);
-
+  
+  log("GET http://localhost:9292/assets/texture/78b3f5b1");
+  err = s_browser->geturl(instance, "http://localhost:9292/assets/texture/78b3f5b1", NULL);
+  if (err != NPERR_NO_ERROR) {
+    log("failed to call GetURL");
+  }
+  
   return NPERR_NO_ERROR;
 }
 
 //------------------------------------------------------------------------------
 extern "C" NPError NPP_NewStream(NPP instance, NPMIMEType type, NPStream* stream, NPBool seekable, uint16_t* stype) {
-  log(__FUNCTION__);
+  log("%s end=%d mime=%s", __FUNCTION__, stream->end, type);
+  log("headers\n%s", stream->headers);
+  
+  Stream* __restrict s = (Stream*)malloc(sizeof(Stream) + stream->end);
+  s->beg = (char*)(s + 1);
+  s->cur = s->beg;
+  s->end = s->beg + stream->end;
+  
+  stream->pdata = s;
+  *stype = NP_NORMAL;
   return NPERR_NO_ERROR;
 }
 
@@ -437,13 +468,26 @@ extern "C" void NPP_URLRedirectNotify(NPP instance, const char* url, int32_t sta
 
 //------------------------------------------------------------------------------
 extern "C" int32_t NPP_Write(NPP instance, NPStream* stream, int32_t offset, int32_t len, void* buffer) {
-  log(__FUNCTION__);
-  return 0;
+  log("%s off=%d, len=%d", __FUNCTION__, offset, len);
+  Stream* __restrict s = (Stream*)stream->pdata;
+  if (offset != (int32_t)(s->cur - s->beg)) {
+    log("  bad offset");
+    return 0;
+  }
+  if (len > (int32_t)(s->end - s->cur)) {
+    log("  bad len");
+    return 0;
+  }
+  
+  memcpy(s->cur, buffer, len);
+  s->cur += len;
+  return len;
 }
 
 //------------------------------------------------------------------------------
 extern "C" int32_t NPP_WriteReady(NPP instance, NPStream* stream) {
   log(__FUNCTION__);
-  return 0;
+  Stream* __restrict s = (Stream*)stream->pdata;
+  return (int32_t)(s->end - s->cur);
 }
 

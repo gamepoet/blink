@@ -1,0 +1,19 @@
+source :rubygems
+gem 'bson_ext'
+gem 'haml'
+gem 'hashes'
+gem 'json'
+gem 'mongo'
+gem 'sass'
+gem 'sinatra',            :require => 'sinatra/base'
+gem 'sinatra-assetpack',  :require => 'sinatra/assetpack'
+gem 'sinatra-ember',      :require => 'sinatra/ember'
+gem 'uglifier'
+
+group :development do
+  gem 'sinatra-reloader', :require => 'sinatra/reloader'
+  gem 'thin'
+end
+
+group :production do
+end
