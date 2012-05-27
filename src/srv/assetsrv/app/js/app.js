@@ -24,7 +24,7 @@ App = Em.Application.create({
         // poll again
         App.sessionPoll();
       });
-    }, 5000);
+    }, 1000);
   },
 
   onSessionUpdated: function(data) {
