@@ -575,7 +575,6 @@
 		5B04F72B155103BF00E9E5E7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "imgview/imgview-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -597,7 +596,6 @@
 		5B04F72C155103BF00E9E5E7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "imgview/imgview-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
