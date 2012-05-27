@@ -1,5 +1,6 @@
 source :rubygems
 gem 'bson_ext'
+gem 'bourbon'
 gem 'haml'
 gem 'hashes'
 gem 'json'

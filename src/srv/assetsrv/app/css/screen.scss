@@ -1,3 +1,5 @@
+@import 'app/css/vendor/bourbon/bourbon';
+
 //$col_bg: #111;
 //$col_fg: #fcf6e7;
 //$col_fg_highlight: #43edab;
@@ -27,9 +29,7 @@ html {
     bottom: 2px;
   }
 
-  transition: background-color $transition_time, color $transition_time;
-  -moz-transition: background-color $transition_time, color $transition_time;
-  -webkit-transition: background-color $transition_time, color $transition_time;
+  @include transition(background-color $transition_time, color $transition_time);
 
   .filename, .width, .height, .semantic {
     height: 20px;
@@ -57,9 +57,7 @@ html {
   &:hover {
     background-color: lighten($col_bg, 10%);
     cursor: pointer;
-    transition: background-color 0s;
-    -moz-transition: background-color 0s;
-    -webkit-transition: background-color 0s;
+    @include transition(background-color 0s);
   }
 }
 .texture-list-item.selected {
