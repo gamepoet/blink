@@ -23,10 +23,6 @@ html {
   font-size: 12px;
 }
 
-.clear {
-  clear: both;
-}
-
 .texture-list-item {
   $line-height: 14px;
 
@@ -80,6 +76,8 @@ html {
 .texture-list {
   margin-left: 405px;
   margin-right: 5px;
+
+  @include clearfix;
 }
 
 .viewport {
