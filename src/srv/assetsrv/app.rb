@@ -65,6 +65,7 @@ class App < Sinatra::Base
       }
     end
 
+    last_modified session[:updated_at]
     content_type :json
     session.doc.to_json
   end
@@ -88,12 +89,8 @@ class App < Sinatra::Base
 
     # grab the latest session
     session = $db.sessions.find_one()
-    if not session
-      session = {
-        doc => {}
-      }
-    end
 
+    last_modified session[:updated_at]
     content_type :json
     session.doc.to_json
   end

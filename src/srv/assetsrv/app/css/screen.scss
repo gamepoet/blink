@@ -8,30 +8,81 @@ $col_fg_highlight: #5675e4;
 $col_fg_highlight2: black;
 $col_bg_highlight2: #d9dfe4;
 
+$transition_time: 0.3s;
+
 html {
   background-color: $col_bg;
   color: $col_fg;
 }
 
+.clear {
+  clear: both;
+}
+
 .texture-list-item {
   border-bottom: 1px solid $col_fg_highlight;
+  height: 20px;
   margin: {
-    left: 5px;
-    right: 5px;
     top: 2px;
     bottom: 2px;
   }
 
-  * {
-    display: inline;
+  transition: background-color $transition_time, color $transition_time;
+  -moz-transition: background-color $transition_time, color $transition_time;
+  -webkit-transition: background-color $transition_time, color $transition_time;
+
+  .filename, .width, .height, .semantic {
+    height: 20px;
+    margin: {
+      left: 5px;
+      right: 5px;
+    }
+    text-align: right;
+  }
+
+  .filename {
+    margin-left: ((2 * 30px) + 75px) + (3 * 10px);
+  }
+
+  .width, .height, .semantic {
+    float: left;
+  }
+  .width, .height {
+    width: 30px;
+  }
+  .semantic {
+    width: 75px;
+  }
+
+  &:hover {
+    background-color: lighten($col_bg, 10%);
+    cursor: pointer;
+    transition: background-color 0s;
+    -moz-transition: background-color 0s;
+    -webkit-transition: background-color 0s;
   }
 }
 .texture-list-item.selected {
   background-color: $col_bg_highlight2;
   color: $col_fg_highlight2;
+
+  &:hover {
+    background-color: lighten($col_bg_highlight2, 10%);
+  }
 }
 
-.texture-list-item:hover {
-  background-color: lighten($col_bg, 10%);
-  cursor: pointer;
+.texture-list {
+  margin-left: 405px;
+  margin-right: 5px;
+}
+
+.viewport {
+  float:left;
+  height: 400px;
+  width: 400px;
+
+  embed {
+    height: 100%;
+    width: 100%;
+  }
 }

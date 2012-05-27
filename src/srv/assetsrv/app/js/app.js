@@ -8,10 +8,9 @@ App = Em.Application.create({
       _.each(data, function(item) {
         App.texturesController.pushObject(App.Texture.create(item));
       });
-//      App.texturesController.set('content', data);
     });
 
-//    this.sessionPoll();
+    this.sessionPoll();
 
     this._super();
   },
@@ -57,6 +56,7 @@ App.MainView = Em.View.extend({
 });
 
 App.TextureListView = Em.View.extend({
+  classNames: ['texture-list'],
   templateName: 'texture-list',
 });
 

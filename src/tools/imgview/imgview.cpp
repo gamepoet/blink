@@ -100,6 +100,14 @@ void issue_invalidate_rect(Plugin* __restrict plugin, float x, float y, float w,
 }
 
 //------------------------------------------------------------------------------
+void url_get(Plugin* __restrict plugin, const char* __restrict url, void* context) {
+  NPError err = s_browser->geturl(plugin->npp, url, NULL);
+  if (err != NPERR_NO_ERROR) {
+    log("request failed: GET %s", url);
+  }
+}
+
+//------------------------------------------------------------------------------
 extern "C" NPError NPP_ClearSiteData(const char* site, uint64_t flags, uint64_t maxAge) {
   log(__FUNCTION__);
   return NPERR_NO_ERROR;
@@ -207,14 +215,12 @@ extern "C" NPError NPP_Destroy(NPP instance, NPSavedData** save) {
 
 //------------------------------------------------------------------------------
 extern "C" NPError NPP_DestroyStream(NPP instance, NPStream* stream, NPReason reason) {
-  log(__FUNCTION__);
+//  log(__FUNCTION__);
+  Plugin* __restrict plugin = (Plugin*)instance->pdata;
   Stream* __restrict s = (Stream*)stream->pdata;
   
   if (reason == NPRES_DONE) {
-    log("%s", s->beg);
-    json_object* json = json_tokener_parse(s->beg);
-    log("%s", json_object_to_json_string(json));
-    json_object_put(json);
+    core_anim_layer_url_ready(plugin->ca_layer, s->beg, (intptr_t)(s->end - s->beg), NULL);
   }
 
   free(s);
@@ -386,19 +392,13 @@ extern "C" NPError NPP_New(NPMIMEType pluginType, NPP instance, uint16_t mode, i
   // create the core animation layer
   plugin->ca_layer = core_anim_layer_create(plugin);
   
-  log("GET http://localhost:9292/assets/texture/78b3f5b1");
-  err = s_browser->geturl(instance, "http://localhost:9292/assets/texture/78b3f5b1", NULL);
-  if (err != NPERR_NO_ERROR) {
-    log("failed to call GetURL");
-  }
-  
   return NPERR_NO_ERROR;
 }
 
 //------------------------------------------------------------------------------
 extern "C" NPError NPP_NewStream(NPP instance, NPMIMEType type, NPStream* stream, NPBool seekable, uint16_t* stype) {
-  log("%s end=%d mime=%s", __FUNCTION__, stream->end, type);
-  log("headers\n%s", stream->headers);
+//  log("%s end=%d mime=%s", __FUNCTION__, stream->end, type);
+//  log("headers\n%s", stream->headers);
   
   Stream* __restrict s = (Stream*)malloc(sizeof(Stream) + stream->end);
   s->beg = (char*)(s + 1);
@@ -468,7 +468,7 @@ extern "C" void NPP_URLRedirectNotify(NPP instance, const char* url, int32_t sta
 
 //------------------------------------------------------------------------------
 extern "C" int32_t NPP_Write(NPP instance, NPStream* stream, int32_t offset, int32_t len, void* buffer) {
-  log("%s off=%d, len=%d", __FUNCTION__, offset, len);
+//  log("%s off=%d, len=%d", __FUNCTION__, offset, len);
   Stream* __restrict s = (Stream*)stream->pdata;
   if (offset != (int32_t)(s->cur - s->beg)) {
     log("  bad offset");
@@ -486,7 +486,7 @@ extern "C" int32_t NPP_Write(NPP instance, NPStream* stream, int32_t offset, int
 
 //------------------------------------------------------------------------------
 extern "C" int32_t NPP_WriteReady(NPP instance, NPStream* stream) {
-  log(__FUNCTION__);
+//  log(__FUNCTION__);
   Stream* __restrict s = (Stream*)stream->pdata;
   return (int32_t)(s->end - s->cur);
 }

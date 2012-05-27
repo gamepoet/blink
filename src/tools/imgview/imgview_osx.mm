@@ -26,8 +26,9 @@
 #import <QuartzCore/QuartzCore.h>
 #include <OpenGL/glu.h>
 #include "imgview_osx.h"
-#include <tiffio.h>
+#include <json/json.h>
 #include <squish.h>
+#include <tiffio.h>
 
 extern void issue_invalidate_rect(Plugin* __restrict plugin, float x, float y, float w, float h);
 extern void url_get(Plugin* __restrict plugin, const char * __restrict url, void* context);
@@ -219,7 +220,10 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
 
   Tex m_tex;
 
-  CFRunLoopTimerRef m_timer_ref;
+  NSString * m_texFilename;
+  bool m_texFilenameChanged;
+  
+  NSTimer * m_timer;
 }
 @end
 
@@ -232,8 +236,21 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
     self.asynchronous = YES;
     self.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
     self.needsDisplayOnBoundsChange = YES;
+    
+    m_timer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(syncSession:) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:m_timer forMode:NSDefaultRunLoopMode];
+    
+    m_texFilename = NULL;
+    m_texFilenameChanged = false;
+    
+//    sleep(15000);
   }
   return self;
+}
+
+//------------------------------------------------------------------------------
+- (void) syncSession:(NSTimer*)timer {
+  url_get(m_plugin, "http://localhost:9292/session", self);
 }
 
 //------------------------------------------------------------------------------
@@ -268,8 +285,14 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
   glRotatef(0.4f * sin(angle), 0.0f, 0.0f, 1.0f);
   angle += 0.1f;
   
-  if (!m_tex.surface) {
-    if (!load_texture(&m_tex, "/Users/bscott/dev/blink/src/tools/imgview/smiley.tif")) {
+  if (!m_tex.surface || m_texFilenameChanged) {
+    if (m_tex.surface) {
+      free(m_tex.surface);
+      m_tex.surface = NULL;
+    }
+    char path[256];
+    snprintf(path, 256, "/Users/bscott/dev/blink/src/tools/imgview/%s", [m_texFilename UTF8String]);
+    if (!load_texture(&m_tex, path)) {
       m_tex.surface = NULL;
     }
     else {
@@ -298,6 +321,8 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
       
       glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, w, h, 0, surface_size, NULL);
       check_gl();
+      
+      m_texFilenameChanged = false;
     }
   }
 
@@ -351,6 +376,15 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
                 forLayerTime:(CFTimeInterval)t
                  displayTime:(const CVTimeStamp*)ts {
   return m_visible;
+}
+
+//------------------------------------------------------------------------------
+- (void) setTexFilename:(const char*)filename {
+  NSString* texFilename = [[NSString alloc] initWithUTF8String:filename];
+  if ((m_texFilename == NULL) || ![texFilename isEqualToString:m_texFilename]) {
+    m_texFilename = texFilename;
+    m_texFilenameChanged = true;
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -416,4 +450,17 @@ void core_anim_layer_set_dims(void* layer, float width, float height) {
 //------------------------------------------------------------------------------
 void core_anim_layer_url_ready(void* layer, const char* data, int data_size, void* context) {
   GLLayer* gl_layer = static_cast<GLLayer*>(layer);
+  
+  // parse json string
+  json_object* json = json_tokener_parse(data);
+  log("%s", json_object_to_json_string(json));
+  
+  // get updated selection
+  json_object* jsonTexFilename = json_object_object_get(json, "selection");
+  const char * texFilename = json_object_get_string(jsonTexFilename);
+  
+  [gl_layer setTexFilename:texFilename];
+  
+  json_object_put(json);
 }
+

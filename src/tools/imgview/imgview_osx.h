@@ -32,3 +32,4 @@ void core_anim_layer_destroy(void* layer);
 void core_anim_layer_render(void* layer);
 void core_anim_layer_set_visible(void* layer, bool visible);
 void core_anim_layer_set_dims(void* layer, float width, float height);
+void core_anim_layer_url_ready(void* layer, const char* data, int data_size, void* context);
