@@ -12,9 +12,15 @@ $col_bg_highlight2: #d9dfe4;
 
 $transition_time: 0.3s;
 
+@include font-face(Roboto-Light,    '/fonts/Roboto-Light');
+//@include font-face(Roboto-Regular,  '/fonts/Roboto-Regular');
+//@include font-face(Roboto-Thin,     '/fonts/Roboto-Thin');
+
 html {
   background-color: $col_bg;
   color: $col_fg;
+  font-family: Roboto-Light, $helvetica;
+  font-size: 12px;
 }
 
 .clear {
@@ -22,9 +28,11 @@ html {
 }
 
 .texture-list-item {
+  $line-height: 14px;
+
   border-bottom: 1px solid $col_fg_highlight;
-  height: 20px;
-  margin: {
+  height: $line-height;
+  padding: {
     top: 2px;
     bottom: 2px;
   }
@@ -32,7 +40,7 @@ html {
   @include transition(background-color $transition_time, color $transition_time);
 
   .filename, .width, .height, .semantic {
-    height: 20px;
+    height: $line-height;
     margin: {
       left: 5px;
       right: 5px;
