@@ -19,6 +19,9 @@ class App < Sinatra::Base
   set :root, File.dirname(__FILE__)
   set :haml, :format => :html5
 
+  configure do |c|
+    mime_type :woff, 'application/font-woff'
+  end
   configure(:development) do |c|
     require 'pp'
     register Sinatra::Reloader
@@ -167,7 +170,15 @@ class App < Sinatra::Base
 
     $db.assets[type].update(query, change)
 
-    200
+    # return the latset data
+    result = $db.assets[type].find_one(query)
+    if result.nil?
+      halt 404
+    end
+
+    last_modified result[:updated_at]
+    content_type :json
+    result.to_json
   end
 
 

@@ -1,8 +1,8 @@
 {{#each App.texturesController}}
   {{#view App.TextureListItemView}}
-    <div class="width">{{doc.width}}</div>
-    <div class="height">{{doc.height}}</div>
-    <div class="semantic">{{doc.semantic}}</div>
+    {{view App.EditableTextIntView valueBinding="doc.width" class="width"}}
+    {{view App.EditableTextIntView valueBinding="doc.height" class="height"}}
+    {{view App.EditableTextView valueBinding="doc.semantic" class="semantic"}}
     <div class="filename">{{filename}}</div>
   {{/view}}
 {{/each}}

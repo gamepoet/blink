@@ -30,7 +30,7 @@ html {
   height: $line-height;
   padding: {
     top: 2px;
-    bottom: 2px;
+    bottom: 4px;
   }
 
   @include transition(background-color $transition_time, color $transition_time);
@@ -74,10 +74,38 @@ html {
 }
 
 .texture-list {
-  margin-left: 405px;
-  margin-right: 5px;
-
+  margin: {
+    left: 400px;
+  }
   @include clearfix;
+
+  .edit, .editing .display {
+    display: none;
+  }
+
+  .edit input {
+    text-align: right;
+    width: 100%;
+  }
+
+  .editing .edit {
+    display: block;
+  }
+
+  .editing input {
+    border: 1px solid #999999;
+    margin: 0px;
+    @include box-shadow(0 1px 2px 0 rgba(0,0,0,0.2) inset);
+  }
+
+  .display {
+    border: 1px solid transparent;
+
+    &:hover {
+      border: 1px solid #aaaaaa;
+      cursor: text;
+    }
+  }
 }
 
 .viewport {
