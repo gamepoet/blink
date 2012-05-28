@@ -129,6 +129,19 @@ class App < Sinatra::Base
     doc.to_json
   end
 
+  # usage: curl -X POST -f 'file=@filename' http://host/assets/:type/:id/bulk
+  post '/assets/:type/:id/bulk' do
+    type      = params[:type]
+    id        = params[:id]
+    data      = params[:file][:tempfile]
+
+    grid = Mongo::Grid.new($db, "fs_#{type}")
+    grid.delete(id)
+    grid.put(data, :_id => id)
+
+    200
+  end
+
   get '/assets/:type/:id' do
     type  = params[:type]
     id    = params[:id]
@@ -145,6 +158,17 @@ class App < Sinatra::Base
     last_modified result[:updated_at]
     content_type :json
     result.to_json
+  end
+
+  get '/assets/:type/:id/bulk' do
+    type  = params[:type]
+    id    = params[:id]
+
+    grid = Mongo::Grid.new($db, "fs_#{type}")
+    io = grid.get(id)
+
+    content_type 'application/octet-stream'
+    io.read.to_s
   end
 
   put '/assets/:type/:id' do
