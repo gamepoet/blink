@@ -33,6 +33,16 @@
 extern void issue_invalidate_rect(Plugin* __restrict plugin, float x, float y, float w, float h);
 extern void url_get(Plugin* __restrict plugin, const char * __restrict url, void* context);
 
+enum EURLRequestType {
+  URL_REQUEST_TYPE_SESSION,
+  URL_REQUEST_TYPE_TEXTURE_BULK,
+};
+
+struct URLRequestContext {
+  EURLRequestType type;
+  void*           layer;
+};
+
 
 struct MemFile {
   char* beg;
@@ -138,28 +148,14 @@ static int mem_file_map(thandle_t handle, tdata_t* buf, toff_t* size) {
 static void mem_file_unmap(thandle_t handle, tdata_t buf, toff_t size) {
 }
 
-//------------------------------------------------------------------------------
-static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
-  FILE* __restrict fh = fopen(filename, "rb");
-  if (!fh) {
-    return false;
-  }
-  fseek(fh, 0, SEEK_END);
-  long size = ftell(fh);
-  fseek(fh, 0, SEEK_SET);
-  char* __restrict buf = (char*)malloc(size);
-  long bytes_read = fread(buf, 1, size, fh);
-  if (bytes_read != size) {
-    free(buf);
-    fclose(fh);
-    return false;
-  }
-  fclose(fh);
 
+//------------------------------------------------------------------------------
+static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, const char* __restrict filename) {
   MemFile file;
-  file.beg = buf;
-  file.cur = buf;
-  file.end = buf + size;
+  file.beg  = (char *)buffer;
+  file.cur  = file.beg;
+  file.end  = file.beg + bufferSize;
+
   TIFF* tiff = TIFFClientOpen(filename,
                               "r",
                               &file,
@@ -171,7 +167,6 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
                               &mem_file_map,
                               &mem_file_unmap);
   if (!tiff) {
-    free(buf);
     return false;
   }
 
@@ -183,11 +178,9 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
   if (!TIFFReadRGBAImageOriented(tiff, width, height, raw_surface)) {
     free(raw_surface);
     TIFFClose(tiff);
-    free(buf);
     return false;
   }
   TIFFClose(tiff);
-  free(buf);
 
   // alloc space for the compressed image
   uint32 dxt_bytes = squish::GetStorageRequirements(width, height, squish::kDxt5);
@@ -220,10 +213,14 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
 
   Tex m_tex;
 
-  NSString * m_texFilename;
-  bool m_texFilenameChanged;
-  
-  NSTimer * m_timer;
+  NSString* m_texFilename;
+  uint32_t m_texFileId;
+
+  void* m_bulk;
+  int m_bulkSize;
+  bool m_texChanged;
+
+  NSTimer* m_timer;
 }
 @end
 
@@ -236,13 +233,17 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
     self.asynchronous = YES;
     self.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
     self.needsDisplayOnBoundsChange = YES;
-    
+
     m_timer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(syncSession:) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:m_timer forMode:NSDefaultRunLoopMode];
-    
+
     m_texFilename = NULL;
-    m_texFilenameChanged = false;
-    
+    m_texFileId = 0;
+    m_texChanged = false;
+
+    m_bulk = NULL;
+    m_bulkSize = 0;
+
 //    sleep(15000);
   }
   return self;
@@ -250,7 +251,10 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
 
 //------------------------------------------------------------------------------
 - (void) syncSession:(NSTimer*)timer {
-  url_get(m_plugin, "http://localhost:9292/session", self);
+  URLRequestContext* ctx = (URLRequestContext*)malloc(sizeof(URLRequestContext));
+  ctx->type = URL_REQUEST_TYPE_SESSION;
+  ctx->layer = [self retain];
+  url_get(m_plugin, "http://localhost:9292/session", ctx);
 }
 
 //------------------------------------------------------------------------------
@@ -264,18 +268,18 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
              forLayerTime:(CFTimeInterval)t
               displayTime:(const CVTimeStamp *)ts {
   CGLSetCurrentContext(ctx);
-    
+
   glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
   glClearDepth(1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  
+
   glViewport(0, 0, (GLsizei)m_width, (GLsizei)m_height);
-  
+
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
   glCullFace(GL_BACK);
   glFrontFace(GL_CCW);
-  
+
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glOrtho(0, m_width, m_height, 0, -1.0f, 1.0f);
@@ -284,15 +288,13 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
   static float angle = 0.0f;
   glRotatef(0.4f * sin(angle), 0.0f, 0.0f, 1.0f);
   angle += 0.1f;
-  
-  if (!m_tex.surface || m_texFilenameChanged) {
+
+  if (m_bulk && (!m_tex.surface || m_texChanged)) {
     if (m_tex.surface) {
       free(m_tex.surface);
       m_tex.surface = NULL;
     }
-    char path[256];
-    snprintf(path, 256, "/Users/bscott/dev/blink/src/tools/imgview/%s", [m_texFilename UTF8String]);
-    if (!load_texture(&m_tex, path)) {
+    if (!load_texture(&m_tex, m_bulk, m_bulkSize, [m_texFilename UTF8String])) {
       m_tex.surface = NULL;
     }
     else {
@@ -311,18 +313,18 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
       // upload texture data to the pbo
       glBufferData(GL_PIXEL_UNPACK_BUFFER, surface_size, m_tex.surface, GL_STATIC_DRAW);
       check_gl();
-      
+
       // setup tex params
       glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
       glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
       glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
       check_gl();
-      
+
       glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, w, h, 0, surface_size, NULL);
       check_gl();
-      
-      m_texFilenameChanged = false;
+
+      m_texChanged = false;
     }
   }
 
@@ -330,7 +332,7 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, m_tex.tex_id);
   }
-  
+
   glBegin(GL_TRIANGLE_STRIP);
   {
     const float x = 10.0f;
@@ -347,7 +349,7 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
     glColor3f(0.0, 1.0f, 0.0f);
     glTexCoord2f(0.0f, 1.0f);
     glVertex3f(x, y, 0.5f);
-    
+
     // bottom right
     glColor3f(0.0f, 0.0f, 1.0f);
     glTexCoord2f(1.0f, 0.0f);
@@ -359,7 +361,7 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
     glVertex3f(x, y+h, 0.5f);
   }
   glEnd();
-  
+
   if (m_tex.tex_id) {
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
@@ -379,12 +381,36 @@ static bool load_texture(Tex* __restrict tex, const char* __restrict filename) {
 }
 
 //------------------------------------------------------------------------------
-- (void) setTexFilename:(const char*)filename {
+- (void) setTexFilename:(const char*)filename
+                 fileId:(uint32_t)fileId {
   NSString* texFilename = [[NSString alloc] initWithUTF8String:filename];
   if ((m_texFilename == NULL) || ![texFilename isEqualToString:m_texFilename]) {
     m_texFilename = texFilename;
-    m_texFilenameChanged = true;
+    
+    m_texFileId = fileId;
+
+    URLRequestContext* ctx = (URLRequestContext*)malloc(sizeof(URLRequestContext));
+    ctx->type = URL_REQUEST_TYPE_TEXTURE_BULK;
+    ctx->layer = [self retain];
+
+    char url[256];
+    snprintf(url, 256, "http://localhost:9292/assets/texture/%08x/bulk", m_texFileId);
+    url_get(m_plugin, url, ctx);
   }
+}
+
+//------------------------------------------------------------------------------
+- (void) setTexBulk:(const void*)data
+               size:(int)dataSize {
+  free(m_bulk);
+  m_bulk = NULL;
+  m_bulkSize = 0;
+  if (dataSize > 0) {
+    m_bulk = malloc(dataSize);
+    memcpy(m_bulk, data, dataSize);
+    m_bulkSize = dataSize;
+  }
+  m_texChanged = true;
 }
 
 //------------------------------------------------------------------------------
@@ -450,17 +476,27 @@ void core_anim_layer_set_dims(void* layer, float width, float height) {
 //------------------------------------------------------------------------------
 void core_anim_layer_url_ready(void* layer, const char* data, int data_size, void* context) {
   GLLayer* gl_layer = static_cast<GLLayer*>(layer);
-  
-  // parse json string
-  json_object* json = json_tokener_parse(data);
-  log("%s", json_object_to_json_string(json));
-  
-  // get updated selection
-  json_object* jsonTexFilename = json_object_object_get(json, "selection");
-  const char * texFilename = json_object_get_string(jsonTexFilename);
-  
-  [gl_layer setTexFilename:texFilename];
-  
-  json_object_put(json);
+  URLRequestContext* ctx = (URLRequestContext*)context;
+
+  if (ctx->type == URL_REQUEST_TYPE_SESSION) {
+    // parse json string
+    json_object* json = json_tokener_parse(data);
+//    log("session: %s", json_object_to_json_string(json));
+
+    // get updated selection
+    json_object* jsonTexFilename = json_object_object_get(json, "selection");
+    const char * texFilename = json_object_get_string(jsonTexFilename);
+    json_object* jsonTexFileId = json_object_object_get(json, "selection_id");
+    const char * texFileIdStr = json_object_get_string(jsonTexFileId);    
+    uint32_t texFileId = strtoul(texFileIdStr, NULL, 16);
+
+    [gl_layer setTexFilename:texFilename fileId:texFileId];
+
+    json_object_put(json);
+  }
+  else if (ctx->type == URL_REQUEST_TYPE_TEXTURE_BULK) {
+//    log("texture bulk");
+    [gl_layer setTexBulk:data size:data_size];
+  }
 }
 

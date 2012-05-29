@@ -43,6 +43,8 @@ struct Stream {
   char*     beg;
   char*     cur;
   char*     end;
+  
+  void*     context;
 };
 
 
@@ -101,7 +103,12 @@ void issue_invalidate_rect(Plugin* __restrict plugin, float x, float y, float w,
 
 //------------------------------------------------------------------------------
 void url_get(Plugin* __restrict plugin, const char* __restrict url, void* context) {
-  NPError err = s_browser->geturl(plugin->npp, url, NULL);
+//  log("url_get: %s", url);
+  Stream* __restrict s = (Stream*)malloc(sizeof(Stream));
+  memset(s, 0, sizeof(Stream));
+  s->context = context;
+  
+  NPError err = s_browser->geturlnotify(plugin->npp, url, NULL, s);
   if (err != NPERR_NO_ERROR) {
     log("request failed: GET %s", url);
   }
@@ -216,14 +223,17 @@ extern "C" NPError NPP_Destroy(NPP instance, NPSavedData** save) {
 //------------------------------------------------------------------------------
 extern "C" NPError NPP_DestroyStream(NPP instance, NPStream* stream, NPReason reason) {
 //  log(__FUNCTION__);
-  Plugin* __restrict plugin = (Plugin*)instance->pdata;
-  Stream* __restrict s = (Stream*)stream->pdata;
-  
-  if (reason == NPRES_DONE) {
-    core_anim_layer_url_ready(plugin->ca_layer, s->beg, (intptr_t)(s->end - s->beg), NULL);
+  Stream* __restrict s = (Stream*)stream->notifyData;
+  if (!s) {
+    // didn't create this stream
+    return NPERR_NO_ERROR;
   }
 
-  free(s);
+  // free stream unless successful, otherwise let urlnotify free it
+  if (reason != NPRES_DONE) {
+    free(s->beg);
+    free(s);
+  }
   return NPERR_NO_ERROR;
 }
 
@@ -400,12 +410,16 @@ extern "C" NPError NPP_NewStream(NPP instance, NPMIMEType type, NPStream* stream
 //  log("%s end=%d mime=%s", __FUNCTION__, stream->end, type);
 //  log("headers\n%s", stream->headers);
   
-  Stream* __restrict s = (Stream*)malloc(sizeof(Stream) + stream->end);
-  s->beg = (char*)(s + 1);
+  Stream* __restrict s = (Stream*)stream->notifyData;
+  if (!s) {
+    // did not request this stream
+    return NPERR_NO_ERROR;
+  }
+
+  s->beg = (char*)malloc(stream->end);
   s->cur = s->beg;
   s->end = s->beg + stream->end;
   
-  stream->pdata = s;
   *stype = NP_NORMAL;
   return NPERR_NO_ERROR;
 }
@@ -458,7 +472,23 @@ extern "C" void NPP_StreamAsFile(NPP instance, NPStream* stream, const char* fna
 
 //------------------------------------------------------------------------------
 extern "C" void NPP_URLNotify(NPP instance, const char* url, NPReason reason, void* notifyData) {
-  log(__FUNCTION__);
+//  log(__FUNCTION__);
+
+  Stream* __restrict s = (Stream*)notifyData;
+  if (!s) {
+    // didn't create this stream
+    return;
+  }
+
+  Plugin* __restrict plugin = (Plugin*)instance->pdata;
+  if (!plugin) {
+    return;
+  }
+
+  core_anim_layer_url_ready(plugin->ca_layer, s->beg, s->cur - s->beg, s->context);
+
+  free(s->beg);
+  free(s);
 }
 
 //------------------------------------------------------------------------------
@@ -469,7 +499,12 @@ extern "C" void NPP_URLRedirectNotify(NPP instance, const char* url, int32_t sta
 //------------------------------------------------------------------------------
 extern "C" int32_t NPP_Write(NPP instance, NPStream* stream, int32_t offset, int32_t len, void* buffer) {
 //  log("%s off=%d, len=%d", __FUNCTION__, offset, len);
-  Stream* __restrict s = (Stream*)stream->pdata;
+  Stream* __restrict s = (Stream*)stream->notifyData;
+  if (!s) {
+    // didn't create this stream
+    return -1;
+  }
+  
   if (offset != (int32_t)(s->cur - s->beg)) {
     log("  bad offset");
     return 0;
@@ -487,7 +522,12 @@ extern "C" int32_t NPP_Write(NPP instance, NPStream* stream, int32_t offset, int
 //------------------------------------------------------------------------------
 extern "C" int32_t NPP_WriteReady(NPP instance, NPStream* stream) {
 //  log(__FUNCTION__);
-  Stream* __restrict s = (Stream*)stream->pdata;
+  Stream* __restrict s = (Stream*)stream->notifyData;
+  if (!s) {
+    // didn't create this stream
+    return -1;
+  }
+
   return (int32_t)(s->end - s->cur);
 }
 

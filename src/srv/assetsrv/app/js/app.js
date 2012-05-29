@@ -212,6 +212,7 @@ App.TextureListItemView = Em.View.extend({
     data = {
       delta: {
         selection: ctx.get('filename'),
+        selection_id: ctx.get('_id'),
       },
     };
 
