@@ -1,3 +1,10 @@
 require './app'
+require 'resque/server'
 
-run App
+map '/' do
+  run App
+end
+
+map '/resque' do
+  run Resque::Server
+end

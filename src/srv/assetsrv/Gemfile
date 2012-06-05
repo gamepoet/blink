@@ -5,13 +5,21 @@ gem 'haml'
 gem 'hashes'
 gem 'json'
 gem 'mongo'
+gem 'rake'
+gem 'resque'
 gem 'sass'
 gem 'sinatra',            :require => 'sinatra/base'
 gem 'sinatra-assetpack',  :require => 'sinatra/assetpack'
 gem 'sinatra-ember',      :require => 'sinatra/ember'
 gem 'uglifier'
 
+gem 'texture_compiler'
+
 group :development do
+  gem 'growl'
+  gem 'guard'
+  gem 'guard-bundler'
+  gem 'guard-resque'
   gem 'sinatra-reloader', :require => 'sinatra/reloader'
   gem 'thin'
 end

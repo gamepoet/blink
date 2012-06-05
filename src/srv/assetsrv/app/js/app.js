@@ -1,5 +1,12 @@
 App = Em.Application.create({
   ready: function() {
+    // preent the browser-default drop handler so I can have custom drop zones
+    // anywhere in the document and the user can't accidentally navigate away to
+    // a local file
+//    $(document).bind('drop dragover', function (e) {
+//      e.preventDefault();
+//    });
+
     App.view = App.MainView.create();
     App.view.appendTo('body');
 
@@ -100,6 +107,13 @@ App.MainView = Em.View.extend({
 App.TextureListView = Em.View.extend({
   classNames: ['texture-list'],
   templateName: 'texture-list',
+
+  didInsertElement: function() {
+    this.$().fileupload({
+      type: 'POST',
+      url:  '/assets/texture',
+    });
+  },
 });
 
 App.EditableTextView = Em.View.extend({

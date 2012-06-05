@@ -1,0 +1,17 @@
+require 'bundler/setup'
+Bundler.require(:default)
+$:.push(File.dirname(__FILE__) + '/lib')
+require 'resque/tasks'
+=begin
+require 'bson_ext'
+require 'json'
+require 'mongo'
+=end
+require 'texture_compiler'
+require 'blink/ext'
+require 'workers/texture_compiler'
+
+task 'resque:setup' do
+  ENV['QUEUE'] = '*'
+  ENV['VERBOSE'] = '1'
+end

@@ -1,0 +1,2 @@
+concurrency: web=1,mongo=1,redis=1,guard=1,worker=1
+port: 5000
