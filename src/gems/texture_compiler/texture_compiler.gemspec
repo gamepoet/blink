@@ -7,6 +7,6 @@ Gem::Specification.new do |s|
   s.email         = ['gamepoet@gmail.com']
   s.homepage      = 'http://github.com/gamepoet/blink'
   s.files         = Dir.glob('lib/**/*.rb') +
-                    Dir.glob('ext/**/*.{c,h,rb}')
+                    Dir.glob('ext/**/*.{cpp,h,rb}')
   s.extensions    = ['ext/texture_compiler/extconf.rb']
 end

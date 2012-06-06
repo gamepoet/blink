@@ -130,11 +130,18 @@ class TextureCompilerJob
     dst_height    = get_metadata(record, platform, :height)
     dst_width     = get_metadata(record, platform, :width)
 
-    dst_file_id = 10
-
     puts "#{platform} #{dst_semantic} #{dst_height} #{dst_width}"
 
     # TODO compress to dxt (based the semantic)
+    img_compressed = img.to_dxt
+
+    # store the compressed surface in mongo
+    dst_file_id = nil
+    fs.open("/texture/#{id}/osx_x64", 'w') do |f|
+      dst_file_id = f.files_id
+      f.write(img_compressed.surface)
+    end
+
     db.assets[:texture].update(
       {
         :_id                        => id,

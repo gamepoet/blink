@@ -2,4 +2,3 @@ web:    bundle exec thin start -p $PORT
 mongo:  mongod --quiet
 redis:  redis-server ./redis.conf
 guard:  bundle exec guard
-worker: bundle exec rake resque:work
