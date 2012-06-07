@@ -1,6 +1,6 @@
 App = Em.Application.create({
   ready: function() {
-    // preent the browser-default drop handler so I can have custom drop zones
+    // prevent the browser-default drop handler so I can have custom drop zones
     // anywhere in the document and the user can't accidentally navigate away to
     // a local file
 //    $(document).bind('drop dragover', function (e) {
@@ -72,31 +72,49 @@ App.texturesController = Em.ArrayController.create({
 
 App.Texture = Em.Object.extend({
   onHeightChanged: function() {
-    App.sendChanges('texture', this.get('_id'), { height: this.get('doc').height })
+    App.sendChanges('texture', this.get('_id'), {
+      target: {
+        default: {
+          height: this.get('metadata').target.default.height
+        }
+      }
+    })
     .success(_.bind(function(data) {
       this.onSync(data);
     }, this));
-  }.observes('doc.height'),
+  }.observes('metadata.target.default.height'),
 
   onSemanticChanged: function() {
-    App.sendChanges('texture', this.get('_id'), { semantic: this.get('doc').semantic })
+    App.sendChanges('texture', this.get('_id'), {
+      target: {
+        default: {
+          semantic: this.get('metadata').target.default.semantic
+        }
+      }
+    })
     .success(_.bind(function(data) {
       this.onSync(data);
     }, this));
-  }.observes('doc.semantic'),
+  }.observes('metadata.target.default.semantic'),
 
   onWidthChanged: function() {
-    App.sendChanges('texture', this.get('_id'), { width: this.get('doc').width })
+    App.sendChanges('texture', this.get('_id'), {
+      target: {
+        default: {
+          width: this.get('metadata').target.default.width
+        }
+      }
+    })
     .success(_.bind(function(data) {
       this.onSync(data);
     }, this));
-  }.observes('doc.width'),
+  }.observes('metadata.target.default.width'),
 
   onSync: function(data) {
     console.log('Texture.onSync');
-    this.set('height', data.height);
-    this.set('width', data.width);
-    this.set('semantic', data.semantic);
+    this.set('metadata.target.default.height', data.height);
+    this.set('metadata.target.default.width', data.width);
+    this.set('metadata.target.default.semantic', data.semantic);
   },
 });
 

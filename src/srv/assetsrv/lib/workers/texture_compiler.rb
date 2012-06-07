@@ -150,7 +150,7 @@ class TextureCompilerJob
       {
         :$set => {
           :updated_at               => Time.now,
-          'status.source'           => true,
+          "status.#{platform}"      => true,
           "file_ids.#{platform}"    => dst_file_id,
         },
       }

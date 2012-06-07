@@ -17,6 +17,25 @@ ASSET_TYPES = %w(
   texture
 ).map { |x| x.freeze }.freeze
 
+class Hash
+  def flatten_with_path(prefix = nil)
+    res = {}
+
+    self.each do |key, val|
+      if prefix
+        key = "#{prefix}.#{key}"
+      end
+
+      if val.is_a? Hash
+        res.merge!(val.flatten_with_path(key))
+      else
+        res[key] = val
+      end
+    end
+
+    return res
+  end
+end
 
 class App < Sinatra::Base
   Bundler.require(environment)
@@ -118,9 +137,9 @@ class App < Sinatra::Base
   end
 
   get '/assets/:type' do
-    if respond_to?("asset_#{type}_get".to_sym)
-      send("asset_#{type}_get")
-    end
+#    if respond_to?("asset_#{type}_get".to_sym)
+#      send("asset_#{type}_get")
+#    end
 
     type = params[:type]
 
@@ -280,12 +299,25 @@ class App < Sinatra::Base
     result.to_json
   end
 
-  get '/assets/:type/:id/bulk' do
-    type  = params[:type]
-    id    = params[:id]
+  get '/assets/:type/:id/:platform/bulk' do
+    type      = params[:type]
+    id        = params[:id]
+    platform  = params[:platform]
 
-    grid = Mongo::Grid.new($db, "fs_#{type}")
-    io = grid.get(id)
+    asset = $db.assets[type].find_one({
+      :id       => id,
+      :type     => type,
+    })
+
+    # bail if the asset is not available
+    if not asset.status[platform]
+      halt 404
+    end
+
+    # get the bulk file and read it
+    file_id = asset.file_ids[platform]
+    grid = Mongo::Grid.new($db)
+    io = grid.get(file_id)
 
     content_type 'application/octet-stream'
     io.read.to_s
@@ -305,16 +337,22 @@ class App < Sinatra::Base
     # build the change
     change = {
       :$set => {
-        :updated_at => Time.now,
-      }
+        :updated_at       => Time.now,
+        'status.osx_x64'  => false,
+      },
+      :$inc => {
+        :version          => 1,
+      },
     }
-    data['delta'].each do |k,v|
-      change[:$set]["doc.#{k}"] = v
-    end
 
+    change[:$set].merge!(data['delta'].flatten_with_path('metadata'))
+    pp change
     $db.assets[type].update(query, change)
 
-    # return the latset data
+    # request recompilation
+    Resque.enqueue(TextureCompilerJob, id, :osx_x64, 0)
+
+    # return the latest data
     result = $db.assets[type].find_one(query)
     if result.nil?
       halt 404
