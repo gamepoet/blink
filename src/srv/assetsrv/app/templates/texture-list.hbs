@@ -3,6 +3,10 @@
     {{view App.EditableTextIntView valueBinding="metadata.target.default.width" class="width"}}
     {{view App.EditableTextIntView valueBinding="metadata.target.default.height" class="height"}}
     {{view App.EditableTextView valueBinding="metadata.target.default.semantic" class="semantic"}}
-    <div class="filename">{{filename}}</div>
+    {{#if status.osx_x64}}
+      <div class="filename">{{filename}}</div>
+    {{else}}
+      <div class="filename">... processing ...</div>
+    {{/if}}
   {{/view}}
 {{/each}}

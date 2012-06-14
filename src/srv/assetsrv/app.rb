@@ -12,6 +12,7 @@ STDOUT.sync = true
 #
 
 $db = Mongo::Connection.new('localhost').db('blink')
+$faye = Faye::Client.new('http://localhost:5000/faye')
 
 ASSET_TYPES = %w(
   texture
@@ -62,6 +63,7 @@ class App < Sinatra::Base
       '/js/ember-config.js',
       '/js/vendor/ember-0.9.8.1.js',
       '/js/vendor/underscore-1.3.3.js',
+      '/js/vendor/faye-browser-0.8.2.js',
       '/js/app.js',
       '/js/templates.js',
     ]
@@ -120,6 +122,8 @@ class App < Sinatra::Base
 
     # grab the latest session
     session = $db.sessions.find_one()
+
+    $faye.publish('/session', session.doc.to_json)
 
     last_modified session[:updated_at]
     content_type :json
@@ -231,6 +235,7 @@ class App < Sinatra::Base
     }
     $db.assets[:texture].insert(record)
 
+    $faye.publish("/assets/texture/#{id_str}", record.to_json)
     Resque.enqueue(TextureSourceProcessorJob, id_str, 0)
 
     content_type :json
@@ -299,23 +304,10 @@ class App < Sinatra::Base
     result.to_json
   end
 
-  get '/assets/:type/:id/:platform/bulk' do
-    type      = params[:type]
-    id        = params[:id]
-    platform  = params[:platform]
-
-    asset = $db.assets[type].find_one({
-      :id       => id,
-      :type     => type,
-    })
-
-    # bail if the asset is not available
-    if not asset.status[platform]
-      halt 404
-    end
+  get '/assets/bulk/:file_id' do
+    file_id = params[:file_id]
 
     # get the bulk file and read it
-    file_id = asset.file_ids[platform]
     grid = Mongo::Grid.new($db)
     io = grid.get(file_id)
 
@@ -335,28 +327,31 @@ class App < Sinatra::Base
     }
 
     # build the change
-    change = {
+    update = {
       :$set => {
-        :updated_at       => Time.now,
-        'status.osx_x64'  => false,
+        :updated_at         => Time.now,
+        'status.osx_x64'    => false,
+      },
+      :$unset => {
+        'file_ids.osx_x64'  => 1,
       },
       :$inc => {
-        :version          => 1,
+        :version            => 1,
       },
     }
 
-    change[:$set].merge!(data['delta'].flatten_with_path('metadata'))
-    pp change
-    $db.assets[type].update(query, change)
+    update[:$set].merge!(data['delta'].flatten_with_path('metadata'))
+    result = $db.assets[type].find_and_modify(
+      :query  => query,
+      :update => update,
+      :new    => true
+    )
+    puts result
+
+    $faye.publish("/assets/texture/#{id}", result.to_json)
 
     # request recompilation
-    Resque.enqueue(TextureCompilerJob, id, :osx_x64, 0)
-
-    # return the latest data
-    result = $db.assets[type].find_one(query)
-    if result.nil?
-      halt 404
-    end
+    Resque.enqueue(TextureCompilerJob, id, :osx_x64, result.version)
 
     last_modified result[:updated_at]
     content_type :json

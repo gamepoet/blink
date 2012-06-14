@@ -7,6 +7,8 @@ App = Em.Application.create({
 //      e.preventDefault();
 //    });
 
+    App.pubsub = new Faye.Client('http://localhost:5000/faye')
+
     App.view = App.MainView.create();
     App.view.appendTo('body');
 
@@ -17,23 +19,19 @@ App = Em.Application.create({
       });
     });
 
-    this.sessionPoll();
+    App.pubsub.subscribe('/session', function(msg) {
+      data = JSON.parse(msg);
+//      console.log(data);
+      App.onSessionUpdated(data);
+    });
+    App.pubsub.subscribe('/assets/texture/*', function(msg) {
+//      console.log('texture msg');
+      data = JSON.parse(msg);
+//      console.log(data);
+      App.onTextureUpdated(data);
+    });
 
     this._super();
-  },
-
-  sessionPoll: function() {
-    setTimeout(function() {
-      $.getJSON('/session')
-      .success(function(data) {
-        App.onSessionUpdated(data);
-
-        // poll again
-        if (!App.stopPolling) {
-          App.sessionPoll();
-        }
-      });
-    }, 3000);
   },
 
   onSessionUpdated: function(data) {
@@ -50,8 +48,20 @@ App = Em.Application.create({
     App.texturesController.set('selection', texObj);
   },
 
+  onTextureUpdated: function(data) {
+    var tex_id = data._id;
+//    console.log('looking for tex: '+tex_id);
+    var tex = App.texturesController.find(tex_id);
+    if (tex) {
+      tex.onSync(data);
+    }
+    else {
+      // not found? must be new
+    }
+  },
+
   sendChanges: function(assetType, id, delta) {
-    console.log('sendChanges: ' + JSON.stringify(delta));
+//    console.log('sendChanges: ' + JSON.stringify(delta));
     var data = {
       delta: delta
     };
@@ -64,18 +74,47 @@ App = Em.Application.create({
   },
 });
 
+// utility function to convert a JSON object hierarchy into dot-delimited object
+App.flattenJSON = function(obj, prefix, into) {
+  prefix = prefix || '';
+  into = into || {};
+
+  for (var key in obj) {
+    var val = obj[key];
+    if (val && typeof val == 'object' && !(val instanceof Date || val instanceof RegExp)) {
+      App.flattenJSON(val, prefix + key + '.', into);
+    }
+    else {
+      into[prefix + key] = val;
+    }
+  }
+  return into;
+};
+
+// utility function to log a change to a property of an object
+App.logChange = function(obj, idKey, path) {
+  var id = obj.getPath(idKey);
+  var val = obj.getPath(path);
+  console.log('[change] ('+obj.__proto__.constructor+' '+id+') '+path+': '+val);
+};
+
 App.texturesController = Em.ArrayController.create({
   content: [],
 
   selection: null,
+
+  find: function(id) {
+    return this.get('content').findProperty('_id', id);
+  },
 });
 
 App.Texture = Em.Object.extend({
-  onHeightChanged: function() {
+  onHeightChanged: function(sender, key) {
+    App.logChange(this, '_id', key);
     App.sendChanges('texture', this.get('_id'), {
       target: {
         default: {
-          height: this.get('metadata').target.default.height
+          height: this.getPath('metadata.target.default.height')
         }
       }
     })
@@ -84,11 +123,12 @@ App.Texture = Em.Object.extend({
     }, this));
   }.observes('metadata.target.default.height'),
 
-  onSemanticChanged: function() {
+  onSemanticChanged: function(sender, key) {
+    App.logChange(this, '_id', key);
     App.sendChanges('texture', this.get('_id'), {
       target: {
         default: {
-          semantic: this.get('metadata').target.default.semantic
+          semantic: this.getPath('metadata.target.default.semantic')
         }
       }
     })
@@ -97,11 +137,12 @@ App.Texture = Em.Object.extend({
     }, this));
   }.observes('metadata.target.default.semantic'),
 
-  onWidthChanged: function() {
+  onWidthChanged: function(sender, key) {
+    App.logChange(this, '_id', key);
     App.sendChanges('texture', this.get('_id'), {
       target: {
         default: {
-          width: this.get('metadata').target.default.width
+          width: this.getPath('metadata.target.default.width')
         }
       }
     })
@@ -111,10 +152,11 @@ App.Texture = Em.Object.extend({
   }.observes('metadata.target.default.width'),
 
   onSync: function(data) {
-    console.log('Texture.onSync');
-    this.set('metadata.target.default.height', data.height);
-    this.set('metadata.target.default.width', data.width);
-    this.set('metadata.target.default.semantic', data.semantic);
+//    console.log('Texture.onSync');
+    var hash = App.flattenJSON(data);
+    for (var key in hash) {
+//      console.log('setPath: '+key+' = '+hash[key]);
+      this.setPath(key, hash[key]);
   },
 });
 

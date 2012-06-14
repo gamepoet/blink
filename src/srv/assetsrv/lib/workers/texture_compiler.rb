@@ -1,4 +1,4 @@
-require 'pp'
+require 'net/http'
 
 module NeedMongo
   module ClassMethods
@@ -29,7 +29,30 @@ module NeedMongo
   end
 end
 
+module NeedFaye
+  module ClassMethods
+    def publish(channel, data)
+      msg = { :channel => channel, :data => data }
+      uri = URI.parse('http://localhost:5000/faye')
+      Net::HTTP.post_form(uri, :message => msg.to_json)
+    end
+
+#    def pubsub
+#      if @pubsib.nil?
+#        Faye.ensure_reactor_running!
+#        @pubsub = Faye::Client.new('http://localhost:5000/faye')
+#      end
+#      return @pubsub
+#    end
+  end
+
+  def self.included(base)
+    base.extend(ClassMethods)
+  end
+end
+
 class TextureSourceProcessorJob
+  include NeedFaye
   include NeedMongo
   @queue = :textures_source_queue
 
@@ -80,8 +103,15 @@ class TextureSourceProcessorJob
       })
     end
 
-    db.assets[:texture].update(query, update)
+    result = db.assets[:texture].find_and_modify(
+      :query => query,
+      :update => update,
+      :new => true
+    )
+    #db.assets[:texture].update(query, update)
     # TODO handle failure
+
+    publish("/assets/texture/#{id}", result.to_json)
 
     # queue up builds for the other platforms
     Resque.enqueue(TextureCompilerJob, id, :osx_x64, record.version)
@@ -99,6 +129,7 @@ class TextureSourceProcessorJob
 end
 
 class TextureCompilerJob
+  include NeedFaye
   include NeedMongo
   @queue = :textures_platform_queue
 
@@ -119,6 +150,8 @@ class TextureCompilerJob
       puts "Could not find texture: id=#{id}, platform=#{platform}, version=#{version}"
       return
     end
+
+    puts record
 
     # get the specific source file associated with the version retrieved
     src_file = grid.get(record.file_ids.source)
@@ -142,19 +175,26 @@ class TextureCompilerJob
       f.write(img_compressed.surface)
     end
 
-    db.assets[:texture].update(
-      {
-        :_id                        => id,
-        :version                    => record.version,  # ensure the record hasn't changed while this job was working
+    query = {
+      :_id                        => id,
+      :version                    => record.version,  # ensure the record hasn't changed while this job was working
+    }
+    update = {
+      :$set => {
+        :updated_at               => Time.now,
+        "status.#{platform}"      => true,
+        "file_ids.#{platform}"    => dst_file_id,
       },
-      {
-        :$set => {
-          :updated_at               => Time.now,
-          "status.#{platform}"      => true,
-          "file_ids.#{platform}"    => dst_file_id,
-        },
-      }
+    }
+    result = db.assets[:texture].find_and_modify(
+      :query => query,
+      :update => update,
+      :new => true
     )
+    puts "committed: #{result.to_json}"
+    puts 'job publish'
+    publish("/assets/texture/#{id}", result.to_json)
+    puts 'publish ok'
   end
 
   def self.get_metadata(record, platform, key)
