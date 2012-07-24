@@ -17,6 +17,7 @@ gem 'uglifier'
 gem 'texture_compiler'
 
 group :development do
+  gem 'foreman'
   gem 'growl'
   gem 'guard'
   gem 'guard-bundler'
