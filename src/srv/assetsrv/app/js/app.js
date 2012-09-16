@@ -7,7 +7,7 @@ App = Em.Application.create({
 //      e.preventDefault();
 //    });
 
-    App.pubsub = new Faye.Client('http://localhost:5000/faye')
+    App.pubsub = new Faye.Client('http://localhost:5000/faye');
 
     App.view = App.MainView.create();
     App.view.appendTo('body');
@@ -157,6 +157,7 @@ App.Texture = Em.Object.extend({
     for (var key in hash) {
 //      console.log('setPath: '+key+' = '+hash[key]);
       this.setPath(key, hash[key]);
+    }
   },
 });
 
