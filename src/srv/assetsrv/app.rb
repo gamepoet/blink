@@ -123,7 +123,7 @@ class App < Sinatra::Base
     # grab the latest session
     session = $db.sessions.find_one()
 
-    $faye.publish('/session', session.doc.to_json)
+    $faye.publish('/session', session.doc)
 
     last_modified session[:updated_at]
     content_type :json
@@ -235,7 +235,7 @@ class App < Sinatra::Base
     }
     $db.assets[:texture].insert(record)
 
-    $faye.publish("/assets/texture/#{id_str}", record.to_json)
+    $faye.publish("/assets/texture/#{id_str}", record)
     Resque.enqueue(TextureSourceProcessorJob, id_str, 0)
 
     content_type :json
@@ -348,7 +348,7 @@ class App < Sinatra::Base
     )
     puts result
 
-    $faye.publish("/assets/texture/#{id}", result.to_json)
+    $faye.publish("/assets/texture/#{id}", result)
 
     # request recompilation
     Resque.enqueue(TextureCompilerJob, id, :osx_x64, result.version)
