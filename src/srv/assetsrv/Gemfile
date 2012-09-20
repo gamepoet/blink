@@ -21,7 +21,9 @@ group :development do
   gem 'growl'
   gem 'guard'
   gem 'guard-bundler'
+  gem 'guard-livereload'
   gem 'guard-resque'
+  gem 'rack-livereload'
   gem 'sinatra-reloader', :require => 'sinatra/reloader'
   gem 'thin'
 end
