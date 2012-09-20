@@ -26,16 +26,21 @@
 #import <QuartzCore/QuartzCore.h>
 #include <OpenGL/glu.h>
 #include "imgview_osx.h"
+#include <event2/event.h>
 #include <json/json.h>
 #include <squish.h>
 #include <tiffio.h>
+#include <blink/gr.h>
+#include <bayeux.h>
+
+#define BASEURI "http://localhost:5000"
 
 extern void issue_invalidate_rect(Plugin* __restrict plugin, float x, float y, float w, float h);
 extern void url_get(Plugin* __restrict plugin, const char * __restrict url, void* context);
 
 enum EURLRequestType {
-  URL_REQUEST_TYPE_SESSION,
   URL_REQUEST_TYPE_TEXTURE_BULK,
+  URL_REQUEST_TYPE_TEXTURE_META,
 };
 
 struct URLRequestContext {
@@ -50,16 +55,10 @@ struct MemFile {
   char* end;
 };
 
-struct Tex {
-  uint32_t  height  : 12; // height - 1 (since 0 is not valid)
-  uint32_t  width   : 12; // width - 1 (since 0 is not valid)
-  uint32_t  levels  : 4;  // levels - 1 (since 0 is not valid)
-  uint32_t  dxt5    : 1;  // dxt5 vs dxt1
-  uint32_t  unused  : 3;
-
-  void*     surface;
-  GLuint    pbo_id;
-  GLuint    tex_id;
+struct TexMeta {
+  int         height;
+  int         width;
+  const char* file_id;
 };
 
 
@@ -150,54 +149,81 @@ static void mem_file_unmap(thandle_t handle, tdata_t buf, toff_t size) {
 
 
 //------------------------------------------------------------------------------
-static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, const char* __restrict filename) {
-  MemFile file;
-  file.beg  = (char *)buffer;
-  file.cur  = file.beg;
-  file.end  = file.beg + bufferSize;
+static bool load_texture(BLGrTex** __restrict tex, const TexMeta* meta, void* buffer, int bufferSize, const char* __restrict filename) {
+//  MemFile file;
+//  file.beg  = (char *)buffer;
+//  file.cur  = file.beg;
+//  file.end  = file.beg + bufferSize;
+//
+//  TIFF* tiff = TIFFClientOpen(filename,
+//                              "r",
+//                              &file,
+//                              &mem_file_read,
+//                              &mem_file_write,
+//                              &mem_file_seek,
+//                              &mem_file_close,
+//                              &mem_file_size,
+//                              &mem_file_map,
+//                              &mem_file_unmap);
+//  if (!tiff) {
+//    return false;
+//  }
+//
+//  uint32_t width, height;
+//  TIFFGetField(tiff, TIFFTAG_IMAGEWIDTH, &width);
+//  TIFFGetField(tiff, TIFFTAG_IMAGELENGTH, &height);
+//
+//  uint32_t* __restrict raw_surface = (uint32_t*)malloc(width * height * sizeof(uint32_t));
+//  if (!TIFFReadRGBAImageOriented(tiff, width, height, raw_surface)) {
+//    free(raw_surface);
+//    TIFFClose(tiff);
+//    return false;
+//  }
+//  TIFFClose(tiff);
+//  
+//  // alloc space for the compressed image
+//  uint32 dxt_bytes = squish::GetStorageRequirements(width, height, squish::kDxt5);
+//  int tex_file_buf_size = sizeof(BLGrTexFileHeader) + dxt_bytes;
+//  void* tex_file_buf = bl_alloc(tex_file_buf_size, 16);
+//  BLGrTexFileHeader* header = (BLGrTexFileHeader*)tex_file_buf;
+//  header->magic     = BL_TO_BIG_ENDIAN(BL_GR_TEX_FILE_MAGIC);
+//  header->version   = BL_TO_BIG_ENDIAN(BL_GR_TEX_FILE_VERSION);
+//  header->endian    = BL_TO_BIG_ENDIAN(BL_GR_TEX_FILE_ENDIAN_CURRENT);
+//  header->width     = width;
+//  header->height    = height;
+//  header->levels    = 1;
+//  header->format    = BL_GR_TEX_FILE_FORMAT_DXT5;
+//  header->reserved  = 0;
+//
+//  squish::u8* __restrict dxt_surface = (squish::u8*)(header + 1);
+//  squish::CompressImage((squish::u8*)raw_surface, width, height, dxt_surface, squish::kDxt5);
+//  free(raw_surface);
+//  
+//  *tex = bl_gr_tex_load((const char*)tex_file_buf, tex_file_buf_size);
 
-  TIFF* tiff = TIFFClientOpen(filename,
-                              "r",
-                              &file,
-                              &mem_file_read,
-                              &mem_file_write,
-                              &mem_file_seek,
-                              &mem_file_close,
-                              &mem_file_size,
-                              &mem_file_map,
-                              &mem_file_unmap);
-  if (!tiff) {
-    return false;
-  }
-
-  uint32_t width, height;
-  TIFFGetField(tiff, TIFFTAG_IMAGEWIDTH, &width);
-  TIFFGetField(tiff, TIFFTAG_IMAGELENGTH, &height);
-
-  uint32_t* __restrict raw_surface = (uint32_t*)malloc(width * height * sizeof(uint32_t));
-  if (!TIFFReadRGBAImageOriented(tiff, width, height, raw_surface)) {
-    free(raw_surface);
-    TIFFClose(tiff);
-    return false;
-  }
-  TIFFClose(tiff);
-
+  
   // alloc space for the compressed image
-  uint32 dxt_bytes = squish::GetStorageRequirements(width, height, squish::kDxt5);
-  squish::u8* __restrict dxt_surface = (squish::u8*)malloc(dxt_bytes);
-  squish::CompressImage((squish::u8*)raw_surface, width, height, dxt_surface, squish::kDxt5);
-  free(raw_surface);
-
-  tex->height   = height - 1;
-  tex->width    = width - 1;
-  tex->levels   = 1 - 1;
-  tex->dxt5     = 1;
-  tex->unused   = 0;
-  tex->surface  = dxt_surface;
-  tex->pbo_id   = 0;
-  tex->tex_id   = 0;
-
-  return true;
+  int tex_file_buf_size = sizeof(BLGrTexFileHeader) + bufferSize;
+  void* tex_file_buf = bl_alloc(tex_file_buf_size, 16);
+  BLGrTexFileHeader* header = (BLGrTexFileHeader*)tex_file_buf;
+  header->magic     = BL_TO_BIG_ENDIAN(BL_GR_TEX_FILE_MAGIC);
+  header->version   = BL_TO_BIG_ENDIAN(BL_GR_TEX_FILE_VERSION);
+  header->endian    = BL_TO_BIG_ENDIAN(BL_GR_TEX_FILE_ENDIAN_CURRENT);
+  header->width     = meta->width;
+  header->height    = meta->height;
+  header->levels    = 1;
+  header->format    = BL_GR_TEX_FILE_FORMAT_DXT5;
+  header->reserved  = 0;
+  memcpy(header + 1, buffer, bufferSize);
+  *tex = bl_gr_tex_load((const char*)tex_file_buf, tex_file_buf_size);
+  bl_free(tex_file_buf);
+  if (*tex) {
+    return true;
+  }
+  else {
+//    bl_free(tex_file_buf);
+    return true;
+  }
 }
 
 
@@ -211,7 +237,7 @@ static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, cons
   float m_width;
   float m_height;
 
-  Tex m_tex;
+  BLGrTex* m_tex;
 
   NSString* m_texFilename;
   uint32_t m_texFileId;
@@ -219,12 +245,91 @@ static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, cons
   void* m_bulk;
   int m_bulkSize;
   bool m_texChanged;
-
-  NSTimer* m_timer;
+  
+  struct event_base* m_ev_base;
+  BayeuxClient* m_pubsub;
+  
+  TexMeta m_tex_meta;
 }
+
+- (Plugin*) getPlugin;
+- (void) setTexFilename:(const char*)filename
+                 fileId:(uint32_t)fileId;
+- (void) setTexBulk:(const void*)data
+               size:(int)size;
+- (void) setTexMeta:(const TexMeta*)meta;
 @end
 
 @implementation GLLayer
+
+//------------------------------------------------------------------------------
+static void url_get(GLLayer* layer, EURLRequestType req_type, const char* format, ...) {
+  URLRequestContext* ctx = (URLRequestContext*)malloc(sizeof(URLRequestContext));
+  ctx->type = req_type;
+  ctx->layer = [layer retain];
+  
+  const char* base_uri = BASEURI;
+  char fmt[256];
+  snprintf(fmt, sizeof(fmt), "%s%s", base_uri, format);
+  fmt[sizeof(fmt) - 1] = 0;
+  
+  char uri[256];
+  va_list args;
+  va_start(args, format);
+  vsnprintf(uri, sizeof(uri), fmt, args);
+  va_end(args);
+  
+  url_get([layer getPlugin], uri, ctx);
+}
+
+//------------------------------------------------------------------------------
+static void on_evt_session(const char* msg, void* ctx) {
+  GLLayer* layer = (GLLayer*)ctx;
+  log("/session: %s", msg);
+  
+  json_object* json = json_tokener_parse(msg);
+//  log("session: %s", json_object_to_json_string(json));
+  
+  // get updated selection
+  json_object* jsonTexFilename = json_object_object_get(json, "selection");
+  const char * texFilename = json_object_get_string(jsonTexFilename);
+  json_object* jsonTexFileId = json_object_object_get(json, "selection_id");
+  const char * texFileIdStr = json_object_get_string(jsonTexFileId);
+  uint32_t texFileId = (uint32_t)strtoul(texFileIdStr, NULL, 16);
+  
+  [layer setTexFilename:texFilename fileId:texFileId];
+  
+  json_object_put(json);
+}
+
+//------------------------------------------------------------------------------
+static void on_url_texture_bulk(GLLayer* layer, const char* data, int data_size) {
+  [layer setTexBulk:data size:data_size];
+}
+
+//------------------------------------------------------------------------------
+static void on_url_texture_meta(GLLayer* layer, const char* data, int data_size) {
+  json_object* msg = json_tokener_parse(data);
+  log("texture_meta: %s", json_object_to_json_string(msg));
+
+  json_object* json_metadata  = json_object_object_get(msg, "metadata");
+  json_object* json_target    = json_object_object_get(json_metadata, "target");
+  json_object* json_default   = json_object_object_get(json_target, "default");
+  json_object* json_height    = json_object_object_get(json_default, "height");
+  json_object* json_width     = json_object_object_get(json_default, "width");
+  json_object* json_file_ids  = json_object_object_get(msg, "file_ids");
+  json_object* json_osx_x64   = json_object_object_get(json_file_ids, "osx_x64");
+  json_object* json_file_id   = json_object_object_get(json_osx_x64, "$oid");
+  
+  TexMeta meta;
+  meta.height   = json_object_get_int(json_height);
+  meta.width    = json_object_get_int(json_width);
+  meta.file_id  = json_object_get_string(json_file_id);
+  
+  [layer setTexMeta:&meta];
+
+  json_object_put(msg);
+}
 
 //------------------------------------------------------------------------------
 - (id) init {
@@ -234,15 +339,16 @@ static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, cons
     self.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
     self.needsDisplayOnBoundsChange = YES;
 
-    m_timer = [NSTimer timerWithTimeInterval:1.0f target:self selector:@selector(syncSession:) userInfo:nil repeats:YES];
-    [[NSRunLoop currentRunLoop] addTimer:m_timer forMode:NSDefaultRunLoopMode];
-
+    m_tex = NULL;
     m_texFilename = NULL;
     m_texFileId = 0;
     m_texChanged = false;
 
     m_bulk = NULL;
     m_bulkSize = 0;
+    
+    m_ev_base = NULL;
+    m_pubsub = NULL;
 
 //    sleep(15000);
   }
@@ -250,15 +356,12 @@ static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, cons
 }
 
 //------------------------------------------------------------------------------
-- (void) syncSession:(NSTimer*)timer {
-  URLRequestContext* ctx = (URLRequestContext*)malloc(sizeof(URLRequestContext));
-  ctx->type = URL_REQUEST_TYPE_SESSION;
-  ctx->layer = [self retain];
-  url_get(m_plugin, "http://localhost:9292/session", ctx);
-}
-
-//------------------------------------------------------------------------------
 - (void) dealloc {
+  if (m_pubsub) {
+    bayeux_client_destroy(m_pubsub);
+    m_pubsub = NULL;
+  }
+  
   [super dealloc];
 }
 
@@ -267,6 +370,11 @@ static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, cons
               pixelFormat:(CGLPixelFormatObj)pf
              forLayerTime:(CFTimeInterval)t
               displayTime:(const CVTimeStamp *)ts {
+  // dispatch events
+  if (m_ev_base) {
+    event_base_loop(m_ev_base, EVLOOP_NONBLOCK);
+  }
+
   CGLSetCurrentContext(ctx);
 
   glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
@@ -289,48 +397,24 @@ static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, cons
   glRotatef(0.4f * sin(angle), 0.0f, 0.0f, 1.0f);
   angle += 0.1f;
 
-  if (m_bulk && (!m_tex.surface || m_texChanged)) {
-    if (m_tex.surface) {
-      free(m_tex.surface);
-      m_tex.surface = NULL;
+  if (m_bulk && m_texChanged) {
+    if (m_tex) {
+      bl_gr_tex_unload(m_tex);
+      m_tex = NULL;
     }
-    if (!load_texture(&m_tex, m_bulk, m_bulkSize, [m_texFilename UTF8String])) {
-      m_tex.surface = NULL;
+    if (!load_texture(&m_tex, &m_tex_meta, m_bulk, m_bulkSize, [m_texFilename UTF8String])) {
+      m_tex = NULL;
     }
     else {
-      uint32_t w = m_tex.width + 1;
-      uint32_t h = m_tex.height + 1;
-      int surface_size = squish::GetStorageRequirements(w, h, m_tex.dxt5 ? squish::kDxt5 : squish::kDxt1);
-      glGenTextures(1, &m_tex.tex_id);
-      glGenBuffers(1, &m_tex.pbo_id);
-      check_gl();
-
-      // bind the texture and pbo
-      glBindTexture(GL_TEXTURE_2D, m_tex.tex_id);
-      glBindBuffer(GL_PIXEL_UNPACK_BUFFER, m_tex.pbo_id);
-      check_gl();
-
-      // upload texture data to the pbo
-      glBufferData(GL_PIXEL_UNPACK_BUFFER, surface_size, m_tex.surface, GL_STATIC_DRAW);
-      check_gl();
-
-      // setup tex params
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-      check_gl();
-
-      glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, w, h, 0, surface_size, NULL);
-      check_gl();
-
       m_texChanged = false;
     }
   }
+  
+  bl_gr_process_commands();
 
-  if (m_tex.tex_id) {
+  if (m_tex) {
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, m_tex.tex_id);
+    bl_gr_tex_bind(m_tex);
   }
 
   glBegin(GL_TRIANGLE_STRIP);
@@ -362,8 +446,8 @@ static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, cons
   }
   glEnd();
 
-  if (m_tex.tex_id) {
-    glBindTexture(GL_TEXTURE_2D, 0);
+  if (m_tex) {
+    bl_gr_tex_unbind(m_tex);
     glDisable(GL_TEXTURE_2D);
   }
 
@@ -381,6 +465,11 @@ static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, cons
 }
 
 //------------------------------------------------------------------------------
+- (Plugin*) getPlugin {
+  return m_plugin;
+}
+
+//------------------------------------------------------------------------------
 - (void) setTexFilename:(const char*)filename
                  fileId:(uint32_t)fileId {
   NSString* texFilename = [[NSString alloc] initWithUTF8String:filename];
@@ -389,33 +478,55 @@ static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, cons
     
     m_texFileId = fileId;
 
-    URLRequestContext* ctx = (URLRequestContext*)malloc(sizeof(URLRequestContext));
-    ctx->type = URL_REQUEST_TYPE_TEXTURE_BULK;
-    ctx->layer = [self retain];
-
-    char url[256];
-    snprintf(url, 256, "http://localhost:9292/assets/texture/%08x/bulk", m_texFileId);
-    url_get(m_plugin, url, ctx);
+    url_get(self, URL_REQUEST_TYPE_TEXTURE_META, "/assets/texture/%08x", m_texFileId);
   }
 }
 
 //------------------------------------------------------------------------------
 - (void) setTexBulk:(const void*)data
-               size:(int)dataSize {
+               size:(int)size {
   free(m_bulk);
   m_bulk = NULL;
   m_bulkSize = 0;
-  if (dataSize > 0) {
-    m_bulk = malloc(dataSize);
-    memcpy(m_bulk, data, dataSize);
-    m_bulkSize = dataSize;
+  if (size > 0) {
+    m_bulk = malloc(size);
+    memcpy(m_bulk, data, size);
+    m_bulkSize = size;
   }
   m_texChanged = true;
 }
 
 //------------------------------------------------------------------------------
+- (void) setTexMeta:(const TexMeta *)meta {
+  m_tex_meta.height   = meta->height;
+  m_tex_meta.width    = meta->width;
+  m_tex_meta.file_id  = strdup(meta->file_id);
+  m_texChanged        = true;
+  
+  // fetch the bulk data
+  url_get(self, URL_REQUEST_TYPE_TEXTURE_BULK, "/bulk/%s", m_tex_meta.file_id);
+}
+
+//------------------------------------------------------------------------------
 - (void) setPlugin:(Plugin*)val {
   m_plugin = val;
+}
+
+//------------------------------------------------------------------------------
+- (void) setEventBase:(struct event_base*)ev_base {
+  m_ev_base = ev_base;
+  if (m_pubsub) {
+    bayeux_client_destroy(m_pubsub);
+    m_pubsub = NULL;
+  }
+  if (m_ev_base) {
+    BayeuxClientOpts opts;
+    bayeux_client_opts_defaults(&opts);
+    opts.ev_base = m_ev_base;
+    m_pubsub = bayeux_client_create("http://localhost:5000/faye", &opts);
+    
+    bayeux_client_subscribe(m_pubsub, "/session", &on_evt_session, self);
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -438,9 +549,10 @@ static bool load_texture(Tex* __restrict tex, void* buffer, int bufferSize, cons
 //
 
 //------------------------------------------------------------------------------
-void* core_anim_layer_create(Plugin* plugin) {
+void* core_anim_layer_create(Plugin* plugin, struct event_base* ev_base) {
   GLLayer* layer = [[GLLayer layer] retain];
   [layer setPlugin:plugin];
+  [layer setEventBase:ev_base];
 
   NSDictionary * actions = [NSDictionary dictionaryWithObjectsAndKeys:
                             [NSNull null], @"contents",
@@ -478,25 +590,21 @@ void core_anim_layer_url_ready(void* layer, const char* data, int data_size, voi
   GLLayer* gl_layer = static_cast<GLLayer*>(layer);
   URLRequestContext* ctx = (URLRequestContext*)context;
 
-  if (ctx->type == URL_REQUEST_TYPE_SESSION) {
-    // parse json string
-    json_object* json = json_tokener_parse(data);
-//    log("session: %s", json_object_to_json_string(json));
-
-    // get updated selection
-    json_object* jsonTexFilename = json_object_object_get(json, "selection");
-    const char * texFilename = json_object_get_string(jsonTexFilename);
-    json_object* jsonTexFileId = json_object_object_get(json, "selection_id");
-    const char * texFileIdStr = json_object_get_string(jsonTexFileId);    
-    uint32_t texFileId = strtoul(texFileIdStr, NULL, 16);
-
-    [gl_layer setTexFilename:texFilename fileId:texFileId];
-
-    json_object_put(json);
+  switch (ctx->type) {
+    case URL_REQUEST_TYPE_TEXTURE_BULK:
+      on_url_texture_bulk(gl_layer, data, data_size);
+      break;
+      
+    case URL_REQUEST_TYPE_TEXTURE_META:
+      on_url_texture_meta(gl_layer, data, data_size);
+      break;
+      
+    default:
+      log("unknown request type: %d", ctx->type);
+      break;
   }
-  else if (ctx->type == URL_REQUEST_TYPE_TEXTURE_BULK) {
-//    log("texture bulk");
-    [gl_layer setTexBulk:data size:data_size];
-  }
+  
+  [gl_layer release];
+  free(ctx);
 }
 

@@ -79,7 +79,9 @@ class App < Sinatra::Base
   ember do
     templates '/js/templates.js', [
       '/app/templates/**/*.hbs'
-    ]
+    ], :relative_to => 'app/templates'
+
+    template_name_style :path
   end
 
   #
@@ -286,6 +288,34 @@ class App < Sinatra::Base
     200
   end
 
+  # deprecated - not async safe since the metadata may not match the file id
+  get '/assets/:type/:id/bulk' do
+    type      = params[:type]
+    id        = params[:id]
+
+    query = {
+      :_id => id,
+    }
+    asset = $db.assets[type].find_one(query)
+    if asset.nil?
+      halt 404
+    end
+    puts asset.to_json
+    pp asset
+
+    file_id = asset.file_ids.osx_x64
+    puts ">------"
+    pp file_id
+    puts "<------"
+
+    # get the bulk file and read it
+    grid = Mongo::Grid.new($db)
+    io = grid.get(file_id)
+
+    content_type 'application/octet-stream'
+    io.read.to_s
+  end
+
   get '/assets/:type/:id' do
     type  = params[:type]
     id    = params[:id]
@@ -304,8 +334,8 @@ class App < Sinatra::Base
     result.to_json
   end
 
-  get '/assets/bulk/:file_id' do
-    file_id = params[:file_id]
+  get '/bulk/:file_id' do
+    file_id = BSON::ObjectId.from_string(params[:file_id])
 
     # get the bulk file and read it
     grid = Mongo::Grid.new($db)

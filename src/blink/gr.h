@@ -24,13 +24,54 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #pragma once
+#ifndef BL_GR_H
+#define BL_GR_H
 
-struct event_base;
-struct Plugin;
+#include <blink/base.h>
 
-void* core_anim_layer_create(Plugin* plugin, struct event_base* ev_base);
-void core_anim_layer_destroy(void* layer);
-void core_anim_layer_render(void* layer);
-void core_anim_layer_set_visible(void* layer, bool visible);
-void core_anim_layer_set_dims(void* layer, float width, float height);
-void core_anim_layer_url_ready(void* layer, const char* data, int data_size, void* context);
+#define BL_GR_TEX_FILE_MAGIC            0x42544558u // BTEX
+#define BL_GR_TEX_FILE_VERSION          0x00000000u
+#define BL_GR_TEX_FILE_ENDIAN_BIG       0x00000000u
+#define BL_GR_TEX_FILE_ENDIAN_LITTLE    0x00000001u
+#define BL_GR_TEX_FILE_HEIGHT_MAX       (1 << 12)
+#define BL_GR_TEX_FILE_WIDTH_MAX        (1 << 12)
+#define BL_GR_TEX_FILE_LEVELS_MAX       (1 << 4)
+
+#define BL_GR_TEX_FILE_FORMAT_DXT5      0
+#define BL_GR_TEX_FILE_FORMAT_DXT1      1
+// ...
+#define BL_GR_TEX_FILE_FORMAT_MAX       2
+
+#ifdef BL_BIG_ENDIAN
+# define BL_GR_TEX_FILE_ENDIAN_CURRENT  BL_GR_TEX_FILE_ENDIAN_BIG
+#else
+# define BL_GR_TEX_FILE_ENDIAN_CURRENT  BL_GR_TEX_FILE_ENDIAN_LITTLE
+#endif
+
+
+struct BLGrTex;
+
+struct BLGrTexFileHeader {
+  uint32_t  magic;    // (big endian) BTEX
+  uint32_t  version;  // (big endian)
+  uint32_t  endian;   // (big endian)
+  uint32_t  height;
+  uint32_t  width;
+  uint32_t  levels;
+  uint32_t  format;   // dxt5, dxt1, rgba8888, ...
+
+  uint32_t  reserved; // unused, forces 16-byte alignment
+};
+
+
+void bl_gr_lib_initialize();
+void bl_gr_lib_finalize();
+
+void bl_gr_process_commands();
+
+void bl_gr_tex_bind(BLGrTex* tex);
+void bl_gr_tex_unbind(BLGrTex* tex);
+BLGrTex* bl_gr_tex_load(const char* buf, unsigned int buf_size);
+void bl_gr_tex_unload(BLGrTex* tex);
+
+#endif

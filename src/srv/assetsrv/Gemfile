@@ -11,7 +11,7 @@ gem 'resque'
 gem 'sass'
 gem 'sinatra',            :require => 'sinatra/base'
 gem 'sinatra-assetpack',  :require => 'sinatra/assetpack'
-gem 'sinatra-ember',      :require => 'sinatra/ember'
+gem 'sinatra-ember',      :require => 'sinatra/ember',    :path => '~/dev/sinatra-ember'
 gem 'uglifier'
 
 gem 'texture_compiler'

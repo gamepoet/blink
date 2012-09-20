@@ -25,7 +25,9 @@
 
 #include <npapi.h>
 #include <npfunctions.h>
+#include <event2/event.h>
 #include <json/json.h>
+#include <blink/gr.h>
 #include "imgview_osx.h"
 
 //
@@ -33,10 +35,11 @@
 //
 
 struct Plugin {
-  NPP       npp;
-  NPWindow  window;
-  void*     ca_layer;
-  bool      is_invalidating_core_anim_model;
+  NPP                           npp;
+  NPWindow                      window;
+  void*                         ca_layer;
+  struct event_base* __restrict ev_base;
+  bool                          is_invalidating_core_anim_model;
 };
 
 struct Stream {
@@ -52,7 +55,7 @@ struct Stream {
 // local vars
 //
 
-static NPNetscapeFuncs * s_browser;
+static NPNetscapeFuncs* s_browser;
 
 
 //
@@ -67,6 +70,15 @@ extern "C" NPError NP_Shutdown();
 //
 // local functions
 //
+
+//------------------------------------------------------------------------------
+static void dispatch_events(NPP npp) {
+  Plugin* __restrict plugin = (Plugin*)npp->pdata;
+  if (plugin->ev_base) {
+    // dispatch all events that are ready to go
+    event_base_loop(plugin->ev_base, EVLOOP_NONBLOCK);
+  }
+}
 
 //------------------------------------------------------------------------------
 static void log(const char* format, ...) {
@@ -182,8 +194,18 @@ extern "C" NPError NP_Initialize(NPNetscapeFuncs* funcs) {
     return NPERR_INCOMPATIBLE_VERSION_ERROR;
   }
 
-  s_browser = funcs;
+//  sleep(10000);
 
+  // init blink
+  BLBaseInitAttr attr;
+  attr.log_filename = NULL;
+  bl_base_lib_initialize(&attr);
+#ifndef NDEBUG
+  bl_log_set_level(BL_LOG_LEVEL_DEBUG);
+#endif
+  bl_gr_lib_initialize();
+
+  s_browser = funcs;
   return NPERR_NO_ERROR;
 }
 
@@ -196,6 +218,9 @@ extern "C" void NPP_LostFocus(NPP instance) {
 extern "C" NPError NP_Shutdown() {
   log(__FUNCTION__);
   s_browser = NULL;
+  
+  bl_gr_lib_finalize();
+  bl_base_lib_finalize();
 
   return NPERR_NO_ERROR;
 }
@@ -213,6 +238,7 @@ extern "C" NPError NPP_Destroy(NPP instance, NPSavedData** save) {
     if (plugin->ca_layer) {
       core_anim_layer_destroy(plugin->ca_layer);
     }
+    event_base_free(plugin->ev_base);
     free(plugin);
     instance->pdata = NULL;
   }
@@ -269,6 +295,7 @@ extern "C" int16_t NPP_HandleEvent(NPP instance, void* event) {
     case NPCocoaEventDrawRect:
       log("%s: NPCocoaEventDrawRect", __FUNCTION__);
       render(instance, evt);
+      dispatch_events(instance);
       return 1;
 
     case NPCocoaEventMouseDown:
@@ -346,7 +373,8 @@ extern "C" NPError NPP_New(NPMIMEType pluginType, NPP instance, uint16_t mode, i
   }
 
   memset(plugin, 0, sizeof(Plugin));
-  plugin->npp = instance;
+  plugin->npp     = instance;
+  plugin->ev_base = event_base_new();
   instance->pdata = plugin;
 
   // query browser caps
@@ -400,7 +428,7 @@ extern "C" NPError NPP_New(NPMIMEType pluginType, NPP instance, uint16_t mode, i
   }
 
   // create the core animation layer
-  plugin->ca_layer = core_anim_layer_create(plugin);
+  plugin->ca_layer = core_anim_layer_create(plugin, plugin->ev_base);
   
   return NPERR_NO_ERROR;
 }
@@ -472,7 +500,7 @@ extern "C" void NPP_StreamAsFile(NPP instance, NPStream* stream, const char* fna
 
 //------------------------------------------------------------------------------
 extern "C" void NPP_URLNotify(NPP instance, const char* url, NPReason reason, void* notifyData) {
-//  log(__FUNCTION__);
+//  log("%s: %s, reason=%d", __FUNCTION__, url, reason);
 
   Stream* __restrict s = (Stream*)notifyData;
   if (!s) {
@@ -485,7 +513,12 @@ extern "C" void NPP_URLNotify(NPP instance, const char* url, NPReason reason, vo
     return;
   }
 
-  core_anim_layer_url_ready(plugin->ca_layer, s->beg, s->cur - s->beg, s->context);
+  if (reason == NPRES_DONE) {
+    core_anim_layer_url_ready(plugin->ca_layer, s->beg, s->cur - s->beg, s->context);
+  }
+  else {
+    bl_log_error("url request failed: %s [reason: %d]", url, reason);
+  }
 
   free(s->beg);
   free(s);

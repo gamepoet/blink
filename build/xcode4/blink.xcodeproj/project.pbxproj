@@ -30,12 +30,18 @@
 		5B3D703B140B40280014D68C /* queue.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D702E140B40280014D68C /* queue.h */; };
 		5B46110113FF71810061F55B /* atomic_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B46110013FF71810061F55B /* atomic_test.cpp */; };
 		5B6B5BF613F391B9007DF59B /* str_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B5BF213F3919C007DF59B /* str_test.cpp */; };
+		5B6FAC1316067A98000D5252 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B6FAC1216067A98000D5252 /* libcurl.dylib */; };
+		5B73898A15D72ACB00FF9305 /* gr.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B73898915D72ACB00FF9305 /* gr.h */; };
+		5B73898C15D856BD00FF9305 /* gr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B73898B15D856BD00FF9305 /* gr.cpp */; };
+		5B73898F15D8717F00FF9305 /* libblink.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B6B5BCE13F38F99007DF59B /* libblink.a */; };
 		5B8971CE13F392420087D363 /* libblink.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B6B5BCE13F38F99007DF59B /* libblink.a */; };
 		5B8971D113F3934A0087D363 /* libUnitTest++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8971D013F3934A0087D363 /* libUnitTest++.a */; };
 		5B8971D413F3A0220087D363 /* endian_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8971D213F39FF70087D363 /* endian_test.cpp */; };
 		5B8971D513F3A0260087D363 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B5BF313F3919C007DF59B /* main.cpp */; };
 		5B9A680813F7046B00E40577 /* debug_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A680613F7028D00E40577 /* debug_test.cpp */; };
 		5B9A681D13F844ED00E40577 /* thread_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A681C13F844ED00E40577 /* thread_test.cpp */; };
+		5BB7304C16066C0B00B40FC2 /* libbayeux.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BB7304716066BC400B40FC2 /* libbayeux.a */; };
+		5BB730501606736000B40FC2 /* libevent_core-2.0.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BB7304F1606736000B40FC2 /* libevent_core-2.0.5.dylib */; };
 		5BBBD81B14004CA1001F3C9B /* job_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD81A14004CA1001F3C9B /* job_test.cpp */; };
 		5BBBD81F1400804B001F3C9B /* queue_swsr_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */; };
 		5BBBD82314074FB5001F3C9B /* vec_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD82214074FB5001F3C9B /* vec_test.cpp */; };
@@ -57,6 +63,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = 5B6B5BCD13F38F99007DF59B;
 			remoteInfo = blink;
+		};
+		5B73898D15D8712F00FF9305 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B6B5BC513F38F99007DF59B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5B6B5BCD13F38F99007DF59B;
+			remoteInfo = blink;
+		};
+		5BB7304616066BC400B40FC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5BB7303D16066BC300B40FC2 /* bayeux.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5B73899B15D9D4FF00FF9305;
+			remoteInfo = bayeux;
+		};
+		5BB7304816066BC400B40FC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5BB7303D16066BC300B40FC2 /* bayeux.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5B7389B215DA141C00FF9305;
+			remoteInfo = pingpong;
+		};
+		5BB7304A16066BE000B40FC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5BB7303D16066BC300B40FC2 /* bayeux.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5B73899A15D9D4FF00FF9305;
+			remoteInfo = bayeux;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -109,10 +143,15 @@
 		5B6B5BE613F39160007DF59B /* tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tests; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6B5BF213F3919C007DF59B /* str_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = str_test.cpp; sourceTree = "<group>"; };
 		5B6B5BF313F3919C007DF59B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		5B6FAC1216067A98000D5252 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
+		5B73898915D72ACB00FF9305 /* gr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gr.h; path = ../../src/blink/gr.h; sourceTree = "<group>"; };
+		5B73898B15D856BD00FF9305 /* gr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gr.cpp; path = ../../src/blink/gr/gr.cpp; sourceTree = "<group>"; };
 		5B8971D013F3934A0087D363 /* libUnitTest++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libUnitTest++.a"; path = "/opt/local/lib/libUnitTest++.a"; sourceTree = "<absolute>"; };
 		5B8971D213F39FF70087D363 /* endian_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = endian_test.cpp; sourceTree = "<group>"; };
 		5B9A680613F7028D00E40577 /* debug_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug_test.cpp; sourceTree = "<group>"; };
 		5B9A681C13F844ED00E40577 /* thread_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread_test.cpp; sourceTree = "<group>"; };
+		5BB7303D16066BC300B40FC2 /* bayeux.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = bayeux.xcodeproj; path = ../../../libbayeux/build/xcode4/bayeux.xcodeproj; sourceTree = "<group>"; };
+		5BB7304F1606736000B40FC2 /* libevent_core-2.0.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libevent_core-2.0.5.dylib"; path = "/opt/local/lib/libevent_core-2.0.5.dylib"; sourceTree = "<absolute>"; };
 		5BBBD81A14004CA1001F3C9B /* job_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = job_test.cpp; sourceTree = "<group>"; };
 		5BBBD81E1400804B001F3C9B /* queue_swsr_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queue_swsr_test.cpp; sourceTree = "<group>"; };
 		5BBBD82214074FB5001F3C9B /* vec_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vec_test.cpp; sourceTree = "<group>"; };
@@ -132,6 +171,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5BB7304C16066C0B00B40FC2 /* libbayeux.a in Frameworks */,
+				5B73898F15D8717F00FF9305 /* libblink.a in Frameworks */,
+				5B6FAC1316067A98000D5252 /* libcurl.dylib in Frameworks */,
+				5BB730501606736000B40FC2 /* libevent_core-2.0.5.dylib in Frameworks */,
 				5B1E58A7156CB5F6009ED276 /* libjson.a in Frameworks */,
 				5BDC8D651558E2FE009528DB /* libsquish.a in Frameworks */,
 				5BDC8D681558E310009528DB /* libtiff.a in Frameworks */,
@@ -184,9 +227,13 @@
 		5B04F71C155103BF00E9E5E7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5BB7303D16066BC300B40FC2 /* bayeux.xcodeproj */,
+				5B6FAC1216067A98000D5252 /* libcurl.dylib */,
+				5BB7304F1606736000B40FC2 /* libevent_core-2.0.5.dylib */,
 				5B1E58A6156CB5F6009ED276 /* libjson.a */,
-				5BDC8D671558E310009528DB /* libtiff.a */,
 				5BDC8D641558E2FE009528DB /* libsquish.a */,
+				5BDC8D671558E310009528DB /* libtiff.a */,
+				5B8971D013F3934A0087D363 /* libUnitTest++.a */,
 				5B04F71D155103BF00E9E5E7 /* Cocoa.framework */,
 				5B04F73C1554F88000E9E5E7 /* OpenGL.framework */,
 				5B04F73E1554F8C600E9E5E7 /* QuartzCore.framework */,
@@ -228,11 +275,13 @@
 			isa = PBXGroup;
 			children = (
 				5B3D701E140B40280014D68C /* base */,
+				5B73898315D7299C00FF9305 /* gr */,
 				5BC7211B148176B8008635D9 /* hash */,
 				5B3D7028140B40280014D68C /* job */,
 				5BDB697D1480355F00291781 /* io */,
 				5B3D702C140B40280014D68C /* queue */,
 				5B3D7027140B40280014D68C /* base.h */,
+				5B73898915D72ACB00FF9305 /* gr.h */,
 				5BC7211F148176B8008635D9 /* hash.h */,
 				5B3D702A140B40280014D68C /* job.h */,
 				5BDB697B1480354900291781 /* io.h */,
@@ -314,7 +363,6 @@
 				5BBBD82014074FB5001F3C9B /* math */,
 				5BBBD81C1400804B001F3C9B /* queue */,
 				5B6B5BF313F3919C007DF59B /* main.cpp */,
-				5B8971D013F3934A0087D363 /* libUnitTest++.a */,
 			);
 			name = test;
 			path = ../../test;
@@ -330,6 +378,23 @@
 				5B9A681C13F844ED00E40577 /* thread_test.cpp */,
 			);
 			path = base;
+			sourceTree = "<group>";
+		};
+		5B73898315D7299C00FF9305 /* gr */ = {
+			isa = PBXGroup;
+			children = (
+				5B73898B15D856BD00FF9305 /* gr.cpp */,
+			);
+			name = gr;
+			sourceTree = "<group>";
+		};
+		5BB7303E16066BC300B40FC2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5BB7304716066BC400B40FC2 /* libbayeux.a */,
+				5BB7304916066BC400B40FC2 /* pingpong */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		5BBBD81914004CA1001F3C9B /* job */ = {
@@ -407,6 +472,7 @@
 				5BDB697C1480354900291781 /* io.h in Headers */,
 				5BC72122148176B8008635D9 /* hash.h in Headers */,
 				5B03A6D21558D5D90080A13D /* imgview_osx.h in Headers */,
+				5B73898A15D72ACB00FF9305 /* gr.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,6 +490,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				5BB7304B16066BE000B40FC2 /* PBXTargetDependency */,
+				5B73898E15D8712F00FF9305 /* PBXTargetDependency */,
 			);
 			name = imgview;
 			productName = imgview;
@@ -483,6 +551,12 @@
 			mainGroup = 5B6B5BC313F38F99007DF59B;
 			productRefGroup = 5B6B5BCF13F38F99007DF59B /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5BB7303E16066BC300B40FC2 /* Products */;
+					ProjectRef = 5BB7303D16066BC300B40FC2 /* bayeux.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				5B6B5BCD13F38F99007DF59B /* blink */,
@@ -491,6 +565,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		5BB7304716066BC400B40FC2 /* libbayeux.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libbayeux.a;
+			remoteRef = 5BB7304616066BC400B40FC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5BB7304916066BC400B40FC2 /* pingpong */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = pingpong;
+			remoteRef = 5BB7304816066BC400B40FC2 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		5B04F719155103BF00E9E5E7 /* Resources */ = {
@@ -528,6 +619,7 @@
 				5BDB69811480355F00291781 /* io.cpp in Sources */,
 				5BC72121148176B8008635D9 /* murmur3.cpp in Sources */,
 				5BC7212914817F97008635D9 /* lookup3.cpp in Sources */,
+				5B73898C15D856BD00FF9305 /* gr.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -557,6 +649,16 @@
 			target = 5B6B5BCD13F38F99007DF59B /* blink */;
 			targetProxy = 5B6B5BF813F391C9007DF59B /* PBXContainerItemProxy */;
 		};
+		5B73898E15D8712F00FF9305 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5B6B5BCD13F38F99007DF59B /* blink */;
+			targetProxy = 5B73898D15D8712F00FF9305 /* PBXContainerItemProxy */;
+		};
+		5BB7304B16066BE000B40FC2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = bayeux;
+			targetProxy = 5BB7304A16066BE000B40FC2 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -581,12 +683,15 @@
 				HEADER_SEARCH_PATHS = (
 					../../src/vendor/npapi,
 					/opt/local/include,
+					../../src,
+					"$(BUILT_PRODUCTS_DIR)/usr/local/include",
 				);
 				INFOPLIST_FILE = "imgview/imgview-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/bayeux-bjotyyvsjtdygjazksdnitfltmfo/Build/Products/Release\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = plugin;
@@ -602,12 +707,15 @@
 				HEADER_SEARCH_PATHS = (
 					../../src/vendor/npapi,
 					/opt/local/include,
+					../../src,
+					"$(BUILT_PRODUCTS_DIR)/usr/local/include",
 				);
 				INFOPLIST_FILE = "imgview/imgview-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/opt/local/lib,
+					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/bayeux-bjotyyvsjtdygjazksdnitfltmfo/Build/Products/Release\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = plugin;

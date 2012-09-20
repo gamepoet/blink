@@ -8,6 +8,11 @@ App = Em.Application.create({
 //    });
 
     App.pubsub = new Faye.Client('http://localhost:5000/faye');
+    App.pubsub.disable('cross-origin-long-polling');
+    App.pubsub.disable('callback-polling');
+    App.pubsub.disable('websocket');
+    App.pubsub.disable('eventsource');
+    App.pubsub.disable('in-process');
 
     App.view = App.MainView.create();
     App.view.appendTo('body');

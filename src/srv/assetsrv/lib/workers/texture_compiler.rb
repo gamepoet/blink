@@ -175,6 +175,8 @@ class TextureCompilerJob
       f.write(img_compressed.surface)
     end
 
+    puts "file_id is #{dst_file_id}"
+
     query = {
       :_id                        => id,
       :version                    => record.version,  # ensure the record hasn't changed while this job was working

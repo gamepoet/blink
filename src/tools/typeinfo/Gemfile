@@ -1,0 +1,4 @@
+source :rubygems
+gem 'erubis'
+gem 'hashes'
+gem 'json'

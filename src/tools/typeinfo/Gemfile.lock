@@ -1,0 +1,14 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    erubis (2.7.0)
+    hashes (0.0.1)
+    json (1.6.6)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  erubis
+  hashes
+  json

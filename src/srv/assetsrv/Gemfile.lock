@@ -1,3 +1,9 @@
+PATH
+  remote: ~/dev/sinatra-ember
+  specs:
+    sinatra-ember (0.0.1)
+      sinatra
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -87,8 +93,6 @@ GEM
       rack-test
       sinatra (~> 1.3.0)
       tilt (~> 1.3)
-    sinatra-ember (0.0.1)
-      sinatra
     sinatra-reloader (1.0)
       sinatra-contrib
     texture_compiler (0.0.1)
@@ -126,7 +130,7 @@ DEPENDENCIES
   sass
   sinatra
   sinatra-assetpack
-  sinatra-ember
+  sinatra-ember!
   sinatra-reloader
   texture_compiler
   thin
