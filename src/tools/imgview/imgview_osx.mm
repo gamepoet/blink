@@ -501,7 +501,9 @@ static void on_url_texture_meta(GLLayer* layer, const char* data, int data_size)
   m_tex_meta.height   = meta->height;
   m_tex_meta.width    = meta->width;
   m_tex_meta.file_id  = strdup(meta->file_id);
-  m_texChanged        = true;
+  
+  // clear the bulk data so it doesn't get loaded with this new metadata
+  [self setTexBulk:NULL size:0];
   
   // fetch the bulk data
   url_get(self, URL_REQUEST_TYPE_TEXTURE_BULK, "/bulk/%s", m_tex_meta.file_id);
