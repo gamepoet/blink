@@ -539,7 +539,7 @@
 		5B6B5BC513F38F99007DF59B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = 5B6B5BC813F38F99007DF59B /* Build configuration list for PBXProject "blink" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -677,6 +677,7 @@
 		5B04F72B155103BF00E9E5E7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "imgview/imgview-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -701,6 +702,7 @@
 		5B04F72C155103BF00E9E5E7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "imgview/imgview-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
@@ -772,6 +774,7 @@
 		5B6B5BD313F38F99007DF59B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				HEADER_SEARCH_PATHS = ../../src;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -781,6 +784,7 @@
 		5B6B5BD413F38F99007DF59B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				HEADER_SEARCH_PATHS = ../../src;
 				PRODUCT_NAME = "$(TARGET_NAME)";
