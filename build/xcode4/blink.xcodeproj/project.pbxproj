@@ -54,6 +54,9 @@
 		5BDB69811480355F00291781 /* io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BDB69801480355F00291781 /* io.cpp */; };
 		5BDC8D651558E2FE009528DB /* libsquish.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BDC8D641558E2FE009528DB /* libsquish.a */; };
 		5BDC8D681558E310009528DB /* libtiff.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BDC8D671558E310009528DB /* libtiff.a */; };
+		5BDF82E51623DF1000F118B8 /* bitbuf.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BDF82E41623DF1000F118B8 /* bitbuf.h */; };
+		5BDF82E71623DF3500F118B8 /* bitbuf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BDF82E61623DF3500F118B8 /* bitbuf.cpp */; };
+		5BDF82EA1623E73B00F118B8 /* bitbuf_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BDF82E91623E73B00F118B8 /* bitbuf_test.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -164,6 +167,9 @@
 		5BDB69801480355F00291781 /* io.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = io.cpp; sourceTree = "<group>"; };
 		5BDC8D641558E2FE009528DB /* libsquish.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsquish.a; path = /opt/local/lib/libsquish.a; sourceTree = "<absolute>"; };
 		5BDC8D671558E310009528DB /* libtiff.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtiff.a; path = /opt/local/lib/libtiff.a; sourceTree = "<absolute>"; };
+		5BDF82E41623DF1000F118B8 /* bitbuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bitbuf.h; path = ../../src/blink/bitbuf.h; sourceTree = "<group>"; };
+		5BDF82E61623DF3500F118B8 /* bitbuf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bitbuf.cpp; path = ../../src/blink/bitbuf/bitbuf.cpp; sourceTree = "<group>"; };
+		5BDF82E91623E73B00F118B8 /* bitbuf_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bitbuf_test.cpp; path = bitbuf/bitbuf_test.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,12 +281,14 @@
 			isa = PBXGroup;
 			children = (
 				5B3D701E140B40280014D68C /* base */,
+				5BDF82E31623DE2400F118B8 /* bitbuf */,
 				5B73898315D7299C00FF9305 /* gr */,
 				5BC7211B148176B8008635D9 /* hash */,
 				5B3D7028140B40280014D68C /* job */,
 				5BDB697D1480355F00291781 /* io */,
 				5B3D702C140B40280014D68C /* queue */,
 				5B3D7027140B40280014D68C /* base.h */,
+				5BDF82E41623DF1000F118B8 /* bitbuf.h */,
 				5B73898915D72ACB00FF9305 /* gr.h */,
 				5BC7211F148176B8008635D9 /* hash.h */,
 				5B3D702A140B40280014D68C /* job.h */,
@@ -358,6 +366,7 @@
 			isa = PBXGroup;
 			children = (
 				5B6B5BF113F3919C007DF59B /* base */,
+				5BDF82E81623E4BC00F118B8 /* bitbuf */,
 				5BC7212414817EAD008635D9 /* hash */,
 				5BBBD81914004CA1001F3C9B /* job */,
 				5BBBD82014074FB5001F3C9B /* math */,
@@ -457,6 +466,22 @@
 			path = osx;
 			sourceTree = "<group>";
 		};
+		5BDF82E31623DE2400F118B8 /* bitbuf */ = {
+			isa = PBXGroup;
+			children = (
+				5BDF82E61623DF3500F118B8 /* bitbuf.cpp */,
+			);
+			name = bitbuf;
+			sourceTree = "<group>";
+		};
+		5BDF82E81623E4BC00F118B8 /* bitbuf */ = {
+			isa = PBXGroup;
+			children = (
+				5BDF82E91623E73B00F118B8 /* bitbuf_test.cpp */,
+			);
+			name = bitbuf;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -473,6 +498,7 @@
 				5BC72122148176B8008635D9 /* hash.h in Headers */,
 				5B03A6D21558D5D90080A13D /* imgview_osx.h in Headers */,
 				5B73898A15D72ACB00FF9305 /* gr.h in Headers */,
+				5BDF82E51623DF1000F118B8 /* bitbuf.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -620,6 +646,7 @@
 				5BC72121148176B8008635D9 /* murmur3.cpp in Sources */,
 				5BC7212914817F97008635D9 /* lookup3.cpp in Sources */,
 				5B73898C15D856BD00FF9305 /* gr.cpp in Sources */,
+				5BDF82E71623DF3500F118B8 /* bitbuf.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -638,6 +665,7 @@
 				5BBBD82314074FB5001F3C9B /* vec_test.cpp in Sources */,
 				5BBBD829140802CE001F3C9B /* mtx_test.cpp in Sources */,
 				5BC7212714817EAD008635D9 /* hash_test.cpp in Sources */,
+				5BDF82EA1623E73B00F118B8 /* bitbuf_test.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
