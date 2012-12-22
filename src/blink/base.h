@@ -111,7 +111,11 @@ void bl_base_lib_finalize();
 //
 
 void* bl_alloc(size_t size, size_t alignment);
+void* bl_calloc(size_t size, size_t alignment);
 void bl_free(void* ptr);
+
+#define BL_ALLOC(T, alignment)  (T*)bl_alloc(sizeof(T), alignment)
+#define BL_CALLOC(T, alignment) (T*)bl_calloc(sizeof(T), alignment)
 
 
 //

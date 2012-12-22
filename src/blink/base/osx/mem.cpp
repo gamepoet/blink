@@ -23,8 +23,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include <stdlib.h>
 #include "../../base.h"
+#include <stdlib.h>
+#include <string.h>
 
 
 //
@@ -40,6 +41,13 @@ void* bl_alloc(size_t size, size_t alignment) {
     return mem;
   }
   return NULL;
+}
+
+//------------------------------------------------------------------------------
+void* bl_calloc(size_t size, size_t alignment) {
+  void* mem = bl_alloc(size, alignment);
+  memset(mem, 0, size);
+  return mem;
 }
 
 //------------------------------------------------------------------------------
