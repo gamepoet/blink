@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "header": "v1.h",
+
+  "types": {
+    "Foo": {
+      "members": [
+        {
+          "name": "width",
+          "type": "int32_t"
+        },
+        {
+          "name": "height",
+          "type": "int32_t"
+        }
+      ]
+    },
+
+    "Bar": {
+      "header": "v2.h",
+      "members": [
+        {
+          "name": "width",
+          "type": "int32_t"
+        },
+        {
+          "name": "height",
+          "type": "int32_t"
+        }
+      ]
+    }
+  }
+}

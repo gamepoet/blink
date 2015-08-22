@@ -1,0 +1,119 @@
+# generalize asset flow
+#
+## create new
+# - initialize asset doc
+#   - add [source, all targets] to processing list
+# - queue job to process source data
+#
+## update existing metadata
+# - update asset doc
+#   - set status to out-of-date
+# - queue compile jobs
+#
+## update existing bulk
+# - update asset doc
+#   - set status to out-of-date
+# - queue job to process source data
+#
+## source process job
+# - process file
+# - update asset doc
+# - queue jobs to process platform data
+#
+## platform process job
+# - process file
+# - dxt compress
+# - save file
+# - update asset doc
+#   - set status to complete
+
+## problem: metadata changed before first job runs
+# - data gets built a second time unnecessarily (wasted cpu)
+## solution:
+# - (let first job work with newer data)
+# - (second job bails early and becomes a nop)
+# - job args: [id, version]
+# - bails on find_and_modify for version mismatch
+# - bails on find_and_modify if platform out-of-date
+# - bails on completion update due to version mismatch
+
+## problem: metadata changed while first job runs
+# - processing set gets out of sync because first job clears the setting when complete
+## solution:
+# - bails on completion update due to version mismatch
+# - second job will end up doing the work
+
+## problem: second job completes before first
+# - first job ends up overwriting with old data
+## solution:
+# - bails on completion update due to version mismatch
+
+
+Asset:
+  _id:            string    # murmur3:hexstring [hash of filename]
+  created_at:     datetime
+  filename:       string
+  type:           string    # texture, geometry, model, ...
+  updated_at:     datetime
+  version:        int       # change version
+
+  status:
+    source:       bool      # true if ready, false if processing needed (out-of-date)
+    osx_x64:      bool      # true if ready, false if processing needed (out-of-date)
+
+  file_ids:
+    source:
+    osx_x64:
+    # ...
+
+
+  metadata:
+    source:
+      height:
+      width:
+    target:
+      default:              # type-specific
+        format:
+        height:
+        levels:
+        semantic:
+        width:
+      osx_x64:              # type-specific
+      osx_x86:              # type-specific
+      # ...
+
+  source:
+    status:       string  # out_of_date, processing, ready, failed
+    file:         string  # path to file in mongo's gridfs
+    metadata:     type_specific_data
+  osx_x64:
+    status:       string  # out_of_date, processing, ready, failed
+    file:         string  # path to the file in mongo's gridfs
+    metadata:     type_specific_data
+  # other target platforms: osx_x86, ps3, win32, win64, x360, ...
+
+  source:
+    status:       string
+    metadata:
+      height:     int
+      width:      int
+  target:
+    _default:
+      height:     int
+      levels:     int
+      semantic:   string
+      width:      int
+    osx_x64: #optional overrides
+      # ...
+
+TextureMetadata:
+  format:     string  # rgba8888, dxt1, dxt5, ...
+  height:     int
+  levels:     int
+  semantic:   string  # albedo, normal, specular, ui, ...
+  width:      int
+
+
+CompileJob:
+  asset_id:   string  # murmur3:hexstring [hash of filename]
+  type:       string  # texture, geometry, model, ...

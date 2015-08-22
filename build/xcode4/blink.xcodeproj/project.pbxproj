@@ -34,6 +34,7 @@
 		5B73898A15D72ACB00FF9305 /* gr.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B73898915D72ACB00FF9305 /* gr.h */; };
 		5B73898C15D856BD00FF9305 /* gr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B73898B15D856BD00FF9305 /* gr.cpp */; };
 		5B73898F15D8717F00FF9305 /* libblink.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B6B5BCE13F38F99007DF59B /* libblink.a */; };
+		5B7EE8AD168676000097CAE1 /* asset.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B7EE8AC168676000097CAE1 /* asset.h */; };
 		5B8971CE13F392420087D363 /* libblink.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B6B5BCE13F38F99007DF59B /* libblink.a */; };
 		5B8971D113F3934A0087D363 /* libUnitTest++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8971D013F3934A0087D363 /* libUnitTest++.a */; };
 		5B8971D413F3A0220087D363 /* endian_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8971D213F39FF70087D363 /* endian_test.cpp */; };
@@ -149,6 +150,7 @@
 		5B6FAC1216067A98000D5252 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
 		5B73898915D72ACB00FF9305 /* gr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gr.h; path = ../../src/blink/gr.h; sourceTree = "<group>"; };
 		5B73898B15D856BD00FF9305 /* gr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gr.cpp; path = ../../src/blink/gr/gr.cpp; sourceTree = "<group>"; };
+		5B7EE8AC168676000097CAE1 /* asset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asset.h; path = ../../src/blink/asset.h; sourceTree = "<group>"; };
 		5B8971D013F3934A0087D363 /* libUnitTest++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libUnitTest++.a"; path = "/opt/local/lib/libUnitTest++.a"; sourceTree = "<absolute>"; };
 		5B8971D213F39FF70087D363 /* endian_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = endian_test.cpp; sourceTree = "<group>"; };
 		5B9A680613F7028D00E40577 /* debug_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug_test.cpp; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 		5B3D701C140B400D0014D68C /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				5B7EE8AB168675D80097CAE1 /* asset */,
 				5B3D701E140B40280014D68C /* base */,
 				5BDF82E31623DE2400F118B8 /* bitbuf */,
 				5B73898315D7299C00FF9305 /* gr */,
@@ -287,6 +290,7 @@
 				5B3D7028140B40280014D68C /* job */,
 				5BDB697D1480355F00291781 /* io */,
 				5B3D702C140B40280014D68C /* queue */,
+				5B7EE8AC168676000097CAE1 /* asset.h */,
 				5B3D7027140B40280014D68C /* base.h */,
 				5BDF82E41623DF1000F118B8 /* bitbuf.h */,
 				5B73898915D72ACB00FF9305 /* gr.h */,
@@ -397,6 +401,13 @@
 			name = gr;
 			sourceTree = "<group>";
 		};
+		5B7EE8AB168675D80097CAE1 /* asset */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = asset;
+			sourceTree = "<group>";
+		};
 		5BB7303E16066BC300B40FC2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -499,6 +510,7 @@
 				5B03A6D21558D5D90080A13D /* imgview_osx.h in Headers */,
 				5B73898A15D72ACB00FF9305 /* gr.h in Headers */,
 				5BDF82E51623DF1000F118B8 /* bitbuf.h in Headers */,
+				5B7EE8AD168676000097CAE1 /* asset.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -711,7 +723,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
 					../../src/vendor/npapi,
-					/opt/local/include,
+					/usr/local/include,
 					../../src,
 					"$(BUILT_PRODUCTS_DIR)/usr/local/include",
 				);
@@ -719,7 +731,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/opt/local/lib,
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/bayeux-bjotyyvsjtdygjazksdnitfltmfo/Build/Products/Release\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -736,7 +747,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				HEADER_SEARCH_PATHS = (
 					../../src/vendor/npapi,
-					/opt/local/include,
+					/usr/local/include,
 					../../src,
 					"$(BUILT_PRODUCTS_DIR)/usr/local/include",
 				);
@@ -744,7 +755,6 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/opt/local/lib,
 					"\"$(SRCROOT)/../../../../Library/Developer/Xcode/DerivedData/bayeux-bjotyyvsjtdygjazksdnitfltmfo/Build/Products/Release\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -773,6 +783,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -794,6 +806,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
@@ -804,7 +818,10 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
-				HEADER_SEARCH_PATHS = ../../src;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					../../src,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -814,7 +831,10 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
-				HEADER_SEARCH_PATHS = ../../src;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					../../src,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
