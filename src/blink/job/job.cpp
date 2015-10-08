@@ -150,7 +150,7 @@ BLJobStatus bl_job_lib_initialize(BLJobLibInitParams* __restrict params) {
   s_worker_count = params->worker_thread_count;
   s_worker_threads = (BLThread*)bl_alloc(s_worker_count * sizeof(BLThread), 16);
   for (unsigned int index = 0; index < s_worker_count; ++index) {
-    bl_thread_create(s_worker_threads + index, &job_worker_proc, (void*)index);
+    bl_thread_create(s_worker_threads + index, &job_worker_proc, (void*)(ptrdiff_t)index);
   }
 
   return BL_JOB_STATUS_OK;
