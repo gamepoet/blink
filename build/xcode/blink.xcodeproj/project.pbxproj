@@ -26,6 +26,8 @@
 		5B8971D113F3934A0087D363 /* libUnitTest++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8971D013F3934A0087D363 /* libUnitTest++.a */; };
 		5B8971D413F3A0220087D363 /* endian_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B8971D213F39FF70087D363 /* endian_test.cpp */; };
 		5B8971D513F3A0260087D363 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B5BF313F3919C007DF59B /* main.cpp */; };
+		5B98E95B1BCE073400B21FA4 /* asset.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B98E95A1BCE073400B21FA4 /* asset.h */; settings = {ASSET_TAGS = (); }; };
+		5B98E95E1BCE075400B21FA4 /* asset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E95D1BCE075400B21FA4 /* asset.cpp */; settings = {ASSET_TAGS = (); }; };
 		5B9A680813F7046B00E40577 /* debug_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A680613F7028D00E40577 /* debug_test.cpp */; };
 		5B9A681D13F844ED00E40577 /* thread_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B9A681C13F844ED00E40577 /* thread_test.cpp */; };
 		5BBBD81B14004CA1001F3C9B /* job_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5BBBD81A14004CA1001F3C9B /* job_test.cpp */; };
@@ -83,6 +85,8 @@
 		5B6B5BF313F3919C007DF59B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		5B8971D013F3934A0087D363 /* libUnitTest++.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libUnitTest++.a"; path = "/opt/local/lib/libUnitTest++.a"; sourceTree = "<absolute>"; };
 		5B8971D213F39FF70087D363 /* endian_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = endian_test.cpp; sourceTree = "<group>"; };
+		5B98E95A1BCE073400B21FA4 /* asset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asset.h; path = ../../src/blink/asset.h; sourceTree = "<group>"; };
+		5B98E95D1BCE075400B21FA4 /* asset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = asset.cpp; sourceTree = "<group>"; };
 		5B9A680613F7028D00E40577 /* debug_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug_test.cpp; sourceTree = "<group>"; };
 		5B9A681C13F844ED00E40577 /* thread_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread_test.cpp; sourceTree = "<group>"; };
 		5BBBD81A14004CA1001F3C9B /* job_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = job_test.cpp; sourceTree = "<group>"; };
@@ -120,11 +124,13 @@
 		5B3D701C140B400D0014D68C /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				5B98E95C1BCE075400B21FA4 /* asset */,
 				5B3D701E140B40280014D68C /* base */,
 				5BC7211B148176B8008635D9 /* hash */,
 				5B3D7028140B40280014D68C /* job */,
 				5BDB697D1480355F00291781 /* io */,
 				5B3D702C140B40280014D68C /* queue */,
+				5B98E95A1BCE073400B21FA4 /* asset.h */,
 				5B3D7027140B40280014D68C /* base.h */,
 				5BC7211F148176B8008635D9 /* hash.h */,
 				5B3D702A140B40280014D68C /* job.h */,
@@ -221,6 +227,15 @@
 			path = base;
 			sourceTree = "<group>";
 		};
+		5B98E95C1BCE075400B21FA4 /* asset */ = {
+			isa = PBXGroup;
+			children = (
+				5B98E95D1BCE075400B21FA4 /* asset.cpp */,
+			);
+			name = asset;
+			path = ../../src/blink/asset;
+			sourceTree = "<group>";
+		};
 		5BBBD81914004CA1001F3C9B /* job */ = {
 			isa = PBXGroup;
 			children = (
@@ -293,6 +308,7 @@
 				5B3D7038140B40280014D68C /* job.h in Headers */,
 				5B3D703B140B40280014D68C /* queue.h in Headers */,
 				5B07E0501413EB370004ACA4 /* vecmath.h in Headers */,
+				5B98E95B1BCE073400B21FA4 /* asset.h in Headers */,
 				5BDB697C1480354900291781 /* io.h in Headers */,
 				5BC72122148176B8008635D9 /* hash.h in Headers */,
 			);
@@ -377,6 +393,7 @@
 				5B3D703A140B40280014D68C /* queue.cpp in Sources */,
 				5BDB69811480355F00291781 /* io.cpp in Sources */,
 				5BC72121148176B8008635D9 /* murmur3.cpp in Sources */,
+				5B98E95E1BCE075400B21FA4 /* asset.cpp in Sources */,
 				5BC7212914817F97008635D9 /* lookup3.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,6 +431,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -452,6 +471,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
