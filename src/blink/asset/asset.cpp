@@ -294,7 +294,7 @@ static void queue_op(const AssetOpIn & op) {
 // api
 //
 
-void bl_asset_init() {
+void bl_asset_lib_initialize() {
   // init the fence
   s_fence_issued = 0;
   s_fence_reached = 0;
@@ -304,7 +304,7 @@ void bl_asset_init() {
   s_thread = new (s_thread_memory) std::thread(&worker_thread);
 }
 
-void bl_asset_shutdown() {
+void bl_asset_lib_finalize() {
   assert(s_type_handlers.empty());
 
   // ask the worker thread to shutdown and wait

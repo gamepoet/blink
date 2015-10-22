@@ -10,12 +10,12 @@ typedef uint32_t BLAssetFence;  ///< An opaque handle for a synchronization fenc
 
 /// Initializes the library. This must be called before any other library
 /// functions can be used.
-void bl_asset_init();
+void bl_asset_lib_initialize();
 
 /// Shuts down the library. You must unload all assets and wait for them to
 /// be unloaded before calling this. All allocated memory and system resources
 /// will be freed.
-void bl_asset_shutdown();
+void bl_asset_lib_finalize();
 
 /// Function prototype for loading an asset into memory.
 ///
