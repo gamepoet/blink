@@ -1,9 +1,9 @@
 #import <Cocoa/Cocoa.h>
 
-struct BLGlContext;
+struct BLRenderContext;
 
 @interface GlView : NSView {
-  BLGlContext* m_gl_context;
+  BLRenderContext* m_render_context;
 }
 
 - (id)initWithFrame:(NSRect)frameRect;

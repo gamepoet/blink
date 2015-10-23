@@ -1,8 +1,9 @@
 #import <OpenGL/glu.h>
 #include "gl_view.h"
-#include "../gl_device.h"
 #include "../application.h"
 #include <blink/base.h>
+#include <blink/render.h>
+#include <blink/render_gl.h>
 
 @implementation GlView
 
@@ -21,10 +22,11 @@
   bl_log_info("lockFocus");
   [super lockFocus];
 
-  if (!m_gl_context) {
-    m_gl_context = bl_gl_context_create((__bridge_retained BLGlSurface*)self);
-
-    bl_gl_context_set_vsync(m_gl_context, false);
+  if (!m_render_context) {
+    BLRenderContextCreateAttr attr;
+    attr.surface = (__bridge_retained BLGlSurface*)self;
+    attr.vsync = false;
+    m_render_context = bl_render_context_create(&attr);
 
     // look for changes in view size
     // note: -reshape will not be called automatically on size changes
@@ -34,7 +36,7 @@
                                                  name:NSViewGlobalFrameDidChangeNotification
                                                object:self];
 
-    application_set_gl_context(m_gl_context);
+    application_set_gl_context(m_render_context);
   }
 }
 
@@ -43,17 +45,17 @@
                                                   name:NSViewGlobalFrameDidChangeNotification
                                                 object:self];
 
-  bl_gl_context_destroy(m_gl_context);
+  bl_render_context_destroy(m_render_context);
 }
 
 - (void)reshape {
-  bl_gl_context_lock(m_gl_context);
+  bl_render_gl_context_lock(m_render_context);
 
-//  [m_gl_context makeCurrentContext];
+//  [m_render_context makeCurrentContext];
 
-//  [m_gl_context update];
+//  [m_render_context update];
 
-  bl_gl_context_unlock(m_gl_context);
+  bl_render_gl_context_unlock(m_render_context);
 }
 
 - (BOOL)acceptsFirstResponder {

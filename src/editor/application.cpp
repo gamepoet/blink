@@ -2,10 +2,10 @@
 #include <blink/asset.h>
 #include <blink/io.h>
 #include <blink/job.h>
+#include <blink/render.h>
 #include "application.h"
-#include "gl_device.h"
 
-static BLGlContext* s_gl_context;
+static BLRenderContext* s_render_context;
 
 static std::chrono::high_resolution_clock::time_point s_time;
 
@@ -23,12 +23,14 @@ void application_init() {
 
   bl_io_lib_initialize();
   bl_asset_lib_initialize();
+  bl_render_lib_initialize();
 
   // init time to the recent past
   s_time = std::chrono::high_resolution_clock::now() - std::chrono::milliseconds(16);
 }
 
 void application_shutdown() {
+  bl_render_lib_finalize();
   bl_asset_lib_finalize();
   bl_io_lib_finalize();
   bl_job_lib_finalize();
@@ -43,16 +45,14 @@ void application_update() {
 
   bl_log_info("dt ( s): %f", dt);
 
-  if (s_gl_context) {
+  if (s_render_context) {
 //    glClearColor(0.4f, 0.4f, 0.8f, 0.0f);
 //    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    bl_gl_context_present(s_gl_context);
-
-//    check_gl_error();
+    bl_render_present(s_render_context);
   }
 }
 
-void application_set_gl_context(BLGlContext* ctx) {
-  s_gl_context = ctx;
+void application_set_gl_context(BLRenderContext* ctx) {
+  s_render_context = ctx;
 }

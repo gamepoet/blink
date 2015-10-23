@@ -2,7 +2,8 @@
 #import <OpenGL/gl.h>
 #import <OpenGL/glu.h>
 #include <blink/base.h>
-#include "../gl_device.h"
+#include "../render.h"
+#include "../render_gl.h"
 
 #define GL_ENSURE(stmt)                                                   \
   do {                                                                    \
@@ -22,12 +23,12 @@ static void report_gl_errors(GLenum err, const char* stmt) {
   BL_DEBUG_BREAK();
 }
 
-static NSOpenGLContext* to_ns_context(BLGlContext* ctx) {
+static NSOpenGLContext* to_ns_context(BLRenderContext* ctx) {
   return (__bridge NSOpenGLContext*)ctx;
 }
 
-BLGlContext* bl_gl_context_create(BLGlSurface* surface) {
-  NSView* view = (__bridge_transfer NSView*)surface;
+BLRenderContext* bl_render_gl_context_create(BLRenderContextCreateAttr* attr) {
+  NSView* view = (__bridge_transfer NSView*)attr->surface;
 
   NSOpenGLPixelFormatAttribute attrs[] = {
     kCGLPFAAccelerated,
@@ -55,23 +56,26 @@ BLGlContext* bl_gl_context_create(BLGlSurface* surface) {
   GL_ENSURE(glClear(GL_COLOR_BUFFER_BIT));
 
   // take ownership of the NSOpenGLContext object from ARC
-  BLGlContext* ctx = (__bridge_retained BLGlContext*)gl_ctx;
+  BLRenderContext* ctx = (__bridge_retained BLRenderContext*)gl_ctx;
+
+  bl_render_gl_context_set_vsync(ctx, attr->vsync);
+
   return ctx;
 }
 
-void bl_gl_context_destroy(BLGlContext* ctx) {
+void bl_render_gl_context_destroy(BLRenderContext* ctx) {
   // release the gl context
   NSOpenGLContext* gl_ctx = (__bridge_transfer NSOpenGLContext*)ctx;
   gl_ctx = nil;
 }
 
-void bl_gl_context_set_vsync(BLGlContext* ctx, bool enabled) {
+void bl_render_gl_context_set_vsync(BLRenderContext* ctx, bool enabled) {
   NSOpenGLContext* gl_ctx = to_ns_context(ctx);
   GLint swapInt = enabled ? 1 : 0;
   [gl_ctx setValues:&swapInt forParameter:NSOpenGLCPSwapInterval];
 }
 
-void bl_gl_context_present(BLGlContext* ctx) {
+void bl_render_gl_context_present(BLRenderContext* ctx) {
   NSOpenGLContext* gl_ctx = to_ns_context(ctx);
 
   static bool up = true;
@@ -97,13 +101,13 @@ void bl_gl_context_present(BLGlContext* ctx) {
   [gl_ctx flushBuffer];
 }
 
-void bl_gl_context_lock(BLGlContext* ctx) {
+void bl_render_gl_context_lock(BLRenderContext* ctx) {
   NSOpenGLContext* gl_ctx = to_ns_context(ctx);
   CGLContextObj cgl_ctx = (CGLContextObj)[gl_ctx CGLContextObj];
   CGLLockContext(cgl_ctx);
 }
 
-void bl_gl_context_unlock(BLGlContext* ctx) {
+void bl_render_gl_context_unlock(BLRenderContext* ctx) {
   NSOpenGLContext* gl_ctx = to_ns_context(ctx);
   CGLContextObj cgl_ctx = (CGLContextObj)[gl_ctx CGLContextObj];
   CGLUnlockContext(cgl_ctx);

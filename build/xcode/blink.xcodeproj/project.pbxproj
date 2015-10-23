@@ -21,6 +21,10 @@
 		5B3D703A140B40280014D68C /* queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B3D702D140B40280014D68C /* queue.cpp */; };
 		5B3D703B140B40280014D68C /* queue.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B3D702E140B40280014D68C /* queue.h */; };
 		5B46110113FF71810061F55B /* atomic_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B46110013FF71810061F55B /* atomic_test.cpp */; };
+		5B58EE591BD9F1D100048F05 /* render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B58EE541BD9F1D100048F05 /* render.cpp */; settings = {ASSET_TAGS = (); }; };
+		5B58EE5A1BD9F1D100048F05 /* render_gl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B58EE561BD9F1D100048F05 /* render_gl_osx.mm */; settings = {ASSET_TAGS = (); }; };
+		5B58EE5B1BD9F1D100048F05 /* render_gl.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B58EE571BD9F1D100048F05 /* render_gl.h */; settings = {ASSET_TAGS = (); }; };
+		5B58EE5C1BD9F1D100048F05 /* render.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B58EE581BD9F1D100048F05 /* render.h */; settings = {ASSET_TAGS = (); }; };
 		5B6B5BF613F391B9007DF59B /* str_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B5BF213F3919C007DF59B /* str_test.cpp */; };
 		5B8971CE13F392420087D363 /* libblink.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B6B5BCE13F38F99007DF59B /* libblink.a */; };
 		5B8971D113F3934A0087D363 /* libUnitTest++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8971D013F3934A0087D363 /* libUnitTest++.a */; };
@@ -33,7 +37,6 @@
 		5B98E98B1BD352F300B21FA4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B98E9891BD352CD00B21FA4 /* Assets.xcassets */; settings = {ASSET_TAGS = (); }; };
 		5B98E9901BD3594700B21FA4 /* application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E98C1BD3589E00B21FA4 /* application.cpp */; settings = {ASSET_TAGS = (); }; };
 		5B98E9941BD35A8D00B21FA4 /* libblink.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B6B5BCE13F38F99007DF59B /* libblink.a */; };
-		5B98E9B51BD61A6300B21FA4 /* gl_device_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E9B21BD61A6300B21FA4 /* gl_device_osx.mm */; settings = {ASSET_TAGS = (); }; };
 		5B98E9B61BD61A6300B21FA4 /* gl_view.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E9B41BD61A6300B21FA4 /* gl_view.mm */; settings = {ASSET_TAGS = (); }; };
 		5B98E9B71BD88CC500B21FA4 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B98E9871BD352AC00B21FA4 /* MainMenu.xib */; };
 		5B98E9BA1BD94FEE00B21FA4 /* app_delegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B98E9B91BD94FEE00B21FA4 /* app_delegate.mm */; settings = {ASSET_TAGS = (); }; };
@@ -95,6 +98,10 @@
 		5B3D702D140B40280014D68C /* queue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queue.cpp; sourceTree = "<group>"; };
 		5B3D702E140B40280014D68C /* queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queue.h; path = ../../src/blink/queue.h; sourceTree = "<group>"; };
 		5B46110013FF71810061F55B /* atomic_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = atomic_test.cpp; sourceTree = "<group>"; };
+		5B58EE541BD9F1D100048F05 /* render.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = render.cpp; sourceTree = "<group>"; };
+		5B58EE561BD9F1D100048F05 /* render_gl_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = render_gl_osx.mm; sourceTree = "<group>"; };
+		5B58EE571BD9F1D100048F05 /* render_gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = render_gl.h; sourceTree = "<group>"; };
+		5B58EE581BD9F1D100048F05 /* render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = render.h; sourceTree = "<group>"; };
 		5B6B5BCE13F38F99007DF59B /* libblink.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libblink.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6B5BE613F39160007DF59B /* tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tests; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6B5BF213F3919C007DF59B /* str_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = str_test.cpp; sourceTree = "<group>"; };
@@ -110,8 +117,6 @@
 		5B98E9891BD352CD00B21FA4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5B98E98C1BD3589E00B21FA4 /* application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = application.cpp; path = ../../src/editor/application.cpp; sourceTree = "<group>"; };
 		5B98E98D1BD3589E00B21FA4 /* application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = application.h; path = ../../src/editor/application.h; sourceTree = "<group>"; };
-		5B98E9B11BD61A5100B21FA4 /* gl_device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gl_device.h; path = ../../src/editor/gl_device.h; sourceTree = "<group>"; };
-		5B98E9B21BD61A6300B21FA4 /* gl_device_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = gl_device_osx.mm; sourceTree = "<group>"; };
 		5B98E9B31BD61A6300B21FA4 /* gl_view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gl_view.h; sourceTree = "<group>"; };
 		5B98E9B41BD61A6300B21FA4 /* gl_view.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = gl_view.mm; sourceTree = "<group>"; };
 		5B98E9B81BD94FEE00B21FA4 /* app_delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = app_delegate.h; sourceTree = "<group>"; };
@@ -167,15 +172,20 @@
 				5B3D7028140B40280014D68C /* job */,
 				5BDB697D1480355F00291781 /* io */,
 				5B3D702C140B40280014D68C /* queue */,
+				5B58EE531BD9F1D100048F05 /* render */,
+				5B58EE551BD9F1D100048F05 /* render_gl */,
 				5B98E95A1BCE073400B21FA4 /* asset.h */,
 				5B3D7027140B40280014D68C /* base.h */,
 				5BC7211F148176B8008635D9 /* hash.h */,
 				5B3D702A140B40280014D68C /* job.h */,
 				5BDB697B1480354900291781 /* io.h */,
 				5B3D702E140B40280014D68C /* queue.h */,
+				5B58EE581BD9F1D100048F05 /* render.h */,
+				5B58EE571BD9F1D100048F05 /* render_gl.h */,
 				5B07E04F1413EB370004ACA4 /* vecmath.h */,
 			);
 			name = lib;
+			path = ../../src/blink;
 			sourceTree = "<group>";
 		};
 		5B3D701E140B40280014D68C /* base */ = {
@@ -217,6 +227,22 @@
 			);
 			name = queue;
 			path = ../../src/blink/queue;
+			sourceTree = "<group>";
+		};
+		5B58EE531BD9F1D100048F05 /* render */ = {
+			isa = PBXGroup;
+			children = (
+				5B58EE541BD9F1D100048F05 /* render.cpp */,
+			);
+			path = render;
+			sourceTree = "<group>";
+		};
+		5B58EE551BD9F1D100048F05 /* render_gl */ = {
+			isa = PBXGroup;
+			children = (
+				5B58EE561BD9F1D100048F05 /* render_gl_osx.mm */,
+			);
+			path = render_gl;
 			sourceTree = "<group>";
 		};
 		5B6B5BC313F38F99007DF59B = {
@@ -280,7 +306,6 @@
 			children = (
 				5B98E98C1BD3589E00B21FA4 /* application.cpp */,
 				5B98E98D1BD3589E00B21FA4 /* application.h */,
-				5B98E9B11BD61A5100B21FA4 /* gl_device.h */,
 				5B98E9761BD3513000B21FA4 /* osx */,
 			);
 			name = editor;
@@ -291,7 +316,6 @@
 			children = (
 				5B98E9B81BD94FEE00B21FA4 /* app_delegate.h */,
 				5B98E9B91BD94FEE00B21FA4 /* app_delegate.mm */,
-				5B98E9B21BD61A6300B21FA4 /* gl_device_osx.mm */,
 				5B98E9B31BD61A6300B21FA4 /* gl_view.h */,
 				5B98E9B41BD61A6300B21FA4 /* gl_view.mm */,
 				5B98E97C1BD3513000B21FA4 /* main.m */,
@@ -386,6 +410,8 @@
 				5B98E95B1BCE073400B21FA4 /* asset.h in Headers */,
 				5BDB697C1480354900291781 /* io.h in Headers */,
 				5BC72122148176B8008635D9 /* hash.h in Headers */,
+				5B58EE5C1BD9F1D100048F05 /* render.h in Headers */,
+				5B58EE5B1BD9F1D100048F05 /* render_gl.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,6 +529,8 @@
 				5B3D7033140B40280014D68C /* mem.cpp in Sources */,
 				5B3D7034140B40280014D68C /* thread.cpp in Sources */,
 				5B3D7035140B40280014D68C /* str.cpp in Sources */,
+				5B58EE591BD9F1D100048F05 /* render.cpp in Sources */,
+				5B58EE5A1BD9F1D100048F05 /* render_gl_osx.mm in Sources */,
 				5B3D7037140B40280014D68C /* job.cpp in Sources */,
 				5B3D703A140B40280014D68C /* queue.cpp in Sources */,
 				5BDB69811480355F00291781 /* io.cpp in Sources */,
@@ -538,7 +566,6 @@
 				5B98E9BA1BD94FEE00B21FA4 /* app_delegate.mm in Sources */,
 				5B98E9901BD3594700B21FA4 /* application.cpp in Sources */,
 				5B98E9B61BD61A6300B21FA4 /* gl_view.mm in Sources */,
-				5B98E9B51BD61A6300B21FA4 /* gl_device_osx.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,7 +630,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -636,7 +663,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -644,6 +671,7 @@
 		5B6B5BD313F38F99007DF59B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				HEADER_SEARCH_PATHS = ../../src;
@@ -654,6 +682,7 @@
 		5B6B5BD413F38F99007DF59B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				EXECUTABLE_PREFIX = lib;
 				HEADER_SEARCH_PATHS = ../../src;
