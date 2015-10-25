@@ -23,6 +23,9 @@ void bl_render_context_destroy(BLRenderContext* ctx);
 
 void bl_render_set_vsync(BLRenderContext* ctx, bool enabled);
 
+void bl_render_get_dimensions(BLRenderContext* ctx, int* width, int* height);
+void bl_render_read_frame_buffer(BLRenderContext* ctx, int width, int height, void* buf);
+
 void bl_render_present(BLRenderContext* ctx);
 
 #endif

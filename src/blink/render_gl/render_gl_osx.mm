@@ -101,6 +101,15 @@ void bl_render_gl_context_present(BLRenderContext* ctx) {
   [gl_ctx flushBuffer];
 }
 
+void bl_render_gl_context_get_dimensions(BLRenderContext* ctx, int* width, int* height) {
+  *width = 100;
+  *height = 100;
+}
+
+void bl_render_gl_context_read_frame_buffer(BLRenderContext* ctx, int width, int height, void* dest) {
+  glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, dest);
+}
+
 void bl_render_gl_context_lock(BLRenderContext* ctx) {
   NSOpenGLContext* gl_ctx = to_ns_context(ctx);
   CGLContextObj cgl_ctx = (CGLContextObj)[gl_ctx CGLContextObj];

@@ -25,6 +25,7 @@
 		5B58EE5A1BD9F1D100048F05 /* render_gl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5B58EE561BD9F1D100048F05 /* render_gl_osx.mm */; settings = {ASSET_TAGS = (); }; };
 		5B58EE5B1BD9F1D100048F05 /* render_gl.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B58EE571BD9F1D100048F05 /* render_gl.h */; settings = {ASSET_TAGS = (); }; };
 		5B58EE5C1BD9F1D100048F05 /* render.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B58EE581BD9F1D100048F05 /* render.h */; settings = {ASSET_TAGS = (); }; };
+		5B58EE651BDB2D9800048F05 /* mongoose.c in Sources */ = {isa = PBXBuildFile; fileRef = 5B58EE611BDB2D8A00048F05 /* mongoose.c */; settings = {ASSET_TAGS = (); }; };
 		5B6B5BF613F391B9007DF59B /* str_test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5B6B5BF213F3919C007DF59B /* str_test.cpp */; };
 		5B8971CE13F392420087D363 /* libblink.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B6B5BCE13F38F99007DF59B /* libblink.a */; };
 		5B8971D113F3934A0087D363 /* libUnitTest++.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B8971D013F3934A0087D363 /* libUnitTest++.a */; };
@@ -102,6 +103,8 @@
 		5B58EE561BD9F1D100048F05 /* render_gl_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = render_gl_osx.mm; sourceTree = "<group>"; };
 		5B58EE571BD9F1D100048F05 /* render_gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = render_gl.h; sourceTree = "<group>"; };
 		5B58EE581BD9F1D100048F05 /* render.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = render.h; sourceTree = "<group>"; };
+		5B58EE611BDB2D8A00048F05 /* mongoose.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mongoose.c; sourceTree = "<group>"; };
+		5B58EE621BDB2D8A00048F05 /* mongoose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mongoose.h; sourceTree = "<group>"; };
 		5B6B5BCE13F38F99007DF59B /* libblink.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libblink.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6B5BE613F39160007DF59B /* tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tests; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B6B5BF213F3919C007DF59B /* str_test.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = str_test.cpp; sourceTree = "<group>"; };
@@ -245,11 +248,30 @@
 			path = render_gl;
 			sourceTree = "<group>";
 		};
+		5B58EE5F1BDB2D5B00048F05 /* vendor */ = {
+			isa = PBXGroup;
+			children = (
+				5B58EE601BDB2D8A00048F05 /* mongoose */,
+			);
+			name = vendor;
+			path = ../../src/vendor;
+			sourceTree = "<group>";
+		};
+		5B58EE601BDB2D8A00048F05 /* mongoose */ = {
+			isa = PBXGroup;
+			children = (
+				5B58EE611BDB2D8A00048F05 /* mongoose.c */,
+				5B58EE621BDB2D8A00048F05 /* mongoose.h */,
+			);
+			path = mongoose;
+			sourceTree = "<group>";
+		};
 		5B6B5BC313F38F99007DF59B = {
 			isa = PBXGroup;
 			children = (
 				5B98E9741BD350F100B21FA4 /* editor */,
 				5B3D701C140B400D0014D68C /* lib */,
+				5B58EE5F1BDB2D5B00048F05 /* vendor */,
 				5B6B5BF013F3919C007DF59B /* test */,
 				5B6B5BCF13F38F99007DF59B /* Products */,
 			);
@@ -564,6 +586,7 @@
 			files = (
 				5B98E9841BD351B600B21FA4 /* main.m in Sources */,
 				5B98E9BA1BD94FEE00B21FA4 /* app_delegate.mm in Sources */,
+				5B58EE651BDB2D9800048F05 /* mongoose.c in Sources */,
 				5B98E9901BD3594700B21FA4 /* application.cpp in Sources */,
 				5B98E9B61BD61A6300B21FA4 /* gl_view.mm in Sources */,
 			);
@@ -733,7 +756,10 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				HEADER_SEARCH_PATHS = ../../src;
+				HEADER_SEARCH_PATHS = (
+					../../src,
+					../../src/vendor/mongoose,
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/../../src/editor/osx/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -758,7 +784,10 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				HEADER_SEARCH_PATHS = ../../src;
+				HEADER_SEARCH_PATHS = (
+					../../src,
+					../../src/vendor/mongoose,
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/../../src/editor/osx/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
